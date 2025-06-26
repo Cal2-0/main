@@ -1,0 +1,25 @@
+{
+    "timestamp": "2025-06-24T13:28:14.417066",
+    "hostname": "Cal",
+    "ip_address": "192.168.1.162",
+    "operating_system": {
+        "system": "Windows",
+        "release": "11",
+        "version": "10.0.26100",
+        "machine": "AMD64",
+        "processor": "Intel64 Family 6 Model 186 Stepping 2, GenuineIntel"
+    },
+    "cpu_information": {
+        "physical_cores": 14,
+        "total_cores": 20,
+        "max_frequency": "2400.00 MHz",
+        "current_frequency": "2400.00 MHz",
+        "cpu_usage_percent": "6.5%"
+    },
+    "memory_information": {
+        "total_ram_gb": 15.7,
+        "available_ram_gb": 7.2,
+        "used_ram_gb": 8.5,
+        "ram_usage_percent": "54.1%"
+    }
+}
