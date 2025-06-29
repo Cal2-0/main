@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Project Codes - VEx</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="projects.css">
+  <link rel="stylesheet" href="project-codes.css">
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="main.html" class="nav-logo">VEx</a>
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="main.html" class="nav-link">Home</a>
+        </li>
+        <li class="nav-item">
+          <a href="projects.html" class="nav-link">My Projects</a>
+        </li>
+        <li class="nav-item">
+          <a href="project-codes.html" class="nav-link active">Project Codes</a>
+        </li>
+      </ul>
+      <button class="info-btn" onclick="showInfo()">ℹ️</button>
+    </div>
+  </nav>
+
+  <div class="main-content">
+    <h1>Project Codes</h1>
+    <h3>Explore the code behind each project</h3>
+
+    <!-- Project Navigation -->
+    <div class="project-nav">
+      <button class="nav-btn" onclick="showProject('main-website')">🏠 Main Website</button>
+      <button class="nav-btn active" onclick="showProject('encryption')">🔐 Encryption</button>
+      <button class="nav-btn" onclick="showProject('computer-id')">💻 Computer ID</button>
+      <button class="nav-btn" onclick="showProject('hangman')">🎮 Hangman</button>
+      <button class="nav-btn" onclick="showProject('movie-recommender')">🎬 MovieIt</button>
+    </div>
+
+    <!-- Main Website Codes -->
+    <div id="main-website" class="project-section">
+      <h2>🏠 Main Website - Code Files</h2>
+      
+      <div class="code-window">
+        <h3>Main Page (main.html)</h3>
+        <div class="code-content" id="main-html">
+          <p>Loading main.html...</p>
+        </div>
+      </div>
+
+      <div class="code-window">
+        <h3>Projects Page (projects.html)</h3>
+        <div class="code-content" id="projects-html">
+          <p>Loading projects.html...</p>
+        </div>
+      </div>
+
+      <div class="code-window">
+        <h3>Main Styling (style.css)</h3>
+        <div class="code-content" id="main-css">
+          <p>Loading style.css...</p>
+        </div>
+      </div>
+
+      <div class="code-window">
+        <h3>Projects Styling (projects.css)</h3>
+        <div class="code-content" id="projects-css">
+          <p>Loading projects.css...</p>
+        </div>
+      </div>
+
+      <div class="code-window">
+        <h3>Project Codes Styling (project-codes.css)</h3>
+        <div class="code-content" id="project-codes-css">
+          <p>Loading project-codes.css...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Encryption Project Codes -->
+    <div id="encryption" class="project-section active">
+      <h2>🔐 Encryption Tools - Code Files</h2>
+      
+      <div class="code-window">
+        <h3>Main Application (app.py)</h3>
+        <div class="code-content" id="encryption-app">
+          <pre>from flask import Flask, render_template, redirect, url_for, request
+import os
+
+app = Flask(__name__, template_folder=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates'))
+
+p = 23  # use your prime p here
+
+def get_public_key(priv):
+    return pow(5, priv, 23)
+
+@app.route("/")
+def home():
+    return render_template("home.html")
+
+@app.route("/encrypt", methods=["GET", "POST"])
+def encrypt():
+    encrypted_str = ""
+    if request.method == "POST":
+        x = request.form.get("message", "")
+        priv = int(request.form.get("priv", 0))
+        other_pub = int(request.form.get("other_pub", 0))
+        s = pow(other_pub, priv, p)  # shared key using DH
+        freq_map = {}
+        for i in x:
+            if i != ' ':
+                freq_map[i] = x.count(i)
+        mi = min(freq_map.values()) if freq_map else 1
+        ma = max(freq_map.values()) if freq_map else 1
+        factor = (mi * ma) * s
+        en = []
+        for i in x:
+            if i == ' ':
+                en.append('-1')  # space marker
+            else:
+                val = (ord(i) * factor)
+                en.append(str(val))
+        en.append('009901' + str(int(mi * s)))
+        en.append('009900' + str(int(ma * s)))
+        encrypted_str = ' '.join(en)
+    return render_template("encrypt.html", encrypted=encrypted_str)
+
+@app.route("/decrypt", methods=["GET", "POST"])
+def decrypt():
+    decrypted = ""
+    error = ""
+    if request.method == "POST":
+        encrypted_message = request.form.get("encrypted", "")
+        priv2 = int(request.form.get("priv2", 0))
+        sender_pub = int(request.form.get("sender_pub", 0))
+        s2 = pow(sender_pub, priv2, p)  # shared key
+        ex1 = encrypted_message.split()
+        if len(ex1) < 2:
+            error = "Invalid encrypted message format."
+            return render_template("decrypt.html", decrypted=decrypted, error=error)
+        mi_str = ex1[-2]
+        ma_str = ex1[-1]
+        if not (mi_str.startswith('009901') and ma_str.startswith('009900')):
+            error = "Error: Invalid encryption format."
+            return render_template("decrypt.html", decrypted=decrypted, error=error)
+        try:
+            mi2 = int(round(int(mi_str[6:]) / s2))
+            ma2 = int(round(int(ma_str[6:]) / s2))
+        except Exception as e:
+            error = f"Error parsing frequency markers: {e}"
+            return render_template("decrypt.html", decrypted=decrypted, error=error)
+        factor2 = (mi2 * ma2) * s2
+        encrypted_values = ex1[:-2]
+        for val in encrypted_values:
+            if val == '-1':  # space marker
+                decrypted += ' '
+            else:
+                try:
+                    num = int(val)
+                    original_ord = num // factor2
+                    if 0 <= original_ord <= 1114111:
+                        decrypted += chr(original_ord)
+                    else:
+                        decrypted += '?'
+                except Exception as e:
+                    decrypted += '?'
+    return render_template("decrypt.html", decrypted=decrypted, error=error)
+
+@app.route("/publickey", methods=["GET", "POST"])
+def public_key():
+    output = ""
+    if request.method == "POST":
+        try:
+            priv = int(request.form.get("priv", 0))
+            result = get_public_key(priv)
+            output = f"Public Key: {result}"
+        except Exception as e:
+            output = f"Error: {e}"
+    return render_template("index.html", output=output)
+
+@app.route("/quit")
+def quit_app():
+    func = request.environ.get('werkzeug.server.shutdown')
+    if func is None:
+        raise RuntimeError('Not running with the Werkzeug Server')
+    func()
+    return "Server shutting down..."
+
+if __name__ == "__main__":
+    app.run(debug=True)</pre>
+        </div>
+      </div>
+
+      <div class="code-window">
+        <h3>Home Template (home.html)</h3>
+        <div class="code-content" id="encryption-home">
+          <pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Encryption Home&lt;/title&gt;
+    &lt;style&gt;
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            color: white;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .nav-links {
+            margin-top: 30px;
+        }
+        .nav-links a {
+            display: inline-block;
+            margin: 10px;
+            padding: 15px 30px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="container"&gt;
+        &lt;h1&gt;🔐 Encryption Suite&lt;/h1&gt;
+        &lt;p&gt;Welcome to the encryption tools. Choose an option below:&lt;/p&gt;
+        
+        &lt;div class="nav-links"&gt;
+            &lt;a href="/encrypt"&gt;🔒 Encrypt Message&lt;/a&gt;
+            &lt;a href="/decrypt"&gt;🔓 Decrypt Message&lt;/a&gt;
+            &lt;a href="/publickey"&gt;🔑 Generate Public Key&lt;/a&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+        </div>
+      </div>
+
+      <div class="code-window">
+        <h3>Encrypt Template (encrypt.html)</h3>
+        <div class="code-content" id="encryption-encrypt">
+          <pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Encrypt Message&lt;/title&gt;
+    &lt;style&gt;
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            color: white;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.9);
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="container"&gt;
+        &lt;h1&gt;🔒 Encrypt Message&lt;/h1&gt;
+        
+        &lt;form method="POST"&gt;
+            &lt;div class="form-group"&gt;
+                &lt;label&gt;Message to Encrypt:&lt;/label&gt;
+                &lt;textarea name="message" rows="4" required&gt;&lt;/textarea&gt;
+            &lt;/div&gt;
+            
+            &lt;div class="form-group"&gt;
+                &lt;label&gt;Your Private Key:&lt;/label&gt;
+                &lt;input type="number" name="priv" required&gt;
+            &lt;/div&gt;
+            
+            &lt;div class="form-group"&gt;
+                &lt;label&gt;Other's Public Key:&lt;/label&gt;
+                &lt;input type="number" name="other_pub" required&gt;
+            &lt;/div&gt;
+            
+            &lt;button type="submit"&gt;Encrypt&lt;/button&gt;
+        &lt;/form&gt;
+        
+        {% if encrypted %}
+        &lt;div class="result"&gt;
+            &lt;h3&gt;Encrypted Message:&lt;/h3&gt;
+            &lt;p&gt;{{ encrypted }}&lt;/p&gt;
+        &lt;/div&gt;
+        {% endif %}
+        
+        &lt;p&gt;&lt;a href="/" style="color: white;"&gt;← Back to Home&lt;/a&gt;&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+        </div>
+      </div>
+
+      <div class="code-window">
+        <h3>Decrypt Template (decrypt.html)</h3>
+        <div class="code-content" id="encryption-decrypt">
+          <pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Decrypt Message&lt;/title&gt;
+    &lt;style&gt;
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            color: white;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.9);
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+        }
+        .error {
+            background: rgba(255, 0, 0, 0.2);
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="container"&gt;
+        &lt;h1&gt;🔓 Decrypt Message&lt;/h1&gt;
+        
+        &lt;form method="POST"&gt;
+            &lt;div class="form-group"&gt;
+                &lt;label&gt;Encrypted Message:&lt;/label&gt;
+                &lt;textarea name="encrypted" rows="4" required&gt;&lt;/textarea&gt;
+            &lt;/div&gt;
+            
+            &lt;div class="form-group"&gt;
+                &lt;label&gt;Your Private Key:&lt;/label&gt;
+                &lt;input type="number" name="priv2" required&gt;
+            &lt;/div&gt;
+            
+            &lt;div class="form-group"&gt;
+                &lt;label&gt;Sender's Public Key:&lt;/label&gt;
+                &lt;input type="number" name="sender_pub" required&gt;
+            &lt;/div&gt;
+            
+            &lt;button type="submit"&gt;Decrypt&lt;/button&gt;
+        &lt;/form&gt;
+        
+        {% if decrypted %}
+        &lt;div class="result"&gt;
+            &lt;h3&gt;Decrypted Message:&lt;/h3&gt;
+            &lt;p&gt;{{ decrypted }}&lt;/p&gt;
+        &lt;/div&gt;
+        {% endif %}
+        
+        {% if error %}
+        &lt;div class="result error"&gt;
+            &lt;h3&gt;Error:&lt;/h3&gt;
+            &lt;p&gt;{{ error }}&lt;/p&gt;
+        &lt;/div&gt;
+        {% endif %}
+        
+        &lt;p&gt;&lt;a href="/" style="color: white;"&gt;← Back to Home&lt;/a&gt;&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Computer ID Project Codes -->
+    <div id="computer-id" class="project-section">
+      <h2>💻 Computer ID System - Code Files</h2>
+      
+      <div class="code-window">
+        <h3>Main Application (123.py)</h3>
+        <div class="code-content" id="computer-main">
+          <pre>from flask import Flask, render_template
+import socket
+app = Flask(__name__, template_folder='.')
+
+@app.route("/")
+def home():
+    host = socket.gethostname()
+    return render_template("main.html", result=host)
+
+if __name__ == "__main__":
+    app.run(debug=True)</pre>
+        </div>
+      </div>
+
+      <div class="code-window">
+        <h3>System Dashboard (main.html)</h3>
+        <div class="code-content" id="computer-dashboard">
+          <pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;PC Info&lt;/title&gt;
+    &lt;style&gt;
+        body {
+            background: url('{{ url_for('static', filename='background.jpg') }}') no-repeat center center fixed;
+            background-size: cover;
+            color: #ffd700;
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 50px;
+            color: #fff;
+            text-shadow: 1px 1px 3px #000;
+        }
+
+        .section {
+            border-radius: 10px;
+            padding: 20px 30px;
+            margin-bottom: 30px;
+            border: 1px solid #444;
+            background-color: rgba(0, 0, 0, 0.6);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+        }
+
+        .section h2 {
+            border-bottom: 1px solid #888;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        p {
+            margin: 8px 0;
+            font-size: 16px;
+        }
+
+        .network h2 { color: #FFD700; }
+        .os h2      { color: #00CED1; }
+        .cpu h2     { color: #ADFF2F; }
+        .disk h2    { color: #FFA07A; }
+        .ram h2     { color: #DA70D6; }
+        .time h2    { color: #87CEFA; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;PC Info&lt;/h1&gt;
+
+    &lt;div class="section network"&gt;
+        &lt;h2&gt;Network Info&lt;/h2&gt;
+        &lt;p&gt;Host Name: {{ host }}&lt;/p&gt;
+        &lt;p&gt;IP Address: {{ ip }}&lt;/p&gt;
+        &lt;p&gt;FQDN: {{ fqdn }}&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;div class="section os"&gt;
+        &lt;h2&gt;OS Info&lt;/h2&gt;
+        &lt;p&gt;System: {{ os_info.system }}&lt;/p&gt;
+        &lt;p&gt;Release: {{ os_info.release }}&lt;/p&gt;
+        &lt;p&gt;Version: {{ os_info.version }}&lt;/p&gt;
+        &lt;p&gt;Architecture: {{ os_info.architecture }}&lt;/p&gt;
+        &lt;p&gt;CPU: {{ os_info.cpu }}&lt;/p&gt;
+        &lt;p&gt;Node: {{ os_info.node }}&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;div class="section cpu"&gt;
+        &lt;h2&gt;CPU Info&lt;/h2&gt;
+        &lt;p&gt;Physical Cores: {{ cpu_info.physical_cores }}&lt;/p&gt;
+        &lt;p&gt;Total Cores: {{ cpu_info.total_cores }}&lt;/p&gt;
+        &lt;p&gt;Max Frequency: {{ cpu_info.max_freq }}&lt;/p&gt;
+        &lt;p&gt;Current Frequency: {{ cpu_info.current_freq }}&lt;/p&gt;
+        &lt;p&gt;CPU Usage: {{ cpu_info.usage }}&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;div class="section disk"&gt;
+        &lt;h2&gt;Disk Info ({{ disk_info.mount }})&lt;/h2&gt;
+        &lt;p&gt;Total Disk Space: {{ disk_info.total }}&lt;/p&gt;
+        &lt;p&gt;Used Disk Space: {{ disk_info.used }}&lt;/p&gt;
+        &lt;p&gt;Free Disk Space: {{ disk_info.free }}&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;div class="section ram"&gt;
+        &lt;h2&gt;RAM Info&lt;/h2&gt;
+        &lt;p&gt;Available RAM: {{ ram_info.available }}&lt;/p&gt;
+        &lt;p&gt;Total RAM: {{ ram_info.total }}&lt;/p&gt;
+        &lt;p&gt;Used RAM: {{ ram_info.used }}&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;div class="section time"&gt;
+        &lt;h2&gt;Time Info&lt;/h2&gt;
+        &lt;p&gt;System Boot Time: {{ time_info.boot }}&lt;/p&gt;
+        &lt;p&gt;Current Time: {{ time_info.now }}&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+        </div>
+      </div>
+
+      <div class="code-window">
+        <h3>Test Template (test.html)</h3>
+        <div class="code-content" id="computer-test">
+          <pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Background Test&lt;/title&gt;
+    &lt;style&gt;
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+        body {
+            background: url('background.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1 style="color:white; text-align:center; margin-top: 50px;"&gt;Background Test&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hangman Project Codes -->
+    <div id="hangman" class="project-section">
+      <h2>🎮 Hangman Game - Code Files</h2>
+      
+      <div class="code-window">
+        <h3>Main Game (index.html)</h3>
+        <div class="code-content" id="hangman-html">
+          <p>Loading index.html...</p>
+        </div>
+      </div>
+
+      <div class="code-window">
+        <h3>Game Logic (script.js)</h3>
+        <div class="code-content" id="hangman-js">
+          <p>Loading script.js...</p>
+        </div>
+      </div>
+
+      <div class="code-window">
+        <h3>Styling (styles.css)</h3>
+        <div class="code-content" id="hangman-css">
+          <p>Loading styles.css...</p>
+        </div>
+      </div>
+
+      <div class="code-window">
+        <h3>Server (server.js)</h3>
+        <div class="code-content" id="hangman-server">
+          <p>Loading server.js...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Movie Recommender Project Codes -->
+    <div id="movie-recommender" class="project-section">
+      <h2>🎬 MovieIt - AI Recommender - Code Files</h2>
+      
+      <div class="code-window">
+        <h3>Main Application (movie_tracker.py)</h3>
+        <div class="code-content" id="movie-main">
+          <pre>import json
+import os
+from datetime import datetime
+import urllib.request
+import urllib.parse
+import urllib.error
+
+class MovieTracker:
+    def __init__(self):
+        self.movies_file = "movies.json"
+        self.movies = self.load_movies()
+        self.api_key = "d74a624410ea1d50ef3545bfb815acf5"  # Your TMDB API key
+        self.base_url = "https://api.themoviedb.org/3"
+
+    def load_movies(self):
+        if os.path.exists(self.movies_file):
+            with open(self.movies_file, 'r') as f:
+                return json.load(f)
+        return []
+
+    def save_movies(self):
+        with open(self.movies_file, 'w') as f:
+            json.dump(self.movies, f, indent=4)
+
+    def fetch_from_tmdb(self, url):
+        try:
+            with urllib.request.urlopen(url) as response:
+                data = response.read()
+                return json.loads(data)
+        except urllib.error.URLError as e:
+            print(f"Error: {e}")
+            return None
+
+    def search_movie(self, title):
+        """Search movie by title using TMDB API"""
+        query = urllib.parse.quote(title)
+        url = f"{self.base_url}/search/movie?api_key={self.api_key}&query={query}"
+        data = self.fetch_from_tmdb(url)
+        return data["results"][0] if data and data.get("results") else None
+
+    def get_movie_details(self, movie_id):
+        url = f"{self.base_url}/movie/{movie_id}?api_key={self.api_key}"
+        return self.fetch_from_tmdb(url)
+
+    def add_movie(self):
+        title = input("Enter movie title: ")
+        print("Searching TMDB...")
+        movie_data = self.search_movie(title)
+        if not movie_data:
+            print("Movie not found.")
+            return
+
+        details = self.get_movie_details(movie_data['id'])
+        if not details:
+            print("Details not found.")
+            return
+
+        movie = {
+            "title": details["title"],
+            "year": details.get("release_date", "Unknown")[:4],
+            "genre": details["genres"][0]["name"] if details.get("genres") else "Unknown",
+            "rating": str(round(details.get("vote_average", 0.0), 1)),
+            "overview": details.get("overview", ""),
+            "date_added": datetime.now().strftime("%Y-%m-%d"),
+            "tmdb_id": details["id"]
+        }
+
+        if any(m["tmdb_id"] == movie["tmdb_id"] for m in self.movies):
+            print("Movie already in your list.")
+            return
+
+        self.movies.append(movie)
+        self.save_movies()
+        print(f"\\nAdded: {movie['title']} ({movie['year']})")
+
+    def show_all_movies(self):
+        if not self.movies:
+            print("No movies found.")
+            return
+        print("\\n=== Your Movie Collection ===")
+        print("{:<4} {:<40} {:<10} {:<10}".format("No.", "Title", "Genre", "Rating"))
+        print("-" * 70)
+        for i, m in enumerate(self.movies, 1):
+            print("{:<4} {:<40} {:<10} {:<10}".format(i, m["title"][:37], m["genre"], m["rating"] + "/10"))
+
+    def remove_movie(self):
+        self.show_all_movies()
+        if not self.movies:
+            return
+        try:
+            index = int(input("Enter number to remove: ")) - 1
+            if 0 <= index < len(self.movies):
+                removed = self.movies.pop(index)
+                self.save_movies()
+                print(f"Removed: {removed['title']}")
+            else:
+                print("Invalid number.")
+        except ValueError:
+            print("Invalid input.")
+
+def main():
+    tracker = MovieTracker()
+    while True:
+        print("\\n=== Movie Tracker ===")
+        print("1. Add Movie from TMDB")
+        print("2. Show All Movies")
+        print("3. Remove Movie")
+        print("4. Exit")
+        choice = input("Choose (1–4): ")
+        if choice == "1":
+            tracker.add_movie()
+        elif choice == "2":
+            tracker.show_all_movies()
+        elif choice == "3":
+            tracker.remove_movie()
+        elif choice == "4":
+            break
+        else:
+            print("Invalid option.")
+
+if __name__ == "__main__":
+    main()</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Info Modal -->
+  <div id="info-modal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeInfo()">&times;</span>
+      <h2>👨‍💻 About Calvin</h2>
+      <div class="info-grid">
+        <div class="info-section">
+          <h3>🎯 Skills</h3>
+          <ul>
+            <li>Python (Flask, Django)</li>
+            <li>JavaScript (Node.js, React)</li>
+            <li>HTML/CSS (Modern Web Design)</li>
+            <li>Cybersecurity & Encryption</li>
+            <li>AI/ML Implementation</li>
+            <li>System Administration</li>
+          </ul>
+        </div>
+        <div class="info-section">
+          <h3>🏆 Achievements</h3>
+          <ul>
+            <li>Built comprehensive encryption suite</li>
+            <li>Developed system monitoring tools</li>
+            <li>Created AI-powered applications</li>
+            <li>Designed interactive web games</li>
+            <li>Implemented secure web interfaces</li>
+          </ul>
+        </div>
+        <div class="info-section">
+          <h3>🎓 Education</h3>
+          <ul>
+            <li>Self-taught developer</li>
+            <li>Continuous learning approach</li>
+            <li>Hands-on project experience</li>
+            <li>Problem-solving mindset</li>
+          </ul>
+        </div>
+        <div class="info-section">
+          <h3>🌟 Interests</h3>
+          <ul>
+            <li>Cybersecurity & Privacy</li>
+            <li>AI & Machine Learning</li>
+            <li>Web Development</li>
+            <li>System Tools</li>
+            <li>Innovation & Technology</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Info Modal
+    function showInfo() {
+      document.getElementById('info-modal').style.display = 'block';
+    }
+
+    function closeInfo() {
+      document.getElementById('info-modal').style.display = 'none';
+    }
+
+    // Close modals when clicking outside
+    window.onclick = function(event) {
+      const infoModal = document.getElementById('info-modal');
+      if (event.target === infoModal) {
+        closeInfo();
+      }
+    }
+
+    // Load code files when page loads
+    window.onload = function() {
+      loadMainWebsiteCodes();
+      loadHangmanCodes();
+    };
+
+    function showProject(projectName) {
+      // Hide all project sections
+      document.querySelectorAll('.project-section').forEach(section => {
+        section.classList.remove('active');
+      });
+      
+      // Remove active class from all nav buttons
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      
+      // Show selected project section
+      document.getElementById(projectName).classList.add('active');
+      
+      // Add active class to clicked button
+      event.target.classList.add('active');
+    }
+
+    async function loadMainWebsiteCodes() {
+      try {
+        const mainResponse = await fetch('./main.html');
+        const mainCode = await mainResponse.text();
+        document.getElementById('main-html').innerHTML = `<pre>${escapeHtml(mainCode)}</pre>`;
+      } catch (error) {
+        document.getElementById('main-html').innerHTML = '<p style="color: #ff6b6b;">Error loading main.html</p>';
+      }
+
+      try {
+        const projectsResponse = await fetch('./projects.html');
+        const projectsCode = await projectsResponse.text();
+        document.getElementById('projects-html').innerHTML = `<pre>${escapeHtml(projectsCode)}</pre>`;
+      } catch (error) {
+        document.getElementById('projects-html').innerHTML = '<p style="color: #ff6b6b;">Error loading projects.html</p>';
+      }
+
+      try {
+        const styleResponse = await fetch('./style.css');
+        const styleCode = await styleResponse.text();
+        document.getElementById('main-css').innerHTML = `<pre>${escapeHtml(styleCode)}</pre>`;
+      } catch (error) {
+        document.getElementById('main-css').innerHTML = '<p style="color: #ff6b6b;">Error loading style.css</p>';
+      }
+
+      try {
+        const projectsCssResponse = await fetch('./projects.css');
+        const projectsCssCode = await projectsCssResponse.text();
+        document.getElementById('projects-css').innerHTML = `<pre>${escapeHtml(projectsCssCode)}</pre>`;
+      } catch (error) {
+        document.getElementById('projects-css').innerHTML = '<p style="color: #ff6b6b;">Error loading projects.css</p>';
+      }
+
+      try {
+        const projectCodesCssResponse = await fetch('./project-codes.css');
+        const projectCodesCssCode = await projectCodesCssResponse.text();
+        document.getElementById('project-codes-css').innerHTML = `<pre>${escapeHtml(projectCodesCssCode)}</pre>`;
+      } catch (error) {
+        document.getElementById('project-codes-css').innerHTML = '<p style="color: #ff6b6b;">Error loading project-codes.css</p>';
+      }
+    }
+
+    async function loadHangmanCodes() {
+      try {
+        const htmlResponse = await fetch('../mine/hangman/index.html');
+        const htmlCode = await htmlResponse.text();
+        document.getElementById('hangman-html').innerHTML = `<pre>${escapeHtml(htmlCode)}</pre>`;
+      } catch (error) {
+        document.getElementById('hangman-html').innerHTML = '<p style="color: #ff6b6b;">Error loading index.html</p>';
+      }
+
+      try {
+        const jsResponse = await fetch('../mine/hangman/script.js');
+        const jsCode = await jsResponse.text();
+        document.getElementById('hangman-js').innerHTML = `<pre>${escapeHtml(jsCode)}</pre>`;
+      } catch (error) {
+        document.getElementById('hangman-js').innerHTML = '<p style="color: #ff6b6b;">Error loading script.js</p>';
+      }
+
+      try {
+        const cssResponse = await fetch('../mine/hangman/styles.css');
+        const cssCode = await cssResponse.text();
+        document.getElementById('hangman-css').innerHTML = `<pre>${escapeHtml(cssCode)}</pre>`;
+      } catch (error) {
+        document.getElementById('hangman-css').innerHTML = '<p style="color: #ff6b6b;">Error loading styles.css</p>';
+      }
+
+      try {
+        const serverResponse = await fetch('../mine/hangman/server.js');
+        const serverCode = await serverResponse.text();
+        document.getElementById('hangman-server').innerHTML = `<pre>${escapeHtml(serverCode)}</pre>`;
+      } catch (error) {
+        document.getElementById('hangman-server').innerHTML = '<p style="color: #ff6b6b;">Error loading server.js</p>';
+      }
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+  </script>
+</body>
+</html> 

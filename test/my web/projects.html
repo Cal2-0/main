@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Projects</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="projects.css">
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="main.html" class="nav-logo">VEx</a>
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="main.html" class="nav-link">Home</a>
+        </li>
+        <li class="nav-item">
+          <a href="projects.html" class="nav-link active">My Projects</a>
+        </li>
+        <li class="nav-item">
+          <a href="project-codes.html" class="nav-link">Project Codes</a>
+        </li>
+      </ul>
+      <button class="info-btn" onclick="showInfo()">ℹ️</button>
+    </div>
+  </nav>
+
+  <div class="main-content page-transition">
+    <h1>My Projects</h1>
+    <p>Explore my collection of innovative projects</p>
+
+    <div class="projects-grid">
+      <div class="project-card" onclick="showProjectInfo('encryption')">
+        <span class="project-icon">🔐</span>
+        <h3>Encryption Suite</h3>
+        <p>A comprehensive encryption tool with multiple algorithms including RSA, AES, and custom implementations.</p>
+      </div>
+
+      <div class="project-card" onclick="showProjectInfo('computer-id')">
+        <span class="project-icon">💻</span>
+        <h3>Computer ID System</h3>
+        <p>System information dashboard that displays hardware details, network info, and system status.</p>
+      </div>
+
+      <div class="project-card" onclick="showProjectInfo('hangman')">
+        <span class="project-icon">🎮</span>
+        <h3>Hangman Game</h3>
+        <p>Interactive web-based hangman game with word categories, scoring system, and smooth animations.</p>
+      </div>
+
+      <div class="project-card" onclick="showProjectInfo('movie-tracker')">
+        <span class="project-icon">🎬</span>
+        <h3>Movie Tracker</h3>
+        <p>AI-powered movie recommendation system with user preferences and rating analysis.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Project Info Modal -->
+  <div id="project-modal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeProjectInfo()">&times;</span>
+      <div id="project-content">
+        <!-- Content will be loaded dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Info Modal -->
+  <div id="info-modal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeInfo()">&times;</span>
+      <h2>👨‍💻 About Calvin</h2>
+      <div class="info-grid">
+        <div class="info-section">
+          <h3>🎯 Skills</h3>
+          <ul>
+            <li>Python (Flask, Django)</li>
+            <li>JavaScript (Node.js, React)</li>
+            <li>HTML/CSS (Modern Web Design)</li>
+            <li>Cybersecurity & Encryption</li>
+            <li>AI/ML Implementation</li>
+            <li>System Administration</li>
+          </ul>
+        </div>
+        <div class="info-section">
+          <h3>🏆 Achievements</h3>
+          <ul>
+            <li>Built comprehensive encryption suite</li>
+            <li>Developed system monitoring tools</li>
+            <li>Created AI-powered applications</li>
+            <li>Designed interactive web games</li>
+            <li>Implemented secure web interfaces</li>
+          </ul>
+        </div>
+        <div class="info-section">
+          <h3>🎓 Education</h3>
+          <ul>
+            <li>Self-taught developer</li>
+            <li>Continuous learning approach</li>
+            <li>Hands-on project experience</li>
+            <li>Problem-solving mindset</li>
+          </ul>
+        </div>
+        <div class="info-section">
+          <h3>🌟 Interests</h3>
+          <ul>
+            <li>Cybersecurity & Privacy</li>
+            <li>AI & Machine Learning</li>
+            <li>Web Development</li>
+            <li>System Tools</li>
+            <li>Innovation & Technology</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Project Info Modal
+    function showProjectInfo(projectType) {
+      const modal = document.getElementById('project-modal');
+      const content = document.getElementById('project-content');
+      
+      const projectData = {
+        encryption: {
+          title: '🔐 Encryption Suite',
+          description: 'A comprehensive encryption tool with multiple algorithms including RSA, AES, and custom implementations.',
+          features: [
+            'RSA Public/Private Key Encryption',
+            'AES Symmetric Encryption',
+            'Custom Encryption Algorithms',
+            'Secure Key Generation',
+            'File Encryption Support',
+            'Web-based Interface'
+          ],
+          tech: ['Python', 'Flask', 'HTML/CSS', 'JavaScript', 'Cryptography'],
+          instructions: 'To run this project, navigate to the encryption folder and run the Flask application. The web interface allows you to encrypt/decrypt text and files using various algorithms.',
+          location: 'encrp/main/'
+        },
+        'computer-id': {
+          title: '💻 Computer ID System',
+          description: 'System information dashboard that displays hardware details, network info, and system status.',
+          features: [
+            'Hardware Information Display',
+            'Network Configuration',
+            'System Performance Metrics',
+            'Real-time Monitoring',
+            'User-friendly Interface',
+            'Cross-platform Compatibility'
+          ],
+          tech: ['Python', 'Flask', 'HTML/CSS', 'System Libraries'],
+          instructions: 'Run the main.py file in the compid folder. This will start a web server that displays comprehensive system information in an easy-to-read format.',
+          location: 'compid/main/'
+        },
+        hangman: {
+          title: '🎮 Hangman Game',
+          description: 'Interactive web-based hangman game with word categories, scoring system, and smooth animations.',
+          features: [
+            'Multiple Word Categories',
+            'Progressive Difficulty',
+            'Score Tracking',
+            'Smooth Animations',
+            'Responsive Design',
+            'Sound Effects'
+          ],
+          tech: ['HTML', 'CSS', 'JavaScript', 'Node.js'],
+          instructions: 'Open the hangman folder and run the server.js file with Node.js. Then open the game in your browser for an interactive hangman experience.',
+          location: 'mine/hangman/'
+        },
+        'movie-tracker': {
+          title: '🎬 Movie Tracker',
+          description: 'AI-powered movie recommendation system with user preferences and rating analysis.',
+          features: [
+            'AI-powered Recommendations',
+            'User Preference Learning',
+            'Movie Database Integration',
+            'Rating Analysis',
+            'Personalized Suggestions',
+            'Watchlist Management'
+          ],
+          tech: ['Python', 'Machine Learning', 'Data Analysis', 'Pandas'],
+          instructions: 'Run the movie_tracker.py file in the MoiveIt folder. The system will analyze your preferences and provide personalized movie recommendations.',
+          location: 'mine/MoiveIt/'
+        }
+      };
+      
+      const project = projectData[projectType];
+      
+      content.innerHTML = `
+        <h2>${project.title}</h2>
+        <p style="color: rgb(227, 235, 8); font-size: 1.1em; margin-bottom: 20px;">${project.description}</p>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+          <div>
+            <h3 style="color: rgb(255, 255, 0); margin-bottom: 10px;">✨ Features</h3>
+            <ul style="color: rgb(227, 235, 8);">
+              ${project.features.map(feature => `<li>${feature}</li>`).join('')}
+            </ul>
+          </div>
+          <div>
+            <h3 style="color: rgb(255, 255, 0); margin-bottom: 10px;">🛠️ Technologies</h3>
+            <ul style="color: rgb(227, 235, 8);">
+              ${project.tech.map(tech => `<li>${tech}</li>`).join('')}
+            </ul>
+          </div>
+        </div>
+        
+        <div style="background: rgba(255, 255, 255, 0.1); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+          <h3 style="color: rgb(255, 255, 0); margin-bottom: 10px;">📁 Project Location</h3>
+          <p style="color: rgb(227, 235, 8); margin: 0;">${project.location}</p>
+        </div>
+        
+        <div style="background: rgba(0, 0, 255, 0.1); padding: 15px; border-radius: 8px; border-left: 4px solid rgb(0, 0, 255);">
+          <h3 style="color: rgb(255, 255, 0); margin-bottom: 10px;">🚀 How to Run</h3>
+          <p style="color: rgb(227, 235, 8); margin: 0;">${project.instructions}</p>
+        </div>
+      `;
+      
+      modal.style.display = 'block';
+    }
+
+    function closeProjectInfo() {
+      document.getElementById('project-modal').style.display = 'none';
+    }
+
+    // Info Modal
+    function showInfo() {
+      document.getElementById('info-modal').style.display = 'block';
+    }
+
+    function closeInfo() {
+      document.getElementById('info-modal').style.display = 'none';
+    }
+
+    // Close modals when clicking outside
+    window.onclick = function(event) {
+      const projectModal = document.getElementById('project-modal');
+      const infoModal = document.getElementById('info-modal');
+      if (event.target === projectModal) {
+        closeProjectInfo();
+      }
+      if (event.target === infoModal) {
+        closeInfo();
+      }
+    }
+  </script>
+</body>
+</html> 
