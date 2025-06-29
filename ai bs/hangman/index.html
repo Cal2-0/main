@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retro Hangman - Movie Edition</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Welcome Screen -->
+        <div id="welcome-screen" class="welcome-screen">
+            <h1 class="retro-title">🎬 MOVIE HANGMAN 🎬</h1>
+            <div class="difficulty-selector">
+                <h2>CHOOSE DIFFICULTY:</h2>
+                <div class="difficulty-buttons">
+                    <button class="difficulty-btn" data-difficulty="easy">EASY</button>
+                    <button class="difficulty-btn" data-difficulty="medium">MEDIUM</button>
+                    <button class="difficulty-btn" data-difficulty="hard">HARD</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Genre Selection Screen -->
+        <div id="genre-screen" class="genre-screen">
+            <h2>CHOOSE A GENRE:</h2>
+            <div class="genre-buttons">
+                <!-- Genres will be populated dynamically -->
+            </div>
+        </div>
+
+        <!-- Main Game Screen -->
+        <div id="game-screen" class="game-screen">
+            <div class="game-area">
+                <!-- Top: Game Info and Controls -->
+                <div class="game-info">
+                    <div class="score">SCORE: <span id="score">0</span></div>
+                    <div class="lives">LIVES: <span id="lives">6</span></div>
+                    <div class="streak">STREAK: <span id="streak">0</span></div>
+                </div>
+                <div class="game-controls">
+                    <button id="hint-btn" class="control-btn">HINT (-10 POINTS)</button>
+                    <button id="skip-btn" class="control-btn">SKIP (-20 POINTS)</button>
+                    <div class="audio-controls">
+                        <button id="mute-btn" class="control-btn">🔊</button>
+                        <input type="range" id="volume-slider" min="0" max="100" value="100" class="volume-slider">
+                    </div>
+                </div>
+
+                <!-- Game Content -->
+                <div class="game-content">
+                    <!-- Left Side: Hangman Drawing -->
+                    <div class="game-left">
+                        <div class="hangman-drawing">
+                            <div class="hangman-container">
+                                <div class="hangman-part" id="stand"></div>
+                                <div class="hangman-part" id="head"></div>
+                                <div class="hangman-part" id="body"></div>
+                                <div class="hangman-part" id="left-arm"></div>
+                                <div class="hangman-part" id="right-arm"></div>
+                                <div class="hangman-part" id="left-leg"></div>
+                                <div class="hangman-part" id="right-leg"></div>
+                            </div>
+                        </div>
+                        <div class="word-display" id="word-display"></div>
+                    </div>
+
+                    <!-- Right Side: Keyboard -->
+                    <div class="game-right">
+                        <div class="keyboard" id="keyboard"></div>
+                    </div>
+                </div>
+                <div class="message" id="message"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio elements -->
+    <audio id="correct-sound" src="https://assets.mixkit.co/active_storage/sfx/2570/2570-preview.mp3"></audio>
+    <audio id="wrong-sound" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3"></audio>
+    <audio id="win-sound" src="https://assets.mixkit.co/active_storage/sfx/2572/2572-preview.mp3"></audio>
+    <audio id="lose-sound" src="https://assets.mixkit.co/active_storage/sfx/2573/2573-preview.mp3"></audio>
+    <audio id="click-sound" src="https://assets.mixkit.co/active_storage/sfx/2574/2574-preview.mp3"></audio>
+
+    <script src="script.js"></script>
+</body>
+</html> 

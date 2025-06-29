@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>calGBT</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background: #181818;
+            color: #eaeaea;
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            box-sizing: border-box;
+        }
+        body {
+            min-height: 100vh;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: #181818;
+        }
+        .header {
+            text-align: center;
+            padding: 2.5rem 0 1.2rem 0;
+            font-size: 2.2rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            color: #eaeaea;
+            background: transparent;
+            border-bottom: 1px solid #232323;
+            margin-bottom: 0;
+            user-select: none;
+        }
+        .main-content {
+            width: 100vw;
+            background: #181818;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            min-height: 0;
+            flex: 1 1 auto;
+        }
+        .chat-container {
+            width: 100vw;
+            max-width: 700px;
+            min-width: 0;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 0;
+            box-sizing: border-box;
+            gap: 0.5rem;
+        }
+        .message-row {
+            display: flex;
+            align-items: flex-end;
+            margin: 0.5rem 0;
+        }
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            margin: 0 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #232323;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .avatar.ai {
+            background: #232323;
+        }
+        .message {
+            max-width: 70vw;
+            padding: 1.1rem 1.4rem;
+            font-size: 1.08rem;
+            border-radius: 1.2rem;
+            margin-bottom: 2px;
+            word-break: break-word;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+            border: 1px solid #232323;
+            background: #202124;
+            color: #eaeaea;
+            transition: background 0.2s;
+        }
+        .message.user {
+            align-self: flex-start;
+            border-bottom-left-radius: 0.3rem;
+            background: #232323;
+            color: #eaeaea;
+        }
+        .message.ai {
+            align-self: flex-end;
+            border-bottom-right-radius: 0.3rem;
+            background: #232323;
+            color: #eaeaea;
+            white-space: pre-line;
+        }
+        .input-area {
+            width: 100vw;
+            background: rgba(24,24,24,0.98);
+            padding: 24px 0 24px 0;
+            display: flex;
+            justify-content: center;
+            box-shadow: 0 -2px 24px rgba(0,0,0,0.18);
+            z-index: 10;
+            border-top: 1px solid #232323;
+        }
+        .input-form {
+            display: flex;
+            width: 100%;
+            max-width: 700px;
+            background: #232323;
+            border-radius: 1.5rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+            border: 1px solid #232323;
+        }
+        .input-form input[type="text"] {
+            flex: 1;
+            padding: 1.1rem 1.4rem;
+            border: none;
+            border-radius: 1.5rem 0 0 1.5rem;
+            font-size: 1.08rem;
+            background: #181818;
+            color: #eaeaea;
+            outline: none;
+            box-shadow: none;
+        }
+        .input-form button {
+            padding: 0 2.2rem;
+            border: none;
+            border-radius: 0 1.5rem 1.5rem 0;
+            background: #232323;
+            color: #eaeaea;
+            font-size: 1.08rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+            box-shadow: none;
+            border-left: 1px solid #232323;
+        }
+        .input-form button:hover {
+            background: #202124;
+            color: #fff;
+        }
+        .clear-btn {
+            position: absolute;
+            right: 30px;
+            top: 2.2rem;
+            background: #232323;
+            color: #eaeaea;
+            border: none;
+            border-radius: 8px;
+            padding: 7px 18px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border: 1px solid #232323;
+        }
+        .clear-btn:hover {
+            background: #202124;
+            color: #fff;
+        }
+        /* Custom Scrollbar Styles */
+        .chat-container::-webkit-scrollbar {
+            width: 10px;
+            background: #232323;
+        }
+        .chat-container::-webkit-scrollbar-thumb {
+            background: #353535;
+            border-radius: 8px;
+        }
+        .chat-container::-webkit-scrollbar-thumb:hover {
+            background: #444;
+        }
+        .chat-container {
+            scrollbar-width: thin;
+            scrollbar-color: #353535 #232323;
+        }
+        /* Custom Scrollbar Styles for .main-content */
+        .main-content::-webkit-scrollbar {
+            width: 10px;
+            background: #232323;
+        }
+        .main-content::-webkit-scrollbar-thumb {
+            background: #353535;
+            border-radius: 8px;
+        }
+        .main-content::-webkit-scrollbar-thumb:hover {
+            background: #444;
+        }
+        .main-content {
+            scrollbar-width: thin;
+            scrollbar-color: #353535 #232323;
+        }
+        @media (max-width: 800px) {
+            .chat-container, .input-form {
+                max-width: 98vw;
+            }
+            .message {
+                max-width: 90vw;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        calGBT
+        <form method="POST" style="display:inline;">
+            <button class="clear-btn" name="clear" type="submit">Clear Chat</button>
+        </form>
+    </div>
+    <div class="main-content">
+        <div class="chat-container" id="chat-container">
+            {% for msg in history %}
+                <div class="message-row">
+                    {% if msg.role == 'user' %}
+                        <div class="avatar user">
+                            <!-- User SVG -->
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="5" fill="#00ffc8"/><ellipse cx="12" cy="19" rx="7" ry="4" fill="#00ffc8" opacity="0.5"/></svg>
+                        </div>
+                        <div class="message user">{{ msg.content }}</div>
+                    {% else %}
+                        <div class="message ai">{{ msg.content }}</div>
+                        <div class="avatar ai">
+                            <!-- AI SVG -->
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="16" rx="8" fill="#181818" stroke="#181818" stroke-width="2"/><circle cx="12" cy="12" r="5" fill="#23272f"/><circle cx="12" cy="12" r="2" fill="#00ffc8"/></svg>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            {% if loading %}
+                <div class="loading"><span class="spinner"></span>calGBT is typing...</div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="input-area">
+        <form class="input-form" method="POST" autocomplete="off">
+            <input type="text" name="inputText" placeholder="Type your message..." required autofocus>
+            <button type="submit">Send</button>
+        </form>
+    </div>
+    <script>
+        // Robust auto-scroll to bottom on page load and after each message
+        function scrollChatToBottom() {
+            const chatContainer = document.getElementById('chat-container');
+            if (chatContainer) {
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+        }
+        window.onload = scrollChatToBottom;
+        // Also scroll after each form submit (after a short delay for DOM update)
+        document.querySelector('.input-form').addEventListener('submit', function() {
+            setTimeout(scrollChatToBottom, 100);
+        });
+    </script>
+</body>
+</html>
