@@ -22,7 +22,7 @@ def hand(con, addr):
             if msg == DIS:
                 connected = False
             print(f"[{addr}, {msg}]")
-            con.send("Msg Received".encode(FORMAT) )
+            con.send("[Msg Received]".encode(FORMAT) )
 
     con.close()
 
