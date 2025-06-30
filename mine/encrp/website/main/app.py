@@ -82,15 +82,14 @@ def decrypt():
 
 @app.route("/publickey", methods=["GET", "POST"])
 def public_key():
-    output = ""
+    pubkey = ""
     if request.method == "POST":
         try:
             priv = int(request.form.get("priv", 0))
-            result = get_public_key(priv)
-            output = f"Public Key: {result}"
+            pubkey = get_public_key(priv)
         except Exception as e:
-            output = f"Error: {e}"
-    return render_template("index.html", output=output)
+            pubkey = f"Error: {e}"
+    return render_template("publickey.html", pubkey=pubkey)
 
 @app.route("/quit")
 def quit_app():

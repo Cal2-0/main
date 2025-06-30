@@ -1,7 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head><title>Encrypt Message</title></head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}Encrypt Message{% endblock %}
+
+{% block content %}
     <h2>Encrypt Message</h2>
     <form method="POST">
         <label>Message to Encrypt:</label><br>
@@ -18,7 +19,7 @@
 
     {% if encrypted %}
         <h3>Encrypted Message:</h3>
-        <p id="encrypted-output" style="word-wrap: break-word; cursor:pointer; background:#f0f0f0;" onclick="copyEncrypted()">{{ encrypted }}</p>
+        <p id="encrypted-output" class="output-copy" onclick="copyEncrypted()">{{ encrypted }}</p>
         <script>
         function copyEncrypted() {
             var text = document.getElementById('encrypted-output').innerText;
@@ -30,5 +31,4 @@
 
     <br>
     <a href="/">Back to Main Menu</a>
-</body>
-</html> 
+{% endblock %} 
