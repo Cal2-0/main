@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Galactic Shooter</title>
+  <style>
+    body {
+      margin: 0;
+      background: #181a20;
+      color: #fff;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+    #gameCanvas {
+      background: #111;
+      display: block;
+      margin: 30px auto 0 auto;
+      border-radius: 12px;
+      box-shadow: 0 0 32px #000a;
+    }
+    .scoreboard {
+      display: flex;
+      justify-content: space-between;
+      width: 900px;
+      margin-top: 10px;
+      font-size: 1.2em;
+      font-family: 'Segoe UI', Arial, sans-serif;
+    }
+    .controls {
+      width: 900px;
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+      font-size: 1em;
+      color: #aaa;
+    }
+    .winner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0,0,0,0.85);
+      color: #fff;
+      font-size: 3em;
+      padding: 40px 60px;
+      border-radius: 20px;
+      box-shadow: 0 0 32px #000a;
+      z-index: 10;
+      text-align: center;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="scoreboard">
+    <div>
+      <span id="yellowHealth">Yellow Health: 10</span>
+      &nbsp;|&nbsp;
+      <span id="yellowScore">Yellow Score: 0</span>
+    </div>
+    <div>
+      <span id="redHealth">Red Health: 10</span>
+      &nbsp;|&nbsp;
+      <span id="redScore">Red Score: 0</span>
+    </div>
+  </div>
+  <canvas id="gameCanvas" width="1300" height="650"></canvas>
+  <div class="controls">
+    <div>Yellow: Move (WASD), Shoot (R)</div>
+    <div>Red: Move (Arrows), Shoot (L)</div>
+  </div>
+  <div class="winner" id="winnerMsg"></div>
+  <script>
+    // --- Asset paths ---
+    const assetPath = 'Assets/';
+    const backgrounds = ['1624.jpg','1700.jpg','1771.jpg','1666.jpg'];
+    const yellowShipImg = 'spaceship_yellow.png';
+    const redShipImg = 'spaceship_red.png';
+    const sounds = {
+      hit: 'Grenade+1.mp3',
+      shoot: 'Gun+Silencer.mp3',
+      win: 'sound.mp3',
+    };
+
+    // --- Game constants ---
+    const WI = 1300, HE = 650;
+    const swi = 55, she = 40;
+    const BORDER_X = WI/2 - 5, BORDER_W = 10;
+    const VEL = 5, BVEL = 7, FPS = 60;
+    const MAX_BULLETS = 4;
+    const INIT_HEALTH = 10;
+
+    // --- Game state ---
+    let yellow = {x: 100, y: HE/2 - she/2, w: swi, h: she, health: INIT_HEALTH};
+    let red = {x: WI - 100 - swi, y: HE/2 - she/2, w: swi, h: she, health: INIT_HEALTH};
+    let yellowBullets = [], redBullets = [];
+    let keys = {};
+    let running = true;
+    let winner = '';
+    let yellowScore = 0;
+    let redScore = 0;
+
+    // --- Load images ---
+    function loadImage(src) {
+      return new Promise(res => {
+        const img = new Image();
+        img.src = assetPath + src;
+        img.onload = () => res(img);
+      });
+    }
+    // --- Load sounds ---
+    function loadSound(src) {
+      const audio = new Audio(assetPath + src);
+      audio.volume = 0.125;
+      return audio;
+    }
+
+    // --- Setup ---
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const yellowHealthDiv = document.getElementById('yellowHealth');
+    const redHealthDiv = document.getElementById('redHealth');
+    const yellowScoreDiv = document.getElementById('yellowScore');
+    const redScoreDiv = document.getElementById('redScore');
+    const winnerMsg = document.getElementById('winnerMsg');
+
+    let bgImg, yellowImg, redImg;
+    let sndHit, sndShoot, sndWin;
+
+    async function loadAssets() {
+      bgImg = await loadImage(backgrounds[Math.floor(Math.random()*backgrounds.length)]);
+      yellowImg = await loadImage(yellowShipImg);
+      redImg = await loadImage(redShipImg);
+      sndHit = loadSound(sounds.hit);
+      sndShoot = loadSound(sounds.shoot);
+      sndWin = loadSound(sounds.win);
+    }
+
+    // --- Drawing ---
+    function draw() {
+      ctx.clearRect(0, 0, WI, HE);
+      ctx.drawImage(bgImg, 0, 0, WI, HE);
+      // Border
+      ctx.fillStyle = '#000';
+      ctx.fillRect(BORDER_X, 0, BORDER_W, HE);
+      // Ships
+      ctx.save();
+      ctx.translate(yellow.x + yellow.w/2, yellow.y + yellow.h/2);
+      ctx.rotate(Math.PI/2);
+      ctx.drawImage(yellowImg, -yellow.w/2, -yellow.h/2, yellow.w, yellow.h);
+      ctx.restore();
+      ctx.save();
+      ctx.translate(red.x + red.w/2, red.y + red.h/2);
+      ctx.rotate(-Math.PI/2);
+      ctx.drawImage(redImg, -red.w/2, -red.h/2, red.w, red.h);
+      ctx.restore();
+      // Bullets
+      yellowBullets.forEach(b => {
+        ctx.fillStyle = 'yellow';
+        ctx.fillRect(b.x, b.y, 10, 5);
+      });
+      redBullets.forEach(b => {
+        ctx.fillStyle = 'red';
+        ctx.fillRect(b.x, b.y, 10, 5);
+      });
+    }
+
+    // --- Movement ---
+    function moveShips() {
+      // Yellow
+      if (keys['KeyA'] && yellow.x - VEL > 0) yellow.x -= VEL;
+      if (keys['KeyD'] && yellow.x + VEL + yellow.w < BORDER_X) yellow.x += VEL;
+      if (keys['KeyW'] && yellow.y - VEL > 0) yellow.y -= VEL;
+      if (keys['KeyS'] && yellow.y + VEL + yellow.h < HE - 15) yellow.y += VEL;
+      // Red
+      if (keys['ArrowLeft'] && red.x - VEL > BORDER_X + BORDER_W) red.x -= VEL;
+      if (keys['ArrowRight'] && red.x + VEL + red.w < WI) red.x += VEL;
+      if (keys['ArrowUp'] && red.y - VEL > 0) red.y -= VEL;
+      if (keys['ArrowDown'] && red.y + VEL + red.h < HE - 15) red.y += VEL;
+    }
+
+    // --- Bullets ---
+    function moveBullets() {
+      // Yellow
+      for (let i = yellowBullets.length-1; i >= 0; i--) {
+        yellowBullets[i].x += BVEL;
+        if (collide(yellowBullets[i], red)) {
+          red.health--;
+          sndHit.currentTime = 0; sndHit.play();
+          yellowBullets.splice(i,1);
+        } else if (yellowBullets[i].x > WI) {
+          yellowBullets.splice(i,1);
+        }
+      }
+      // Red
+      for (let i = redBullets.length-1; i >= 0; i--) {
+        redBullets[i].x -= BVEL;
+        if (collide(redBullets[i], yellow)) {
+          yellow.health--;
+          sndHit.currentTime = 0; sndHit.play();
+          redBullets.splice(i,1);
+        } else if (redBullets[i].x < 0) {
+          redBullets.splice(i,1);
+        }
+      }
+    }
+
+    function collide(bullet, ship) {
+      return bullet.x < ship.x + ship.w && bullet.x + 10 > ship.x && bullet.y < ship.y + ship.h && bullet.y + 5 > ship.y;
+    }
+
+    // --- Game loop ---
+    function update() {
+      if (!running) return;
+      moveShips();
+      moveBullets();
+      draw();
+      yellowHealthDiv.textContent = `Yellow Health: ${yellow.health}`;
+      redHealthDiv.textContent = `Red Health: ${red.health}`;
+      yellowScoreDiv.textContent = `Yellow Score: ${yellowScore}`;
+      redScoreDiv.textContent = `Red Score: ${redScore}`;
+      if (yellow.health <= 0) {
+        redScore++;
+        showWinner('Red Wins!!');
+      } else if (red.health <= 0) {
+        yellowScore++;
+        showWinner('Yellow Wins!!');
+      } else {
+        requestAnimationFrame(update);
+      }
+    }
+
+    // --- Controls ---
+    document.addEventListener('keydown', e => {
+      keys[e.code] = true;
+      // Yellow shoot (R)
+      if (e.code === 'KeyR' && yellowBullets.length < MAX_BULLETS && running) {
+        yellowBullets.push({x: yellow.x + yellow.w, y: yellow.y + yellow.h/2 - 2, w: 10, h: 5});
+        sndShoot.currentTime = 0; sndShoot.play();
+      }
+      // Red shoot (L)
+      if (e.code === 'KeyL' && redBullets.length < MAX_BULLETS && running) {
+        redBullets.push({x: red.x, y: red.y + red.h/2 - 2, w: 10, h: 5});
+        sndShoot.currentTime = 0; sndShoot.play();
+      }
+    });
+    document.addEventListener('keyup', e => {
+      keys[e.code] = false;
+    });
+
+    // --- Winner ---
+    function showWinner(text) {
+      running = false;
+      winnerMsg.textContent = text;
+      winnerMsg.style.display = 'block';
+      sndWin.currentTime = 0; sndWin.play();
+      setTimeout(() => {
+        winnerMsg.style.display = 'none';
+        resetGame();
+      }, 4000);
+    }
+    function resetGame() {
+      yellow = {x: 100, y: HE/2 - she/2, w: swi, h: she, health: INIT_HEALTH};
+      red = {x: WI - 100 - swi, y: HE/2 - she/2, w: swi, h: she, health: INIT_HEALTH};
+      yellowBullets = [];
+      redBullets = [];
+      running = true;
+      update();
+    }
+
+    // --- Start ---
+    loadAssets().then(() => {
+      update();
+    });
+  </script>
+</body>
+</html> 
