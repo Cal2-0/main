@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Movieszbt</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            min-height: 100vh;
+            overflow-y: hidden;
+        }
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            background: linear-gradient(120deg, #181f2a 0%, #232b3a 100%);
+            color: #e5e7eb;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        .navbar {
+            width: 100%;
+            background: #181f2a;
+            box-shadow: 0 2px 16px 0 #2563eb33;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .navbar-logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #e2f206;
+            letter-spacing: 1px;
+            padding-left: 32px;
+            text-shadow: 0 2px 16px #2563eb77;
+        }
+        .navbar-logo .logo-icon {
+            font-size: 2.1rem;
+            margin-right: 10px;
+            filter: drop-shadow(0 0 8px #60a5fa99);
+        }
+        .navbar-links {
+            padding-right: 32px;
+        }
+        .navbar-link {
+            color: #a5b4fc;
+            text-decoration: none;
+            font-size: 1.08rem;
+            font-weight: 500;
+            margin-left: 18px;
+            transition: color 0.2s;
+        }
+        .navbar-link:hover {
+            color: #fff;
+        }
+        .main-flex {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 60px;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: 100vh;
+        }
+        .input-card {
+            background: #232b3a;
+            border-radius: 22px;
+            box-shadow: 0 8px 40px 0 rgba(20,30,60,0.22);
+            padding: 64px 48px 64px 48px;
+            min-width: 340px;
+            max-width: 420px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: 0;
+            height: auto;
+        }
+        .input-card h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #dbf113;
+            letter-spacing: -1px;
+            text-align: center;
+        }
+        .input-caption {
+            font-size: 1.13rem;
+            color: #a5b4fc;
+            margin-bottom: 32px;
+            text-align: center;
+            font-weight: 400;
+            letter-spacing: 0.2px;
+        }
+        .input-card form {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            width: 100%;
+        }
+        .input-card input[type="text"] {
+            padding: 16px 18px;
+            border: 1.5px solid #374151;
+            border-radius: 10px;
+            font-size: 1.13rem;
+            background: #181f2a;
+            color: #e5e7eb;
+            transition: border 0.2s, background 0.2s;
+        }
+        .input-card input[type="text"]:focus {
+            border: 1.5px solid #60a5fa;
+            outline: none;
+            background: #232b3a;
+        }
+        .input-card button {
+            background: linear-gradient(90deg, #2563eb 60%, #60a5fa 100%);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 14px 22px;
+            font-size: 1.13rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 2px 16px 0 rgba(37,99,235,0.18), 0 0 8px 0 #2563eb33;
+            transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+            text-shadow: 0 1px 8px #2563eb33;
+        }
+        .input-card button:hover {
+            background: linear-gradient(90deg, #1d4ed8 60%, #3b82f6 100%);
+            box-shadow: 0 4px 24px 0 #2563eb55, 0 0 12px 0 #60a5fa55;
+            transform: translateY(-2px) scale(1.03);
+        }
+        .input-card .view-btn {
+            margin-top: 10px;
+            background: linear-gradient(90deg, #0ea5e9 60%, #60a5fa 100%);
+        }
+        .input-card .view-btn:hover {
+            background: linear-gradient(90deg, #0369a1 60%, #60a5fa 100%);
+        }
+        .movie-info-card {
+            background: #181f2a;
+            border-radius: 28px;
+            box-shadow: 0 2px 28px 0 #2563eb33, 0 0 0 2px #2563eb44;
+            padding: 0;
+            min-width: 600px;
+            max-width: 1300px;
+            width: 100%;
+            margin-top: 0;
+            color: #e5e7eb;
+            font-size: 1.08rem;
+            position: relative;
+            overflow: hidden;
+            border: 1.5px solid #2563eb88;
+            animation: fadeInCard 0.7s cubic-bezier(.4,1.4,.6,1) 1;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            min-height: 420px;
+        }
+        .movie-info-card .poster-side {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-left: 60px;
+            min-width: 320px;
+            max-width: 380px;
+            width: 340px;
+            height: 100%;
+            background: #232b3a;
+            border-top-left-radius: 28px;
+            border-bottom-left-radius: 28px;
+        }
+        .movie-info-card .movie-poster {
+            display: block;
+            margin: 0 auto;
+            max-width: 220px;
+            width: 100%;
+            height: 320px;
+            object-fit: cover;
+            border-radius: 18px;
+            box-shadow: 0 4px 24px #2563eb33;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-left: 20px;
+        }
+        .movie-info-card .movie-poster:hover {
+            transform: scale(1.04) rotate(-1deg);
+            box-shadow: 0 8px 32px #60a5fa55;
+        }
+        .movie-info-details {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 36px 36px 36px 36px;
+            height: 100%;
+        }
+        .movie-info-innerbox {
+            background: #232b3a;
+            border-radius: 18px;
+            box-shadow: 0 2px 12px 0 #2563eb22;
+            padding: 24px 24px 18px 24px;
+            width: 100%;
+            max-width: 340px;
+            margin: 0 auto;
+        }
+        .movie-info-row {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            width: 100%;
+        }
+        .movie-label {
+            min-width: 90px;
+            color: #e3ee0f;
+            font-weight: 600;
+            margin-right: 10px;
+            letter-spacing: 0.5px;
+        }
+        .movie-value {
+            color: #e0e7ef;
+            font-weight: 400;
+            word-break: break-word;
+        }
+        @keyframes fadeInCard {
+            from { opacity: 0; transform: translateY(30px) scale(0.97); }
+            to { opacity: 1; transform: none; }
+        }
+        @media (max-width: 1400px) {
+            .main-flex { max-width: 98vw; gap: 30px; }
+            .movie-info-card { min-width: 0; max-width: 98vw; }
+        }
+        @media (max-width: 900px) {
+            .main-flex { flex-direction: column; align-items: center; gap: 18px; }
+            .input-card, .movie-info-card { max-width: 98vw; min-width: 0; width: 100%; }
+            .movie-info-card { flex-direction: column; min-height: 0; }
+            .movie-info-card .poster-side { min-width: 0; max-width: 100vw; width: 100%; border-radius: 28px 28px 0 0; }
+            .movie-info-details { padding: 24px 8px; }
+            .movie-info-innerbox { max-width: 98vw; }
+        }
+        @media (max-width: 600px) {
+            .main-flex { margin: 12px auto 0 auto; }
+            .input-card, .movie-info-card { padding: 8px 2px 8px 2px; }
+            .movie-info-card { font-size: 0.97rem; }
+            .input-card h1 { font-size: 1.1rem; }
+            .input-caption { font-size: 0.98rem; }
+            .movie-info-card .movie-poster { height: 180px; max-width: 98vw; }
+            .movie-info-details { padding: 12px 4px; }
+            .movie-info-innerbox { padding: 12px 4px 10px 4px; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-logo">
+            <span class="logo-icon">🎬</span> Movieszbt
+        </div>
+        <div class="navbar-links">
+            <a href="/view" class="navbar-link">View Movies</a>
+            <a href="https://www.themoviedb.org/movie" class="navbar-link" target="_blank" rel="noopener">Movie Releases</a>
+        </div>
+    </nav>
+    <div class="main-flex">
+        <div class="input-card">
+            <h1>Your Movie Database</h1>
+            <div class="input-caption">Search, collect, and explore your favorite movies in one place. Powered by TMDB and IMDB.</div>
+            <form method="POST">
+                <input type="text" name="inputText" placeholder="Enter Movie key..." autocomplete="off">
+                <button type="submit">Search</button>
+            </form>
+            <form action="/view" method="get">
+                <button type="submit" class="view-btn">🎬 View Movies</button>
+            </form>
+        </div>
+        {% if ans or output or year or rat or ov or poster_url %}
+        <div class="movie-info-card">
+            <div class="movie-poster">
+                {% if poster_url and imdb_url %}
+                    <a href="{{ imdb_url }}" target="_blank" rel="noopener">
+                        <img src="{{ poster_url }}" alt="Movie Poster" class="movie-poster">
+                    </a>
+                {% elif poster_url %}
+                    <img src="{{ poster_url }}" alt="Movie Poster" class="movie-poster">
+                {% endif %}
+            </div>
+            <div class="movie-info-details">
+                <div class="movie-info-row"><span class="movie-label">Result:</span> <span class="movie-value">{{ output }}</span></div>
+                <div class="movie-info-row"><span class="movie-label">Title:</span> <span class="movie-value">{{ ans }}</span></div>
+                <div class="movie-info-row"><span class="movie-label">Year:</span> <span class="movie-value">{{ year }}</span></div>
+                <div class="movie-info-row"><span class="movie-label">Rating:</span> <span class="movie-value">{{ rat }}</span></div>
+                <div class="movie-info-row"><span class="movie-label">Overview:</span> <span class="movie-value">{{ ov }}</span></div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
