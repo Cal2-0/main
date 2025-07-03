@@ -150,6 +150,8 @@
             .navbar-links { padding-right: 10px; }
             .search-input { width: 100%; }
         }
+        tr.clickable-row { cursor: pointer; transition: background 0.15s; }
+        tr.clickable-row:hover { background: #2563eb44; }
     </style>
     <script>
         function filterTable() {
@@ -169,6 +171,16 @@
                 trs[i].style.display = show ? '' : 'none';
             }
         }
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('tr[data-imdb]').forEach(function(row) {
+                row.addEventListener('click', function(e) {
+                    // Prevent clicking remove button from triggering row click
+                    if (e.target.tagName === 'BUTTON' || e.target.closest('form')) return;
+                    const imdb = row.getAttribute('data-imdb');
+                    if (imdb) window.open('https://www.imdb.com/title/' + imdb, '_blank');
+                });
+            });
+        });
     </script>
 </head>
 <body>
@@ -196,8 +208,9 @@
                 <th>Date Added</th>
                 <th>Remove</th>
             </tr>
+            <tbody>
             {% for movie in movies %}
-            <tr>
+            <tr class="clickable-row" data-imdb="{{ movie.imdb_id }}">
                 <td>{{ movie.tmdb_id }}</td>
                 <td>{{ movie.title }}</td>
                 <td>{{ movie.year }}</td>
@@ -212,6 +225,7 @@
                 </td>
             </tr>
             {% endfor %}
+            </tbody>
         </table>
     </div>
 </body>

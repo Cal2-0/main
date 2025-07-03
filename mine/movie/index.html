@@ -104,6 +104,7 @@
             flex-direction: column;
             gap: 18px;
             width: 100%;
+            position: relative;
         }
         .input-card input[type="text"] {
             padding: 16px 18px;
@@ -255,9 +256,156 @@
             .movie-info-details { padding: 12px 4px; }
             .movie-info-innerbox { padding: 12px 4px 10px 4px; }
         }
+        /* Toast styles */
+        .toast-container {
+            position: fixed;
+            top: 32px;
+            right: 32px;
+            z-index: 9999;
+        }
+        .toast {
+            background: #232b3a;
+            color: #60a5fa;
+            border-left: 5px solid #60a5fa;
+            border-radius: 10px;
+            box-shadow: 0 2px 16px #2563eb33;
+            padding: 18px 28px;
+            margin-bottom: 16px;
+            font-size: 1.08rem;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.3s, transform 0.3s;
+            pointer-events: none;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+        /* Autocomplete styles */
+        .autocomplete-list {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 100%;
+            z-index: 2000;
+            background: #232b3a;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 4px 24px #2563eb33;
+            margin-top: 2px;
+            max-height: 220px;
+            overflow-y: auto;
+            border: 1.5px solid #374151;
+        }
+        .autocomplete-item {
+            padding: 12px 18px;
+            color: #e5e7eb;
+            cursor: pointer;
+            font-size: 1.08rem;
+            border-bottom: 1px solid #232b3a;
+            transition: background 0.15s;
+        }
+        .autocomplete-item:last-child { border-bottom: none; }
+        .autocomplete-item:hover, .autocomplete-item.active {
+            background: #2563eb;
+            color: #fff;
+        }
     </style>
+    <script>
+    // Toast notification system
+    function showToast(message) {
+        const container = document.querySelector('.toast-container');
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.textContent = message;
+        container.appendChild(toast);
+        setTimeout(() => toast.classList.add('show'), 10);
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+
+    // Autocomplete for TMDB
+    let activeItem = -1;
+    function autocompleteTMDB(input) {
+        let list;
+        input.addEventListener('input', function() {
+            const val = this.value;
+            closeAllLists();
+            if (!val) return false;
+            list = document.createElement('div');
+            list.setAttribute('class', 'autocomplete-list');
+            this.parentNode.appendChild(list);
+            fetch(`https://api.themoviedb.org/3/search/movie?api_key=d74a624410ea1d50ef3545bfb815acf5&query=${encodeURIComponent(val)}`)
+                .then(r => r.json())
+                .then(data => {
+                    if (!data.results) return;
+                    data.results.slice(0, 7).forEach((movie, idx) => {
+                        const item = document.createElement('div');
+                        item.className = 'autocomplete-item';
+                        item.textContent = movie.title;
+                        item.addEventListener('mousedown', function(e) {
+                            input.value = movie.title;
+                            closeAllLists();
+                        });
+                        list.appendChild(item);
+                    });
+                });
+        });
+        input.addEventListener('keydown', function(e) {
+            let items = list ? list.getElementsByClassName('autocomplete-item') : [];
+            if (e.key === 'ArrowDown') {
+                activeItem++;
+                addActive(items);
+            } else if (e.key === 'ArrowUp') {
+                activeItem--;
+                addActive(items);
+            } else if (e.key === 'Enter') {
+                if (activeItem > -1 && items[activeItem]) {
+                    e.preventDefault();
+                    items[activeItem].dispatchEvent(new Event('mousedown'));
+                }
+            }
+        });
+        function addActive(items) {
+            if (!items) return false;
+            removeActive(items);
+            if (activeItem >= items.length) activeItem = 0;
+            if (activeItem < 0) activeItem = items.length - 1;
+            items[activeItem].classList.add('active');
+        }
+        function removeActive(items) {
+            for (let i = 0; i < items.length; i++) items[i].classList.remove('active');
+        }
+        function closeAllLists(elmnt) {
+            const lists = document.getElementsByClassName('autocomplete-list');
+            for (let i = 0; i < lists.length; i++) {
+                if (elmnt !== lists[i] && elmnt !== input) lists[i].parentNode.removeChild(lists[i]);
+            }
+            activeItem = -1;
+        }
+        document.addEventListener('click', function (e) { closeAllLists(e.target); });
+    }
+    window.addEventListener('DOMContentLoaded', function() {
+        // Attach autocomplete to the movie input
+        const input = document.querySelector('.input-card input[type="text"]');
+        if (input) autocompleteTMDB(input);
+        // Show toast if Flask passes a message
+        /*{% if ans == 'Movie inserted successfully!' %}*/
+            showToast('Movie added!');
+        /*{% elif ans == 'This movie is already added in the database.' %}*/
+            showToast('Movie already in database.');
+        /*{% elif ans == 'Movie not found.' %}*/
+            showToast('Movie not found.');
+        /*{% elif 'Error' in ans %}*/
+            showToast('Error: {{ ans }}');
+        /*{% endif %}*/
+    });
+    </script>
 </head>
 <body>
+    <div class="toast-container"></div>
     <nav class="navbar">
         <div class="navbar-logo">
             <span class="logo-icon">🎬</span> Movieszbt
