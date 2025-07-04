@@ -1,0 +1,57 @@
+{% extends 'base.html' %} 
+{% block content %}
+
+<form method="post" class="buttons" autocomplete="off">
+  <h3>Welcome to Calvinator 3000</h3>
+
+  <div class="form-group">
+    <label for="name">Name:</label>
+    <input
+      type="text"
+      id="name"
+      placeholder="Calvinator 3000"
+      name="name"
+      value="{{ name }}"
+      required
+      autocomplete="off"
+    />
+  </div>
+
+  <div class="form-group">
+    <label for="password">Password:</label>
+    <input
+      type="password"
+      id="password"
+      placeholder="Room password"
+      name="password"
+      value="{{ password }}"
+      autocomplete="off"
+    />
+  </div>
+
+  <div class="form-group">
+    <label for="code">Room Code:</label>
+    <div class="join">
+      <input
+        type="text"
+        id="code"
+        placeholder="Room Code"
+        name="code"
+        value="{{ code }}"
+        autocomplete="off"
+      />
+      <button type="submit" name="join" value="1">Join a Room</button>
+    </div>
+  </div>
+
+  <button type="submit" name="create" value="1" class="create-btn">Create a Room</button>
+
+  {% if error %}
+  <ul>
+    <li>{{ error }}</li>
+  </ul>
+  {% endif %}
+
+</form>
+
+{% endblock %}

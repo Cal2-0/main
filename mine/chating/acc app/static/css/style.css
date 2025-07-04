@@ -1,0 +1,225 @@
+html, body {
+  overflow: hidden;
+  height: 100vh;
+}
+
+body {
+  background: #000;
+  color: #F8F8F2;
+  font-family: 'Press Start 2P', 'Fira Mono', 'Consolas', 'monospace';
+  margin: 0;
+  min-height: 100vh;
+  height: 100vh;
+  letter-spacing: 0.01em;
+}
+
+/* Hide scrollbars for all elements */
+* {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE 10+ */
+}
+*::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  height: 100vh;
+  background: #000;
+  width: 100vw;
+  box-sizing: border-box;
+  margin-top: 0.5rem;
+  overflow: hidden;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  background: rgba(24, 18, 43, 0.98);
+  padding: 1.2rem 1.5rem;
+  border-radius: 18px;
+  box-shadow: 0 0 32px 4px #00FFF7, 0 0 0 4px #FF00A0 inset;
+  border: 2.5px solid #00FFF7;
+  min-width: 350px;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow: hidden;
+}
+
+.buttons h3 {
+  color: #FF00A0;
+  font-weight: 700;
+  margin-bottom: 1.2rem;
+  letter-spacing: 0.08em;
+  font-size: 1.3rem;
+  text-shadow: 0 0 8px #00FFF7, 0 0 2px #FF00A0;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 1.1rem;
+  box-sizing: border-box;
+}
+
+label {
+  color: #00FFF7;
+  font-size: 1.1rem;
+  margin-bottom: 0.7rem;
+  margin-left: 0.1rem;
+  text-shadow: 0 0 2px #FF00A0;
+}
+
+input[type="text"],
+input[type="password"] {
+  background: #22223B;
+  color: #F8F8F2;
+  border: 2px solid #FF00A0;
+  border-radius: 8px;
+  padding: 1.1rem 1.2rem;
+  font-size: 1.1rem;
+  margin-top: 0.2rem;
+  margin-bottom: 0.2rem;
+  outline: none;
+  transition: border 0.2s, box-shadow 0.2s;
+  box-shadow: 0 0 8px #00FFF7, 0 0 2px #FF00A0;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+input[type="text"]:focus,
+input[type="password"]:focus {
+  border: 2px solid #00FFF7;
+  box-shadow: 0 0 12px #FF00A0, 0 0 4px #00FFF7;
+}
+
+.join {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 1.2rem;
+  margin-bottom: 1.1rem;
+  box-sizing: border-box;
+}
+
+.create-btn {
+  width: 100%;
+}
+
+button, .create-btn {
+  background: linear-gradient(90deg, #00FFF7 0%, #FF00A0 100%);
+  color: #18122B;
+  border: 2px solid #FFD600;
+  border-radius: 8px;
+  padding: 1.1rem 2.2rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 0 8px #FFD600, 0 0 2px #00FFF7;
+  transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+  font-family: inherit;
+  text-shadow: 0 0 2px #FF00A0;
+}
+button:hover, .create-btn:hover {
+  background: linear-gradient(90deg, #FFD600 0%, #FF00A0 100%);
+  color: #18122B;
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 0 16px #FF00A0, 0 0 8px #00FFF7;
+}
+
+.message-box {
+  border: 1.5px solid #3a3b5a;
+  border-radius: 16px;
+  background: rgba(30, 32, 48, 0.98);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  width: 90vw;
+  max-width: 600px;
+  align-items: stretch;
+  padding: 1.5rem 1.2rem;
+}
+
+.messages {
+  overflow-y: auto;
+  flex: 1;
+  width: 100%;
+  margin-bottom: 1rem;
+  padding-right: 0.5rem;
+}
+
+.inputs {
+  padding: 0.5rem 0;
+  display: flex;
+  gap: 0.7rem;
+}
+
+h2 {
+  text-align: center;
+  color: #e0b366;
+  font-weight: 700;
+  margin-bottom: 1.2rem;
+}
+
+#message {
+  flex: 1;
+}
+
+.text {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.7rem 1rem;
+  background: #23243a;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  box-shadow: 0 1px 4px 0 rgba(31, 38, 135, 0.07);
+}
+
+.text strong {
+  color: #e0b366;
+}
+
+.muted {
+  font-size: 0.85rem;
+  color: #b0b0c3;
+}
+
+ul {
+  padding-left: 1.2rem;
+}
+li {
+  color: #ff6f61;
+  font-size: 1rem;
+}
+
+@media (max-width: 700px) {
+  .buttons {
+    padding: 1.5rem 0.5rem;
+    min-width: unset;
+    max-width: 98vw;
+  }
+}
+
+@media (max-width: 600px) {
+  .buttons {
+    min-width: 90vw;
+    max-width: 98vw;
+    padding: 1.2rem 0.5rem;
+  }
+  .content {
+    margin-top: 0.5rem;
+  }
+}
+
+/* Retro font from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
