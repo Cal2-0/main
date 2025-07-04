@@ -4,149 +4,604 @@
     <title>escAPI - Holiday Planner</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
-            background: #181a20;
-            color: #f3f3f3;
-            font-family: 'Quicksand', Arial, sans-serif;
-            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
+            font-family: 'Quicksand', sans-serif;
+            color: #ffffff;
+            overflow-x: hidden;
         }
-        header {
-            background: linear-gradient(90deg, #ff6f61 0%, #6a82fb 100%);
-            padding: 2rem 0 1rem 0;
-            text-align: center;
-            border-bottom-left-radius: 2rem;
-            border-bottom-right-radius: 2rem;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+        
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
         }
-        header h1 {
-            font-family: 'Montserrat', cursive, sans-serif;
-            font-size: 2.8rem;
-            letter-spacing: 0.1em;
-            color: #fff;
-            margin: 0;
-            text-shadow: 2px 2px 8px #00000055;
+        
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 2s infinite alternate;
         }
+        
+        @keyframes twinkle {
+            0% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+        
         .container {
-            max-width: 700px;
-            margin: 2rem auto;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem 0;
+        }
+        
+        .logo {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 4rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+            margin-bottom: 1rem;
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            font-weight: 600;
+        }
+        
+        .form-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
             padding: 2rem;
-            background: #23242b;
-            border-radius: 1.5rem;
-            box-shadow: 0 2px 16px #00000033;
+            margin-bottom: 3rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
-        form {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            margin-bottom: 2rem;
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
         }
-        input[type="text"], input[type="date"] {
-            padding: 0.8rem 1rem;
-            border-radius: 0.7rem;
+        
+        .form-group {
+            position: relative;
+        }
+        
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #ffffff;
+            font-size: 0.9rem;
+        }
+        
+        input[type="text"], 
+        input[type="date"], 
+        textarea {
+            width: 100%;
+            padding: 1rem;
             border: none;
-            background: #292b36;
-            color: #f3f3f3;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
             font-size: 1rem;
             font-family: inherit;
             outline: none;
-            transition: background 0.2s;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
         }
-        input[type="text"]:focus, input[type="date"]:focus {
-            background: #35374a;
+        
+        input[type="text"]:focus, 
+        input[type="date"]:focus, 
+        textarea:focus {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
         }
-        button[type="submit"] {
-            background: linear-gradient(90deg, #ff6f61 0%, #6a82fb 100%);
-            color: #fff;
-            font-weight: bold;
+        
+        input::placeholder, 
+        textarea::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .submit-btn {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
             border: none;
-            border-radius: 0.7rem;
-            padding: 0.9rem 1.2rem;
+            border-radius: 50px;
+            padding: 1rem 2rem;
             font-size: 1.1rem;
+            font-weight: 600;
             cursor: pointer;
-            box-shadow: 0 2px 8px #00000033;
-            transition: background 0.2s, transform 0.1s;
-        }
-        button[type="submit"]:hover {
-            background: linear-gradient(90deg, #6a82fb 0%, #ff6f61 100%);
-            transform: translateY(-2px) scale(1.03);
-        }
-        h2 {
-            font-family: 'Montserrat', cursive, sans-serif;
-            color: #ff6f61;
-            margin-top: 0;
-        }
-        .cards {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-        .card {
-            background: #292b36;
-            border-radius: 1.2rem;
-            box-shadow: 0 2px 12px #00000022;
-            padding: 1.5rem 1.2rem;
-            color: #f3f3f3;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             position: relative;
             overflow: hidden;
-            border-left: 6px solid #ff6f61;
-            transition: border-color 0.2s;
         }
-        .card:hover {
-            border-left: 6px solid #6a82fb;
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
         }
-        .card strong {
-            color: #6a82fb;
+        
+        .submit-btn:active {
+            transform: translateY(0);
         }
-        .card-title {
-            font-size: 1.3rem;
-            font-family: 'Montserrat', cursive, sans-serif;
+        
+        .results-container {
+            margin-top: 3rem;
+        }
+        
+        .results-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .results-header h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .trip-info {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .trip-detail {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1rem 1.5rem;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .trip-detail i {
+            margin-right: 0.5rem;
+            color: #4ecdc4;
+        }
+        
+        .destinations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .destination-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .destination-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .destination-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
+        }
+        
+        .destination-number {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+        
+        .destination-name {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+        
+        .destination-detail {
+            margin-bottom: 1rem;
+        }
+        
+        .detail-label {
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+            color: #4ecdc4;
             margin-bottom: 0.5rem;
-            color: #ff6f61;
         }
-        .card-content {
-            font-size: 1.05rem;
+        
+        .detail-label i {
+            margin-right: 0.5rem;
+            width: 16px;
+        }
+        
+        .detail-content {
+            color: #ffffff;
             line-height: 1.6;
+            margin-left: 1.5rem;
         }
-        .quirky {
-            font-family: 'Montserrat', cursive, sans-serif;
-            font-size: 1.1rem;
-            color: #ffe066;
+        
+        .budget-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-left: 1.5rem;
         }
-        @media (max-width: 800px) {
-            .container { padding: 1rem; }
+        
+        .budget-budget {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            color: white;
         }
+        
+        .budget-mid-range {
+            background: linear-gradient(45deg, #f093fb, #f5576c);
+            color: white;
+        }
+        
+        .budget-luxury {
+            background: linear-gradient(45deg, #ffecd2, #fcb69f);
+            color: #333;
+        }
+        
+        .error-message {
+            background: rgba(255, 107, 107, 0.2);
+            border: 1px solid rgba(255, 107, 107, 0.5);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-top: 1rem;
+            text-align: center;
+        }
+        
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+        
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+            
+            .logo {
+                font-size: 3rem;
+            }
+            
+            .destinations-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .trip-info {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+        
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1) sepia(1) saturate(5) hue-rotate(180deg);
+            cursor: pointer;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+        input[type="date"]::-webkit-calendar-picker-indicator:hover {
+            opacity: 1;
+        }
+        input[type="date"] {
+            background: rgba(255,255,255,0.15) url('data:image/svg+xml;utf8,<svg fill="%23ffffff" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11zm0-13H5V6h14v1z"/></svg>') no-repeat right 1rem center/1.5em auto;
+            color: #fff;
+            border: 1px solid #4ecdc4;
+            box-shadow: 0 2px 8px rgba(76,205,196,0.08);
+        }
+        input[type="date"]::-webkit-input-placeholder { color: #fff; opacity: 0.7; }
+        input[type="date"]::-moz-placeholder { color: #fff; opacity: 0.7; }
+        input[type="date"]:-ms-input-placeholder { color: #fff; opacity: 0.7; }
+        input[type="date"]::placeholder { color: #fff; opacity: 0.7; }
     </style>
 </head>
 <body>
-    <header>
-        <h1>escAPI</h1>
-        <div class="quirky">Your quirky holiday escape planner!</div>
-    </header>
+    <div class="stars"></div>
+    
     <div class="container">
-        <form method="POST">
-            <input type="text" name="inputText" placeholder="Enter Holiday Destination..." required>
-            <label for="StartDate">Choose your trip Start date:</label>
-            <input type="date" id="StartDate" name="StartDate" required>
-            <label for="ReturnDate">Choose your trip Return date:</label>
-            <input type="date" id="ReturnDate" name="ReturnDate" required>
-            <input type="text" name="Text" placeholder="Any extra Conditions...">
-            <button type="submit">Find My Escape!</button>
-        </form>
-        <h2>Top Picks:</h2>
-        {% if parts %}
-        <div class="cards">
-            {% for part in parts %}
-            <div class="card">
-                <div class="card-content">{{ part|safe }}</div>
+        <header>
+            <h1 class="logo">escAPI</h1>
+            <p class="tagline">Your AI-Powered Holiday Escape Planner</p>
+        </header>
+        
+        {% if destinations or raw_response %}
+        <button class="back-btn" onclick="window.location.reload()">
+            <i class="fas fa-arrow-left"></i> Plan Another Trip
+        </button>
+        
+        <div class="results-container">
+            <div class="results-header">
+                <h2>Your Perfect Holiday Destinations</h2>
+                <div class="trip-info">
+                    <div class="trip-detail">
+                        <i class="fas fa-map-marker-alt"></i>
+                        From: {{ user_country }}
+                    </div>
+                    <div class="trip-detail">
+                        <i class="fas fa-calendar-alt"></i>
+                        {{ start_date }} to {{ return_date }}
+                    </div>
+                    {% if extra_conditions %}
+                    <div class="trip-detail">
+                        <i class="fas fa-star"></i>
+                        {{ extra_conditions }}
+                    </div>
+                    {% endif %}
+                </div>
             </div>
-            {% endfor %}
+            
+            {% if destinations %}
+            <div class="destinations-grid">
+                {% for dest in destinations %}
+                <div class="destination-card">
+                    <div class="destination-number">{{ dest.number }}</div>
+                    
+                    <div class="destination-name">
+                        {% if dest.name %}
+                            {{ dest.name }}
+                        {% else %}
+                            Destination {{ dest.number }}
+                        {% endif %}
+                    </div>
+                    
+                    {% if dest.weather %}
+                    <div class="destination-detail">
+                        <div class="detail-label">
+                            <i class="fas fa-sun"></i>
+                            Weather
+                        </div>
+                        <div class="detail-content">{{ dest.weather }}</div>
+                    </div>
+                    {% endif %}
+                    
+                    {% if dest.highlights %}
+                    <div class="destination-detail">
+                        <div class="detail-label">
+                            <i class="fas fa-star"></i>
+                            Highlights
+                        </div>
+                        <div class="detail-content">{{ dest.highlights }}</div>
+                    </div>
+                    {% endif %}
+                    
+                    {% if dest.budget %}
+                    <div class="destination-detail">
+                        <div class="detail-label">
+                            <i class="fas fa-wallet"></i>
+                            Budget
+                        </div>
+                        <span class="budget-badge budget-{{ dest.budget.lower().replace('-', '') }}">
+                            {{ dest.budget }}
+                        </span>
+                    </div>
+                    {% endif %}
+                    
+                    {% if dest.why_visit %}
+                    <div class="destination-detail">
+                        <div class="detail-label">
+                            <i class="fas fa-heart"></i>
+                            Why Visit
+                        </div>
+                        <div class="detail-content">{{ dest.why_visit }}</div>
+                    </div>
+                    {% endif %}
+                    
+                    {% if dest.raw_text and not (dest.name and dest.weather) %}
+                    <div class="destination-detail">
+                        <div class="detail-label">
+                            <i class="fas fa-info-circle"></i>
+                            Details
+                        </div>
+                        <div class="detail-content">{{ dest.raw_text }}</div>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            {% elif raw_response %}
+            <!-- Fallback: Show raw response if parsing fails -->
+            <div class="destination-card">
+                <div class="destination-name">Holiday Recommendations</div>
+                <div class="destination-detail">
+                    <div class="detail-content" style="white-space: pre-wrap;">{{ raw_response }}</div>
+                </div>
+            </div>
+            {% endif %}
         </div>
+        
         {% else %}
-        <p class="quirky">{{ output or "No recommendations yet. Try entering your dream destination!" }}</p>
+        <div class="form-container">
+            <form method="POST" id="holiday-form" autocomplete="off">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="inputText">
+                            <i class="fas fa-home"></i>
+                            Your Home Country
+                        </label>
+                        <input type="text" 
+                               id="inputText" 
+                               name="inputText" 
+                               placeholder="e.g., United States, India, United Kingdom..." 
+                               required
+                               autocomplete="off">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="StartDate">
+                            <i class="fas fa-calendar-alt"></i>
+                            Start Date
+                        </label>
+                        <input type="date" 
+                               id="StartDate" 
+                               name="StartDate" 
+                               required
+                               autocomplete="off">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ReturnDate">
+                            <i class="fas fa-calendar-check"></i>
+                            Return Date
+                        </label>
+                        <input type="date" 
+                               id="ReturnDate" 
+                               name="ReturnDate" 
+                               required
+                               autocomplete="off">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="budget">
+                            <i class="fas fa-wallet"></i>
+                            Extra Conditions
+                        </label>
+                        <input type="text" 
+                               id="budget" 
+                               name="Text" 
+                               placeholder="e.g., Budget-friendly, Mid-range, Luxury, Adventure activities..."
+                               autocomplete="off">
+                    </div>
+                </div>
+                
+                <div style="text-align: center;">
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-search"></i>
+                        Find My Perfect Escape!
+                    </button>
+                </div>
+            </form>
+        </div>
+        {% endif %}
+        
+        {% if error %}
+        <div class="error-message">
+            <i class="fas fa-exclamation-triangle"></i>
+            {{ error }}
+        </div>
         {% endif %}
     </div>
+    
+    <script>
+        // Create animated stars
+        function createStars() {
+            const starsContainer = document.querySelector('.stars');
+            const numberOfStars = 50;
+            
+            for (let i = 0; i < numberOfStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.width = Math.random() * 3 + 'px';
+                star.style.height = star.style.width;
+                star.style.animationDelay = Math.random() * 2 + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+        
+        // Set minimum date to today
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('StartDate').min = today;
+            
+            // Update return date minimum when start date changes
+            document.getElementById('StartDate').addEventListener('change', function() {
+                document.getElementById('ReturnDate').min = this.value;
+            });
+            
+            createStars();
+        });
+        
+        // Form validation
+        document.getElementById('holiday-form').addEventListener('submit', function(e) {
+            const startDate = new Date(document.getElementById('StartDate').value);
+            const returnDate = new Date(document.getElementById('ReturnDate').value);
+            
+            if (returnDate <= startDate) {
+                e.preventDefault();
+                alert('Return date must be after the start date!');
+            }
+        });
+    </script>
 </body>
 </html>
