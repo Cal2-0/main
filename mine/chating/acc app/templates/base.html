@@ -2,12 +2,11 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Calvinator 3000</title>
+    <title>Chat App</title>
     <link
       rel="stylesheet"
       href="{{url_for('static', filename='css/style.css')}}"
     />
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
       integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
@@ -15,10 +14,6 @@
     ></script>
   </head>
   <body>
-    <nav style="width:100vw; background:#18122B; border-bottom:2.5px solid #00FFF7; box-shadow:0 2px 12px #FF00A0; display:flex; align-items:center; justify-content:space-between; padding:0.7rem 2.2vw 0.7rem 2vw; font-family:'Press Start 2P', 'Fira Mono', 'Consolas', 'monospace';">
-      <span style="color:#FF00A0; font-size:1.1rem; letter-spacing:0.08em; text-shadow:0 0 8px #00FFF7, 0 0 2px #FF00A0; font-weight:bold;">Calvinator 3000</span>
-      <a href="/" style="background:#00FFF7; color:#18122B; border:2px solid #FF00A0; border-radius:7px; padding:0.4rem 1.1rem; font-size:0.95rem; text-decoration:none; box-shadow:0 0 8px #FF00A0; transition:background 0.2s; font-family:inherit; font-weight:bold;">Home</a>
-    </nav>
     <div class="content">{% block content %} {% endblock %}</div>
   </body>
 </html>
