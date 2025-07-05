@@ -59,6 +59,12 @@
         .navbar-link:hover {
             color: #fff;
         }
+        .user-welcome {
+            color: #60a5fa;
+            font-size: 1rem;
+            font-weight: 500;
+            margin-right: 18px;
+        }
         .main-flex {
             display: flex;
             justify-content: center;
@@ -282,34 +288,7 @@
             transform: translateY(0);
             pointer-events: auto;
         }
-        /* Autocomplete styles */
-        .autocomplete-list {
-            position: absolute;
-            left: 0;
-            right: 0;
-            top: 100%;
-            z-index: 2000;
-            background: #232b3a;
-            border-radius: 0 0 10px 10px;
-            box-shadow: 0 4px 24px #2563eb33;
-            margin-top: 2px;
-            max-height: 220px;
-            overflow-y: auto;
-            border: 1.5px solid #374151;
-        }
-        .autocomplete-item {
-            padding: 12px 18px;
-            color: #e5e7eb;
-            cursor: pointer;
-            font-size: 1.08rem;
-            border-bottom: 1px solid #232b3a;
-            transition: background 0.15s;
-        }
-        .autocomplete-item:last-child { border-bottom: none; }
-        .autocomplete-item:hover, .autocomplete-item.active {
-            background: #2563eb;
-            color: #fff;
-        }
+
     </style>
     <script>
     // Toast notification system
@@ -326,81 +305,22 @@
         }, 3000);
     }
 
-    // Autocomplete for TMDB
-    let activeItem = -1;
-    function autocompleteTMDB(input) {
-        let list;
-        input.addEventListener('input', function() {
-            const val = this.value;
-            closeAllLists();
-            if (!val) return false;
-            list = document.createElement('div');
-            list.setAttribute('class', 'autocomplete-list');
-            this.parentNode.appendChild(list);
-            fetch(`https://api.themoviedb.org/3/search/movie?api_key=d74a624410ea1d50ef3545bfb815acf5&query=${encodeURIComponent(val)}`)
-                .then(r => r.json())
-                .then(data => {
-                    if (!data.results) return;
-                    data.results.slice(0, 7).forEach((movie, idx) => {
-                        const item = document.createElement('div');
-                        item.className = 'autocomplete-item';
-                        item.textContent = movie.title;
-                        item.addEventListener('mousedown', function(e) {
-                            input.value = movie.title;
-                            closeAllLists();
-                        });
-                        list.appendChild(item);
-                    });
-                });
-        });
-        input.addEventListener('keydown', function(e) {
-            let items = list ? list.getElementsByClassName('autocomplete-item') : [];
-            if (e.key === 'ArrowDown') {
-                activeItem++;
-                addActive(items);
-            } else if (e.key === 'ArrowUp') {
-                activeItem--;
-                addActive(items);
-            } else if (e.key === 'Enter') {
-                if (activeItem > -1 && items[activeItem]) {
-                    e.preventDefault();
-                    items[activeItem].dispatchEvent(new Event('mousedown'));
-                }
-            }
-        });
-        function addActive(items) {
-            if (!items) return false;
-            removeActive(items);
-            if (activeItem >= items.length) activeItem = 0;
-            if (activeItem < 0) activeItem = items.length - 1;
-            items[activeItem].classList.add('active');
-        }
-        function removeActive(items) {
-            for (let i = 0; i < items.length; i++) items[i].classList.remove('active');
-        }
-        function closeAllLists(elmnt) {
-            const lists = document.getElementsByClassName('autocomplete-list');
-            for (let i = 0; i < lists.length; i++) {
-                if (elmnt !== lists[i] && elmnt !== input) lists[i].parentNode.removeChild(lists[i]);
-            }
-            activeItem = -1;
-        }
-        document.addEventListener('click', function (e) { closeAllLists(e.target); });
-    }
+
     window.addEventListener('DOMContentLoaded', function() {
-        // Attach autocomplete to the movie input
-        const input = document.querySelector('.input-card input[type="text"]');
-        if (input) autocompleteTMDB(input);
-        // Show toast if Flask passes a message
-        /*{% if ans == 'Movie inserted successfully!' %}*/
-            showToast('Movie added!');
-        /*{% elif ans == 'This movie is already added in the database.' %}*/
-            showToast('Movie already in database.');
-        /*{% elif ans == 'Movie not found.' %}*/
-            showToast('Movie not found.');
-        /*{% elif 'Error' in ans %}*/
-            showToast('Error: {{ ans }}');
-        /*{% endif %}*/
+            // Show toast notifications for movie operations
+    /*{% if ans == 'Movie inserted successfully to your collection!' %}*/
+        showToast('✅ Movie added to your collection!');
+    /*{% elif ans == 'Movie inserted successfully to guest collection!' %}*/
+        showToast('✅ Movie added to guest collection!');
+    /*{% elif ans == 'This movie is already in your collection.' %}*/
+        showToast('⚠️ Movie already in your collection.');
+    /*{% elif ans == 'This movie is already in the guest collection.' %}*/
+        showToast('⚠️ Movie already in guest collection.');
+    /*{% elif ans == 'Movie not found.' %}*/
+        showToast('❌ Movie not found.');
+    /*{% elif 'Error' in ans %}*/
+        showToast('❌ Error: {{ ans }}');
+    /*{% endif %}*/
     });
     </script>
 </head>
@@ -411,20 +331,35 @@
             <span class="logo-icon">🎬</span> Movieszbt
         </div>
         <div class="navbar-links">
-            <a href="/view" class="navbar-link">View Movies</a>
-            <a href="https://www.themoviedb.org/movie" class="navbar-link" target="_blank" rel="noopener">Movie Releases</a>
+            {% if session.username %}
+                <span class="user-welcome">Welcome, {{ session.username }}!</span>
+                <a href="/view" class="navbar-link">View My Movies</a>
+                <a href="https://www.themoviedb.org/movie" class="navbar-link" target="_blank" rel="noopener">Movie Releases</a>
+                <a href="/logout" class="navbar-link">Logout</a>
+            {% else %}
+                <a href="/view" class="navbar-link">View Guest Movies</a>
+                <a href="https://www.themoviedb.org/movie" class="navbar-link" target="_blank" rel="noopener">Movie Releases</a>
+                <a href="/login" class="navbar-link">Login</a>
+                <a href="/register" class="navbar-link">Register</a>
+            {% endif %}
         </div>
     </nav>
     <div class="main-flex">
         <div class="input-card">
-            <h1>Your Movie Database</h1>
-            <div class="input-caption">Search, collect, and explore your favorite movies in one place. Powered by TMDB and IMDB.</div>
+            <h1>{% if session.username %}Your Movie Database{% else %}Guest Movie Database{% endif %}</h1>
+            <div class="input-caption">
+                {% if session.username %}
+                    Search, collect, and explore your favorite movies in one place. Powered by TMDB and IMDB.
+                {% else %}
+                    Search and explore movies in the guest collection. <a href="/register" style="color: #60a5fa;">Register</a> to create your own collection!
+                {% endif %}
+            </div>
             <form method="POST">
-                <input type="text" name="inputText" placeholder="Enter Movie key..." autocomplete="off">
+                <input type="text" name="inputText" placeholder="Enter Movie key..." autocomplete="off" autocomplete="new-password">
                 <button type="submit">Search</button>
             </form>
             <form action="/view" method="get">
-                <button type="submit" class="view-btn">🎬 View Movies</button>
+                <button type="submit" class="view-btn">🎬 {% if session.username %}View My Movies{% else %}View Guest Movies{% endif %}</button>
             </form>
         </div>
         {% if ans or output or year or rat or ov or poster_url %}

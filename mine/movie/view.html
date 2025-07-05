@@ -55,6 +55,12 @@
         .navbar-link:hover {
             color: #fff;
         }
+        .user-welcome {
+            color: #60a5fa;
+            font-size: 1rem;
+            font-weight: 500;
+            margin-right: 18px;
+        }
         .container {
             max-width: 1200px;
             margin: 40px auto;
@@ -152,6 +158,33 @@
         }
         tr.clickable-row { cursor: pointer; transition: background 0.15s; }
         tr.clickable-row:hover { background: #2563eb44; }
+        
+        /* Toast styles */
+        .toast-container {
+            position: fixed;
+            top: 32px;
+            right: 32px;
+            z-index: 9999;
+        }
+        .toast {
+            background: #232b3a;
+            color: #60a5fa;
+            border-left: 5px solid #60a5fa;
+            border-radius: 10px;
+            box-shadow: 0 2px 16px #2563eb33;
+            padding: 18px 28px;
+            margin-bottom: 16px;
+            font-size: 1.08rem;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.3s, transform 0.3s;
+            pointer-events: none;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
     </style>
     <script>
         function filterTable() {
@@ -171,6 +204,38 @@
                 trs[i].style.display = show ? '' : 'none';
             }
         }
+
+        // Toast notification system
+        function showToast(message) {
+            const container = document.querySelector('.toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            container.appendChild(toast);
+            setTimeout(() => toast.classList.add('show'), 10);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Handle movie removal with confirmation and toast
+        function removeMovieFromRow(button) {
+            const row = button.closest('tr');
+            const movieId = row.getAttribute('data-movie-id');
+            const movieTitle = row.getAttribute('data-movie-title');
+            
+            if (confirm(`Remove "${movieTitle}" from your collection?`)) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = `/remove/${movieId}`;
+                document.body.appendChild(form);
+                form.submit();
+                
+                // Show toast notification
+                showToast('🗑️ Movie removed from collection');
+            }
+        }
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('tr[data-imdb]').forEach(function(row) {
                 row.addEventListener('click', function(e) {
@@ -184,18 +249,27 @@
     </script>
 </head>
 <body>
+    <div class="toast-container"></div>
     <nav class="navbar">
         <div class="navbar-logo">
             <span class="logo-icon">🎬</span> Movieszbt
         </div>
         <div class="navbar-links">
-            <a href="/" class="navbar-link">Home</a>
+            {% if session.username %}
+                <span class="user-welcome">Welcome, {{ session.username }}!</span>
+                <a href="/" class="navbar-link">Home</a>
+                <a href="/logout" class="navbar-link">Logout</a>
+            {% else %}
+                <a href="/" class="navbar-link">Home</a>
+                <a href="/login" class="navbar-link">Login</a>
+                <a href="/register" class="navbar-link">Register</a>
+            {% endif %}
         </div>
     </nav>
     <div class="container">
-        <h1>🎞️ All Movies in Database</h1>
+        <h1>🎞️ {% if is_guest %}Guest Movies Collection{% else %}My Movies Collection{% endif %}</h1>
         <div class="search-bar">
-            <input type="text" id="searchInput" class="search-input" onkeyup="filterTable()" placeholder="Search movies... (title, genre, year, etc)">
+            <input type="text" id="searchInput" class="search-input" onkeyup="filterTable()" placeholder="Search movies... (title, genre, year, etc)" autocomplete="off">
         </div>
         <table id="moviesTable">
             <tr>
@@ -210,7 +284,7 @@
             </tr>
             <tbody>
             {% for movie in movies %}
-            <tr class="clickable-row" data-imdb="{{ movie.imdb_id }}">
+            <tr class="clickable-row" data-imdb="{{ movie.imdb_id }}" data-movie-id="{{ movie.tmdb_id }}" data-movie-title="{{ movie.title }}">
                 <td>{{ movie.tmdb_id }}</td>
                 <td>{{ movie.title }}</td>
                 <td>{{ movie.year }}</td>
@@ -219,9 +293,7 @@
                 <td>{{ movie.overview }}</td>
                 <td>{{ movie.date_added }}</td>
                 <td>
-                    <form method="post" action="/remove/{{ movie.tmdb_id }}" style="display:inline;">
-                        <button type="submit" class="remove-btn" onclick="return confirm('Remove this movie?');">Remove</button>
-                    </form>
+                    <button type="button" class="remove-btn" onclick="removeMovieFromRow(this)">Remove</button>
                 </td>
             </tr>
             {% endfor %}
