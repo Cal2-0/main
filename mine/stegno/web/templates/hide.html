@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hide a Message</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: #181a20;
+            color: #f1f1f1;
+            font-family: 'Inter', 'Segoe UI', 'Roboto', Arial, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            line-height: 1.7;
+        }
+        .logo {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            color: #00e6d0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        .card {
+            background: #23262f;
+            padding: 2rem 2.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            min-width: 320px;
+            max-width: 90vw;
+            margin-bottom: 2rem;
+        }
+        label {
+            font-size: 1rem;
+            margin-bottom: 0.2rem;
+            color: #b0b3c6;
+        }
+        input[type="text"], input[type="number"], input[type="file"] {
+            background: #181a20;
+            color: #f1f1f1;
+            border: 1px solid #31344b;
+            border-radius: 0.5rem;
+            padding: 0.7rem 1rem;
+            font-size: 1rem;
+            outline: none;
+            margin-bottom: 0.5rem;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+            transition: border 0.2s, box-shadow 0.2s;
+        }
+        input[type="text"]:focus, input[type="number"]:focus, input[type="file"]:focus {
+            border: 1.5px solid #00e6d0;
+            box-shadow: 0 0 0 2px #00e6d033;
+        }
+        input[type="file"] {
+            padding: 0.3rem 0.5rem;
+        }
+        input::placeholder {
+            color: #888;
+            opacity: 1;
+        }
+        button {
+            background: linear-gradient(90deg, #00e6d0 0%, #00bfae 100%);
+            color: #181a20;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.9rem 1.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+            transition: background 0.2s, color 0.2s, transform 0.2s;
+            margin-top: 0.5rem;
+        }
+        button:focus {
+            outline: 2px solid #00e6d0;
+            outline-offset: 2px;
+        }
+        button:hover {
+            background: #00bfae;
+            color: #fff;
+            transform: translateY(-2px) scale(1.03);
+        }
+        a {
+            color: #00e6d0;
+            text-decoration: none;
+            margin-top: 1.5rem;
+            font-size: 1rem;
+            transition: color 0.2s;
+        }
+        a:hover {
+            color: #00bfae;
+        }
+        p {
+            margin: 0.5rem 0;
+        }
+        .success {
+            color: #00e6d0;
+            font-weight: 600;
+        }
+        .error {
+            color: #ff4d4f;
+            font-weight: 600;
+        }
+        .download-link {
+            display: inline-block;
+            margin-top: 1rem;
+            background: #00e6d0;
+            color: #181a20;
+            padding: 0.7rem 1.2rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            text-decoration: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+            transition: background 0.2s, color 0.2s, transform 0.2s;
+        }
+        .download-link:hover {
+            background: #00bfae;
+            color: #fff;
+            transform: translateY(-2px) scale(1.03);
+        }
+        img {
+            margin: 1rem 0;
+            border-radius: 0.7rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+        }
+        @media (max-width: 600px) {
+            .logo {
+                font-size: 1.5rem;
+            }
+            h2 {
+                font-size: 1.3rem;
+            }
+            .card {
+                padding: 1rem;
+                min-width: unset;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="logo">🕵️‍♂️ Stegno</div>
+    <h2>Hide a Message in Uploaded PNG Image</h2>
+    <div class="card">
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+        {% if success %}
+            <p class="success">✅ Message hidden successfully!</p>
+            <p><strong>Message Length:</strong> {{ message_length }} characters</p>
+            <img src="/static/edited_image.png" alt="Edited Image" width="300"><br>
+            <a class="download-link" href="/static/edited_image.png" download>Download Edited Image</a>
+        {% endif %}
+        <form method="POST" enctype="multipart/form-data">
+            <label>Message:</label>
+            <input name="message" type="text" placeholder="Enter your secret message">
+            <label>Your Private Key:</label>
+            <input name="priv" type="number" placeholder="e.g. 12345">
+            <label>Other's Public Key:</label>
+            <input name="other_pub" type="number" placeholder="e.g. 67890">
+            <label>Upload PNG Image:</label>
+            <input type="file" name="image" accept=".png">
+            <button type="submit">Hide Message</button>
+        </form>
+    </div>
+    <a href="/">Back</a>
+</body>
+</html>
