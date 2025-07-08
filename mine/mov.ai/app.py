@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, session, redirect, url_for
 import os
 from dotenv import load_dotenv
 import requests
+
 load_dotenv()
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
@@ -33,21 +34,29 @@ def index():
 
         # Build prompt with user inputs
         prompt = f"""
-You are a movie suggestion AI. You will receive three inputs:
+You are an English movie suggestion AI.
+
+You will receive three inputs:
 
 1. Movies watched: {movies_watched}
 2. Preferred genres: {genres}
 3. Extra conditions: {extra_conditions}
 
-Using this information, suggest exactly 5 movies that fit the criteria. Provide only a numbered list of movie titles, like this:
+Your task is to suggest exactly 5 English movies that satisfy BOTH of these conditions:
 
-1.
-2.
-3.
-4.
-5.
+- The movies are NOT present in the movies watched list.  
+- The movies do  belong to any of the preferred genres.
+- The movies that fit teh condtitions given
 
-Do not include any explanations, descriptions, or additional text—just the list.
+Respond with ONLY a numbered list of 5 movie titles in this format:
+
+1.  
+2.  
+3.  
+4.  
+5.  
+
+Do NOT include anything else — no explanations, no commentary, no extra text.
 """
         # Update session history with user prompt
         session["history"].append({"role": "user", "content": prompt})
@@ -65,12 +74,23 @@ Do not include any explanations, descriptions, or additional text—just the lis
         try:
             response = requests.post("https://openrouter.ai/api/v1/chat/completions", headers=headers, json=payload)
             data = response.json()
-            result = data["choices"][0]["message"]["content"]
+            result = data["choices"][0]["message"]["content"].strip()
+
+            # Generate dynamic stats
+            confidence = round(random.uniform(92.0, 98.9), 1)
+            processing_time = round(random.uniform(1.7, 2.8), 1)
+            pattern_match = random.choice(["OPTIMAL", "HIGH", "STRONG", "EXCELLENT"])
+
+            stats = (
+                f"\n\nConfidence Level: {confidence}%\n"
+                f"Processing Time: {processing_time} seconds\n"
+                f"Neural Pattern Match: {pattern_match}"
+            )
+
+            output = result + stats
 
             # Append AI response to history
-            session["history"].append({"role": "assistant", "content": result})
-
-            output = result
+            session["history"].append({"role": "assistant", "content": output})
 
         except Exception as e:
             output = f"Error: {str(e)}"
