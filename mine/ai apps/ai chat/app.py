@@ -3,15 +3,7 @@ import os
 from dotenv import load_dotenv
 import requests
 load_dotenv()
-OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
-
-
-
-headers = {
-    "Authorization": f"Bearer {OPENROUTER_API_KEY}",
-    "Content-Type": "application/json"
-}
-
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 app = Flask(__name__, template_folder=os.path.dirname(os.path.abspath(__file__)))
 app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'dev_secret')
@@ -33,21 +25,27 @@ def index():
             # Add user message to history
             history.append({"role": "user", "content": user_input})
             session["history"] = history
-            # Prepare messages for API (system + history)
-            messages = [
-                {"role": "system", "content": "You are calGBT, a helpful AI assistant."}
-            ] + history
-            payload = {
-                "model": "mistralai/mistral-7b-instruct",
-                "messages": messages,
-                "max_tokens": 500
+            # Gemini API expects a specific payload
+            gemini_url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
+            gemini_headers = {
+                "Content-Type": "application/json",
+                "X-goog-api-key": GEMINI_API_KEY
+            }
+            gemini_data = {
+                "contents": [
+                    {
+                        "parts": [
+                            {"text": user_input}
+                        ]
+                    }
+                ]
             }
             try:
                 loading = True
-                response = requests.post("https://openrouter.ai/api/v1/chat/completions", headers=headers, json=payload)
+                response = requests.post(gemini_url, headers=gemini_headers, json=gemini_data)
                 data = response.json()
-                result = data["choices"][0]["message"]["content"]
-                # Add assistant message to history
+                # Gemini's response structure
+                result = data.get("candidates", [{}])[0].get("content", {}).get("parts", [{}])[0].get("text", "[No response]")
                 history.append({"role": "assistant", "content": result})
                 session["history"] = history
                 loading = False
