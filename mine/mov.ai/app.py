@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, session, redirect, url_for
 import os
 from dotenv import load_dotenv
 import requests
+import random
 
 load_dotenv()
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
