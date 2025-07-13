@@ -2,26 +2,66 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>III</title>
+    <title>III - The Rabbit Hole</title>
     <style>
         body {
-            background-color: #101010;
-            color: #f2f2f2;
+            background-color: #0d0d0d;
+            color: #e6e6e6;
             font-family: 'Courier New', Courier, monospace;
-            text-align: center;
             padding: 60px;
+            line-height: 1.6;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
         }
         h1 {
-            font-size: 28px;
+            text-align: center;
+            font-size: 40px;
             color: #ffffff;
         }
-        p {
-            margin-top: 30px;
+        p, div, .footer {
+            font-size: 1.35em;
+            text-align: center;
+        }
+        .footer {
+            margin-top: 60px;
+            font-style: italic;
+            text-align: center;
+        }
+        input, button {
+            font-size: 1.2em;
+            padding: 18px 24px;
+            border-radius: 8px;
+            border: 1px solid #444;
+            background: #181818;
+            color: #e6e6e6;
+            margin: 10px 0;
+            width: 80%;
+            max-width: 400px;
+            box-sizing: border-box;
+        }
+        input:focus, button:focus {
+            outline: 2px solid #888;
+        }
+        button {
+            background: #222;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: #333;
         }
     </style>
 </head>
 <body>
     <h1>The Rabbit Hole</h1>
+    
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+    </div>
+
     <p>
         You’ve followed the rabbit — now it’s up to you to find the door.<br>
         All paths diverge here, but only one leads onward.<br>
@@ -29,8 +69,28 @@
         <b>When in Rome... think like Caesar.</b>
     </p>
 
+
     <p style="margin-top: 60px;"><i>–3301</i></p>
 
     <!-- Clue: /wkh-jdwh -->
+
+    <!-- FINALE PART: .- - -->
+
+    <script>
+        // Progress tracking
+        function updateProgress() {
+            const progress = localStorage.getItem('wildGooseProgress') || 0;
+            document.getElementById('progressFill').style.width = (progress * 10) + '%';
+        }
+
+        function setProgress(level) {
+            localStorage.setItem('wildGooseProgress', level);
+            updateProgress();
+        }
+
+        // Initialize progress
+        updateProgress();
+        setProgress(2);
+    </script>
 </body>
 </html>

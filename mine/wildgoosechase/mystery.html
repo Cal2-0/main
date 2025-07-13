@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Symbol Cipher Challenge</title>
+    <style>
+        body {
+            background-color: #0d0d0d;
+            color: #e6e6e6;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 60px;
+            line-height: 1.6;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+        h1 {
+            text-align: center;
+            font-size: 40px;
+            color: #ffffff;
+        }
+        p, div, .footer {
+            font-size: 1.35em;
+            text-align: center;
+        }
+        .footer {
+            margin-top: 60px;
+            font-style: italic;
+            text-align: center;
+        }
+        
+        .cipher-key {
+            background-color: #222;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            display: inline-block;
+        }
+        
+        .symbol-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .symbol-pair {
+            background-color: #333;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 18px;
+        }
+        
+        .symbol {
+            font-size: 24px;
+            color: #66ccff;
+            font-weight: bold;
+        }
+        
+        .letter {
+            font-size: 16px;
+            color: #ffcc66;
+            margin-top: 5px;
+        }
+        
+        .puzzle-message {
+            background-color: #1a1a1a;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 30px 0;
+            font-size: 28px;
+            line-height: 1.8;
+            letter-spacing: 3px;
+            color: #66ccff;
+            font-weight: bold;
+        }
+        
+        .hint {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #888;
+            font-style: italic;
+        }
+        
+        .answer-box {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #1a3a1a;
+            border-radius: 10px;
+            border: 2px solid #66cc66;
+        }
+        
+        input, button {
+            font-size: 1.2em;
+            padding: 18px 24px;
+            border-radius: 8px;
+            border: 1px solid #444;
+            background: #181818;
+            color: #e6e6e6;
+            margin: 10px 0;
+            width: 80%;
+            max-width: 400px;
+            box-sizing: border-box;
+        }
+        input:focus, button:focus {
+            outline: 2px solid #888;
+        }
+        button {
+            background: #222;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: #333;
+        }
+        
+        .result {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .success {
+            background-color: #2a4a2a;
+            color: #66ff66;
+        }
+        
+        .error {
+            background-color: #4a2a2a;
+            color: #ff6666;
+        }
+    </style>
+</head>
+<body>
+    
+    <p>The ancient symbols hold the key to your next destination.<br>
+    Study the cipher key below, then decode the hidden message.</p>
+      
+    
+    <div class="puzzle-message">
+        □★♥○ ✧△■ ♥■✭✧ ●△◆♠♠■♥▲■ ◆✧ ✧△■ ◆✧ 1:45 -3301
+    </div>
+    
+    <div class="hint">
+        <p>Each symbol represents a letter. Use the cipher key above to decode the message.</p>
+        <p>Spaces between groups of symbols represent spaces between words.</p>
+    </div>
+    
+    <div class="answer-box">
+        <h3>Enter the decoded message:</h3>
+        <input type="text" id="answerInput" placeholder="Type your decoded message here..." />
+        <br>
+        <button onclick="checkAnswer()">Submit Answer</button>
+        <div id="result"></div>
+    </div>
+    
+    <script>
+        function checkAnswer() {
+            const input = document.getElementById('answerInput').value.toLowerCase().trim();
+            const correct = "find the next challenge at the at 1:45 -3301";
+            const resultDiv = document.getElementById('result');
+            
+            if (input === correct) {
+                resultDiv.className = 'result success';
+                resultDiv.innerHTML = '✅ Correct! <a href="complexity.html" style="color: #66ff66;">Click here to continue</a>';
+            } else {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = '❌ Incorrect. Study the cipher key more carefully and try again.';
+            }
+        }
+        
+        // Allow Enter key to submit
+        document.getElementById('answerInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkAnswer();
+            }
+        });
+        
+    </script>
+    <!-- Clue: https://www.youtube.com/watch?v=hiOjqskDlS0 -->
+
+    <!-- FINALE PART: ...- .. -.-. - --- .-. -.-- / .- - -->
+</body>
+</html>

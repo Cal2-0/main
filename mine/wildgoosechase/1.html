@@ -23,16 +23,77 @@
             color: #ffffff;
         }
 
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background-color: #333;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #66ccff, #ff66cc);
+            width: 5%;
+            transition: width 0.5s ease;
+        }
+
+        .difficulty {
+            display: inline-block;
+            background-color: #333;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+
+        .difficulty.easy { background-color: #2d5a2d; }
+        .difficulty.medium { background-color: #5a5a2d; }
+        .difficulty.hard { background-color: #5a2d2d; }
+
+        .hint-box {
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .hint-toggle {
+            background-color: #333;
+            border: none;
+            color: #e6e6e6;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+
+        .hint-toggle:hover {
+            background-color: #444;
+        }
+
         .footer {
             margin-top: 60px;
             font-style: italic;
             text-align: right;
+        }
+
+        .typo-fix {
+            color: #ffaa00;
+            font-style: italic;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>The Wild Goose Chase Begins</h1>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
 
         <p>Hello.</p>
 
@@ -45,7 +106,7 @@
         <p>
             Within this message lies the path to your next step.<br>
             Seek it. Decode it. Follow it.
-            Inspect everything
+            Inspect everything.
         </p>
 
         <p>
@@ -53,12 +114,28 @@
             Our reward is insight.
         </p>
 
-        <div class="footer">
-            Our salutation,<br>
-            –3301
-        </div>
-    </div>
+        <!-- Clue (Maybe it is base64?): aHR0cDovLzEyNy4wLjAuMTo1NTAxL21pbmUvd2lsZGdvb3NlY2hhc2UvZm9sbG93LXRoZS13aGl0ZS1yYWJiaXQuaHRtbA== -->
 
-    <!-- Clue(Maybeit is base 64?): aHR0cDovLzEyNy4wLjAuMTo1NTAxL21pbmUvd2lsZGdvb3NlY2hhc2UvZm9sbG93LXRoZS13aGl0ZS1yYWJiaXQuaHRtbA== -->
+    <!-- FINALE PART: ...- .. -.-. - --- .-. -.-- -->
+    <script>
+        // Progress tracking
+        function updateProgress() {
+            const progress = localStorage.getItem('wildGooseProgress') || 0;
+            document.getElementById('progressFill').style.width = (progress * 10) + '%';
+        }
+
+        function setProgress(level) {
+            localStorage.setItem('wildGooseProgress', level);
+            updateProgress();
+        }
+
+        // Initialize progress
+        updateProgress();
+        
+        // Set initial progress for this stage
+        if (!localStorage.getItem('wildGooseProgress')) {
+            setProgress(1);
+        }
+    </script>
 </body>
 </html>
