@@ -1,33 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>Signal Interference</title>
-<style>
-  body {
-    background-color: #121212;
-    color: #eee;
-    font-family: 'Courier New', monospace;
-    max-width: 800px;
-    margin: 60px auto;
-    padding: 20px;
-    text-align: center;
-  }
-  .cipher-box {
-    background-color: #222;
-    padding: 20px;
-    border-radius: 10px;
-    display: inline-block;
-    margin-top: 30px;
-    font-size: 20px;
-    letter-spacing: 2px;
-  }
-  .hint {
-    margin-top: 30px;
-    font-size: 14px;
-    color: #888;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <title>Signal Interference</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: #eee;
+      font-family: 'Courier New', monospace;
+      max-width: 800px;
+      margin: 60px auto;
+      padding: 20px;
+      text-align: center;
+      user-select: none;
+    }
+
+    .cipher-box {
+      background-color: #222;
+      padding: 20px;
+      border-radius: 10px;
+      display: inline-block;
+      margin-top: 30px;
+      font-size: 20px;
+      letter-spacing: 2px;
+    }
+
+    .hint {
+      margin-top: 30px;
+      font-size: 14px;
+      color: #888;
+    }
+
+    /* Hidden input box */
+    #secretInputContainer {
+      position: fixed;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #222;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px #444;
+      display: none;
+      z-index: 9999;
+    }
+
+    #secretInput {
+      font-family: 'Courier New', monospace;
+      font-size: 16px;
+      padding: 10px;
+      width: 250px;
+      border-radius: 6px;
+      border: 1px solid #555;
+      background: #121212;
+      color: #eee;
+    }
+
+    #submitBtn {
+      margin-left: 10px;
+      padding: 10px 15px;
+      font-family: 'Courier New', monospace;
+      font-size: 16px;
+      border-radius: 6px;
+      border: none;
+      background: #444;
+      color: #eee;
+      cursor: pointer;
+    }
+
+    #submitBtn:hover {
+      background: #666;
+    }
+  </style>
 </head>
 <body>
   <h1>Interference Detected</h1>
@@ -38,12 +82,61 @@
   </div>
 
   <p class="hint">
-    The hunt never ends.<br/>
+    The hunt never ends.<br />
     Look closely, the pattern lies where the wild roams.
   </p>
-  <!-- Maybe Anotehr type of a cipher Good luck -->
-  <!-- Hint: Key = wildhunt -->
-   <!-- 3301 -->
 
+  <div id="secretInputContainer">
+    <input id="secretInput" type="text" placeholder="Enter secret phrase" autocomplete="off" />
+    <button id="submitBtn">Submit</button>
+  </div>
+
+  <script>
+    const secretPhrase = 'deltasignal';
+    const container = document.getElementById('secretInputContainer');
+    const input = document.getElementById('secretInput');
+    const submit = document.getElementById('submitBtn');
+
+    // Show input on right mouse down
+    window.addEventListener('mousedown', (e) => {
+      if (e.button === 2) { // Right click
+        e.preventDefault();
+        container.style.display = 'block';
+        input.focus();
+      }
+    });
+
+    // Hide input on right mouse up
+    window.addEventListener('mouseup', (e) => {
+      if (e.button === 2) {
+        container.style.display = 'none';
+        input.value = '';
+      }
+    });
+
+    // Prevent context menu
+    window.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+    });
+
+    // Submit logic
+    submit.addEventListener('click', () => {
+      const val = input.value.trim().toLowerCase();
+      if (val === secretPhrase) {
+        window.location.href = 'next.html';
+      } else {
+        alert('Incorrect phrase. Try again.');
+        input.value = '';
+        input.focus();
+      }
+    });
+
+    // Allow Enter key
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        submit.click();
+      }
+    });
+  </script>
 </body>
 </html>

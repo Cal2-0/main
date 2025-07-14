@@ -1,57 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Transmission Complete</title>
     <style>
         body {
             background-color: #0d0d0d;
             color: #e6e6e6;
             font-family: 'Courier New', Courier, monospace;
-            padding: 60px;
+            padding: 40px 20px;
             line-height: 1.6;
-            text-align: center;
+            margin: 0;
+            height: 100vh;
+            overflow: hidden;
+            font-size: 16px;
         }
 
         .container {
-            max-width: 800px;
+            max-width: 700px;
             margin: auto;
+            height: 100%;
+            overflow-y: auto;
+            box-sizing: border-box;
+            position: relative;
+            padding-right: 15px;
+            /* Hide scrollbar for WebKit browsers */
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none;  /* IE 10+ */
+        }
+        .container::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
         }
 
         h1 {
             text-align: center;
-            font-size: 40px;
+            font-size: 32px;
             color: #ffffff;
-            margin-bottom: 30px;
-        }
-
-        .message {
-            background-color: #181818;
-            border-left: 4px solid #444;
-            padding: 20px;
-            margin: 30px 0;
-            border-radius: 6px;
-            color: #e6e6e6;
-            font-size: 1.1em;
-            text-align: center;
+            margin-bottom: 25px;
+            font-weight: normal;
+            letter-spacing: 0.05em;
         }
 
         .symbol {
-            font-size: 48px;
-            text-align: center;
+            font-size: 40px;
             margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .message {
+            background-color: #1a1a1a;
+            border-left: 4px solid #333;
+            padding: 18px 20px;
+            margin: 25px 0;
+            border-radius: 6px;
+            color: #dcdcdc;
+            font-size: 1em;
+            text-align: center;
+            font-style: italic;
+            letter-spacing: 0.03em;
+            line-height: 1.5;
+        }
+
+        p {
+            margin-bottom: 1.3em;
+            color: #bbb;
+            text-align: center;
+            max-width: 90%;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .footer {
-            margin-top: 60px;
+            margin-top: 50px;
             font-style: italic;
-            text-align: center;
-            color: #888;
+            text-align: right;
+            color: #666;
+            letter-spacing: 0.1em;
+        }
+
+        /* Secret message hidden at bottom */
+        .secret-message {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(20, 20, 20, 0.85);
+            color: #66ccff;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.1em;
+            padding: 14px 28px;
+            border-radius: 10px;
+            border: 1px solid #3399ff;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+            max-width: 90vw;
+            letter-spacing: 0.12em;
+            user-select: none;
+            z-index: 9999;
+            text-shadow: 0 0 4px #66ccff;
+            font-style: italic;
+        }
+
+        .secret-message.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Large bottom padding to force deep scroll */
+        .bottom-padding {
+            height: 5000px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container" id="container">
         <div class="symbol">&#x1F41B;</div>
         <h1>Transmission Complete</h1>
 
@@ -76,9 +140,37 @@
             You now know where to look.
         </p>
 
+        <div class="bottom-padding"></div>
+
         <div class="footer">
             – 3301
         </div>
     </div>
+
+    <div class="secret-message" id="secretMessage">
+        The hunt is never over — be vigilant.<br>
+        https://youtu.be/0XrwC4sFGII
+        Only the brightest and the smartest can find what lies beyond.
+    </div>
+    <!-- Is it over? -->
+    <!-- 3301 -->
+
+    <script>
+        const container = document.getElementById('container');
+        const secret = document.getElementById('secretMessage');
+
+        container.addEventListener('scroll', () => {
+            const scrollTop = container.scrollTop;
+            const scrollHeight = container.scrollHeight;
+            const clientHeight = container.clientHeight;
+
+            // Show secret message when scrolled to bottom 15%
+            if (scrollTop > (scrollHeight - clientHeight) * 0.85) {
+                secret.classList.add('visible');
+            } else {
+                secret.classList.remove('visible');
+            }
+        });
+    </script>
 </body>
 </html>

@@ -124,12 +124,19 @@
             background-color: #4a2a2a;
             color: #ff6666;
         }
+           .hidden-message {
+    color: transparent;     /* hides text color */
+    user-select: text;      /* makes it unselectable (optional) */
+        }  
     </style>
 </head>
 <body>
 
     <p>The ancient symbols hold the key to your next destination.<br>
     Study the cipher key below, then decode the hidden message.</p>
+            <span class="hidden-message">.-.. .- ... -
+
+</span>
 
     <div class="puzzle-message">
         □★♥○ ✧△■ ♥■✭✧ ●△◆♠♠■♥▲■ ◆✧ ✧△■ ◆✧ 1:45 -3301
@@ -142,7 +149,7 @@
 
     <div class="answer-box">
         <h3>Enter the decoded message:</h3>
-        <input type="text" id="answerInput" placeholder="Type your decoded message here..." />
+        <input type="text" id="answerInput" placeholder="Type your decoded message here..." autocomplete="off" />
         <br>
         <button onclick="checkAnswer()">Submit Answer</button>
         <div id="result"></div>

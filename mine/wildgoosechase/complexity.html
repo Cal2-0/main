@@ -1,137 +1,116 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
-    <meta charset="UTF-8">
-    <title>The Ultimate Challenge</title>
-    <style>
-        body {
-            background-color: #0d0d0d;
-            color: #e6e6e6;
-            font-family: 'Courier New', Courier, monospace;
-            padding: 60px;
-            line-height: 1.6;
-            text-align: center;
-        }
-        .container {
-            max-width: 800px;
-            margin: auto;
-        }
-        h1 {
-            text-align: center;
-            font-size: 40px;
-            color: #ffffff;
-        }
-        p, div, .footer {
-            font-size: 1.35em;
-            text-align: center;
-        }
-        .footer {
-            margin-top: 60px;
-            font-style: italic;
-            text-align: center;
-        }
-        input, button {
-            font-size: 1.2em;
-            padding: 18px 24px;
-            border-radius: 8px;
-            border: 1px solid #444;
-            background: #181818;
-            color: #e6e6e6;
-            margin: 10px 0;
-            width: 80%;
-            max-width: 400px;
-            box-sizing: border-box;
-        }
-        input:focus, button:focus {
-            outline: 2px solid #888;
-        }
-        button {
-            background: #222;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        button:hover {
-            background: #333;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <title>The Chosen One Awaits</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+    html, body {
+      margin: 0; padding: 40px;
+      height: 100%;
+      background: #0a0a0a;
+      color: #bbb;
+      font-family: 'Share Tech Mono', monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      user-select: none;
+      text-align: center;
+      line-height: 1.6;
+      font-size: 18px;
+      overflow: hidden;
+    }
+
+    .container {
+      max-width: 700px;
+      color: #777;
+      font-style: italic;
+      letter-spacing: 0.04em;
+      user-select: text;
+      user-select: all;
+    }
+
+    h1 {
+      color: #999;
+      font-weight: normal;
+      letter-spacing: 0.15em;
+      font-size: 28px;
+      margin-bottom: 30px;
+    }
+
+    p {
+      margin-bottom: 1.2em;
+      font-size: 1em;
+      line-height: 1.5em;
+      color: #666;
+    }
+
+    .hint {
+      margin-top: 40px;
+      font-size: 0.9em;
+      color: #444;
+      font-style: normal;
+      user-select: none;
+      opacity: 0.4;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🎯 THE ULTIMATE CHALLENGE</h1>
+  <div class="container" tabindex="0" aria-label="Secret final challenge">
+    <h1>Only The Chosen May Proceed</h1>
+    <p>
+      This is no ordinary journey.<br />
+      The path has been scattered in whispers and shadows,<br />
+      encoded beneath layers of quiet noise.<br />
+      The key you seek is not written plainly,<br />
+      but hidden throughout your quest.<br /><br />
+      To proceed, you must become the one who sees beyond.<br />
+      The phrase to unlock your destiny<br />
+      lies somewhere within the puzzle you have followed.<br />
+      Seek it in silence.<br /><br />
+      When the time is right, type what you have uncovered —<br />
+      <em>the phrase</em> — anywhere on this page.<br />
+      The page is listening.<br />
+      No box, no invitation.<br />
+      Just your resolve.<br /><br />
+      Only then will the path reveal itself.<br />
+      Only then will you become the chosen one.
+    </p>
+    <div class="hint">(Hint: The key phrase was hidden in the puzzles you've solved.)</div>
+  </div>
 
-        <div class="challenge-box">
-            <h2>Final Mission</h2>
-            <p>
-                Throughout your journey, you've encountered fragments hidden in the shadows.<br>
-                Each stage contains a piece of the ultimate puzzle, encoded in Morse code.
-            </p>
+  <script>
+    const secretPhrase = 'victory at last';
 
-            <div class="hint">
-                <strong>🔍 Your Mission:</strong><br>
-                1. Return to each stage and inspect the page source<br>
-                2. Find the "FINALE PART" comments in each file<br>
-                3. Collect all Morse code fragments<br>
-                4. Decode the complete message<br>
-                5. Enter the final answer below
-            </div>
+ 
+    let typed = '';
 
-            <div class="morse-display" id="morseDisplay">
-                Enter your collected Morse code here...
-            </div>
+    window.addEventListener('keydown', (e) => {
 
-            <div class="input-section">
-                <input type="text" id="finalAnswer" placeholder="Enter the decoded final answer" />
-                <button onclick="checkFinalAnswer()">SUBMIT ANSWER</button>
-            </div>
+      if (e.key.length === 1) {
+        typed += e.key.toLowerCase();
 
-            <div id="feedback" class="feedback"></div>
-        </div>
-    </div>
-
-    <script>
-        const correctAnswer = "victory at last";
-        let attempts = 0;
-        const maxAttempts = 5;
-
-        function checkFinalAnswer() {
-            const userAnswer = document.getElementById('finalAnswer').value.toLowerCase().trim();
-            const feedbackDiv = document.getElementById('feedback');
-            attempts++;
-
-            if (userAnswer === correctAnswer) {
-                // Redirect to finale.html after a short delay
-                feedbackDiv.innerHTML = `<div class='feedback success'>Correct! Proceeding to the final message...</div>`;
-                setTimeout(() => {
-                    window.location.href = 'finale.html';
-                }, 1500);
-                document.getElementById('finalAnswer').disabled = true;
-                document.querySelector('button').disabled = true;
-            } else {
-                const remaining = maxAttempts - attempts;
-                if (remaining > 0) {
-                    feedbackDiv.textContent = `Incorrect. ${remaining} attempts remaining. Check your Morse code decoding.`;
-                } else {
-                    feedbackDiv.textContent = `Too many attempts. The answer is: \"${correctAnswer.toUpperCase()}\". Better luck next time!`;
-                }
-                feedbackDiv.className = 'feedback error';
-            }
+        // Keep typed string length reasonable
+        if (typed.length > secretPhrase.length) {
+          typed = typed.slice(typed.length - secretPhrase.length);
         }
 
-        // Allow Enter key to submit
-        document.getElementById('finalAnswer').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                checkFinalAnswer();
-            }
-        });
+        if (typed === secretPhrase) {
 
-        // Morse code display functionality
-        document.getElementById('morseDisplay').addEventListener('click', function() {
-            const morse = prompt('Enter your collected Morse code fragments:');
-            if (morse) {
-                this.textContent = morse;
-                this.style.color = '#ffff00';
-            }
-        });
-    </script>
+          document.body.style.transition = 'background 1s ease';
+          document.body.style.background = '#060606';
+
+          setTimeout(() => {
+            window.location.href = 'http://127.0.0.1:5500/finale.html';
+          }, 5000);
+        }
+      }
+    });
+  </script>
 </body>
-</html> 
+</html>

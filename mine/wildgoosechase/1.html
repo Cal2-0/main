@@ -48,10 +48,7 @@
             margin-left: 10px;
         }
 
-        .difficulty.easy { background-color: #2d5a2d; }
-        .difficulty.medium { background-color: #5a5a2d; }
-        .difficulty.hard { background-color: #5a2d2d; }
-
+    
         .hint-box {
             background-color: #1a1a1a;
             border: 1px solid #333;
@@ -82,18 +79,24 @@
         }
 
         .typo-fix {
-            color: #ffaa00;
+        
             font-style: italic;
         }
+
+        .hidden-message {
+            size:  10px;
+    color: transparent;     /* hides text color */
+    user-select: text;      /* makes it unselectable (optional) */
+        }  
+      
     </style>
+
 </head>
 <body>
     <div class="container">
         <h1>The Wild Goose Chase Begins</h1>
 
-        <div class="progress-bar">
-            <div class="progress-fill" id="progressFill"></div>
-        </div>
+    
 
         <p>Hello.</p>
 
@@ -102,7 +105,8 @@
             This is not a game for the faint of heart. Along the path, you will encounter deception, illusion,
             and the limits of your own perception. Only the sharpest minds will see beyond the veil.
         </p>
-
+        <span class="hidden-message">...- .. -.-. - --- .-. -.-- 
+</span>
         <p>
             Within this message lies the path to your next step.<br>
             Seek it. Decode it. Follow it.
@@ -114,9 +118,8 @@
             Our reward is insight.
         </p>
 
-        <!-- Clue (Maybe it is base64?): aHR0cDovLzEyNy4wLjAuMTo1NTAxL21pbmUvd2lsZGdvb3NlY2hhc2UvZm9sbG93LXRoZS13aGl0ZS1yYWJiaXQuaHRtbA== -->
-
-    <!-- FINALE PART: ...- .. -.-. - --- .-. -.-- -->
+        <!-- Clue (Maybe it is to the base of 64?): aHR0cDovLzEyNy4wLjAuMTo1NTAxL21pbmUvd2lsZGdvb3NlY2hhc2UvZm9sbG93LXRoZS13aGl0ZS1yYWJiaXQuaHRtbA== -->
+      
     <script>
         // Progress tracking
         function updateProgress() {
