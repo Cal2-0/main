@@ -87,7 +87,6 @@
   <script>
     const secretPhrase = 'victory at last';
 
- 
     let typed = '';
 
     window.addEventListener('keydown', (e) => {
@@ -101,12 +100,12 @@
         }
 
         if (typed === secretPhrase) {
-
           document.body.style.transition = 'background 1s ease';
           document.body.style.background = '#060606';
 
           setTimeout(() => {
-            window.location.href = 'http://127.0.0.1:5500/finale.html';
+       
+            window.location.href = '/finale.html';
           }, 5000);
         }
       }

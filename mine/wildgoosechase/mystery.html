@@ -155,26 +155,6 @@
         <div id="result"></div>
     </div>
 
-    <script>
-        function checkAnswer() {
-            const input = document.getElementById('answerInput').value.toLowerCase().trim();
-            const correct = "complexity";
-            const resultDiv = document.getElementById('result');
-
-            if (input === correct) {
-                resultDiv.className = 'result success';
-                resultDiv.innerHTML = '✅ Correct! <a href="complexity.html" style="color: #66ff66;">Click here to continue</a>';
-            } else {
-                resultDiv.className = 'result error';
-                resultDiv.innerHTML = '❌ Incorrect. Study the cipher key more carefully and try again.';
-            }
-        }
-
-        document.getElementById('answerInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                checkAnswer();
-            }
-        });
-    </script>
+    <!-- https://youtu.be/hiOjqskDlS0 -->
 </body>
 </html>

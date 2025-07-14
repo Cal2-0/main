@@ -12,23 +12,16 @@
             line-height: 1.6;
             text-align: center;
         }
-        .container {
-            max-width: 800px;
-            margin: auto;
-        }
         h1 {
-            text-align: center;
             font-size: 40px;
             color: #ffffff;
         }
-        p, div, .footer {
+        p, .footer {
             font-size: 1.35em;
-            text-align: center;
         }
         .footer {
             margin-top: 60px;
             font-style: italic;
-            text-align: center;
         }
         input, button {
             font-size: 1.2em;
@@ -53,17 +46,30 @@
         button:hover {
             background: #333;
         }
+        .error {
+            color: red;
+            font-size: 1.2em;
+            margin-top: 15px;
+        }
+        .success {
+            color: lightgreen;
+            font-size: 1.2em;
+            margin-top: 15px;
+        }
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
     <h1>The Gate</h1>
-    
+
     <p>
         The next step is encoded.<br />
         Decode the following Base64 string to find your next destination:
     </p>
 
-    <div class="clue">aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS90aGVfd2lsZF9nb29zZV9jaGFzZV8zMzAyLw==</div>
+    <div class="clue hidden">aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS90aGVfd2lsZF9nb29zZV9jaGFzZV8zMzAyLw==</div>
 
     <p>
         At that destination, you will find 4 cryptic hints.<br />
@@ -81,54 +87,6 @@
     <div id="successMsg" class="success"></div>
     <div class="attempt-counter" id="attemptCounter"></div>
 
-    <script>
-        const correctCode = "5132";
-        let attempts = 0;
-        const maxAttempts = 5;
-
-        function updateAttemptCounter() {
-            const counter = document.getElementById('attemptCounter');
-            counter.textContent = `Attempts: ${attempts}/${maxAttempts}`;
-        }
-
-        function showFeedback(message, isError = true) {
-            const errorDiv = document.getElementById('errorMsg');
-            const successDiv = document.getElementById('successMsg');
-            
-            if (isError) {
-                errorDiv.textContent = message;
-                successDiv.textContent = '';
-            } else {
-                successDiv.textContent = message;
-                errorDiv.textContent = '';
-            }
-        }
-
-        document.getElementById("codeForm").addEventListener("submit", function(e) {
-            e.preventDefault();
-            const val = document.getElementById("codeInput").value;
-            attempts++;
-            updateAttemptCounter();
-
-            if(val === correctCode) {
-                showFeedback("Correct! Proceeding to the next challenge...", false);
-                setTimeout(() => {
-                    window.location.href = "the-lock.html";
-                }, 1500);
-            } else {
-                if (attempts >= maxAttempts) {
-                    showFeedback("Too many attempts. Here's a hint: The numbers are 5, 1, 3, 2 in that order.");
-                } else {
-                    const remaining = maxAttempts - attempts;
-                    showFeedback(`Incorrect code. ${remaining} attempts remaining.`);
-                }
-            }
-        });
-
-        // Initialize
-        updateAttemptCounter();
-    </script>
-
-    <!-- FINALE PART: .-.. .- ... - -->
+    
 </body>
 </html>
