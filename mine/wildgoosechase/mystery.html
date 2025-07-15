@@ -146,14 +146,15 @@
         <p>Each symbol represents a letter. Use the cipher key above to decode the message.</p>
         <p>Spaces between groups of symbols represent spaces between words.</p>
     </div>
-
+    <form method="POST">
     <div class="answer-box">
         <h3>Enter the decoded message:</h3>
-        <input type="text" id="answerInput" placeholder="Type your decoded message here..." autocomplete="off" />
+        <input type="text" id="answerInput" name="inputText" placeholder="Type your decoded message here..." autocomplete="off" required />
         <br>
-        <button onclick="checkAnswer()">Submit Answer</button>
+        <button type="submit">Submit Answer</button>
         <div id="result"></div>
     </div>
+    </form>
 
     <!-- https://youtu.be/hiOjqskDlS0 -->
 </body>

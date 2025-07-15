@@ -78,10 +78,11 @@
         Enter the code below to proceed.
     </p>
 
-    <form id="codeForm">
-        <input type="text" id="codeInput" maxlength="4" placeholder="Enter 4-digit code" required autocomplete="off" />
-        <button type="submit">Submit</button>
-    </form>
+    <form method="POST" action="/the-gate.html">
+    <input type="text" name="inputText" id="codeInput" maxlength="4" placeholder="Enter 4-digit code" required autocomplete="off" />
+    <button type="submit">Submit</button>
+</form>
+
 
     <div id="errorMsg" class="error"></div>
     <div id="successMsg" class="success"></div>

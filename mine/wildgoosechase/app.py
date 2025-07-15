@@ -10,6 +10,7 @@ SECRET_CODE =os.getenv("key")
 numb2=os.getenv("c")
 numb3=os.getenv("d")
 numb4=os.getenv("e")
+numb5=os.getenv("f")
 
 @app.route("/", methods=["GET", "POST"])
 def home():
@@ -20,7 +21,7 @@ def follow_the_white_rabbit():
     return render_template("follow-the-white-rabbit.html")
 
 @app.route("/the-gate.html", methods=["GET", "POST"])
-def index():
+def gate():
     if request.method == "POST":
         user_input = request.form.get("inputText", "")
         if user_input == SECRET_CODE:
@@ -43,6 +44,13 @@ def next():
 
 @app.route("/mystery.html", methods=["GET", "POST"])
 def mystery():
+    print(numb5)
+    if request.method == "POST":
+        user_input = request.form.get("inputText", "")
+        if user_input == numb5:
+            return render_template("complexity.html")
+        else:
+            return render_template("mystery.html", error="Incorrect code. Try again.")
     return render_template("mystery.html")
 
 @app.route("/finale.html", methods=["GET", "POST"])

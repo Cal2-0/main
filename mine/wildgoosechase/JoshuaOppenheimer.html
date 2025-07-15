@@ -1,67 +1,76 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>The Cipher Challenge</title>
+  <title>Are You Worthy</title>
   <style>
     body {
       background-color: #0e0e0e;
       color: #f1f1f1;
       font-family: monospace;
-      font-size: 30px;
-      padding: 40px;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
     }
+
+    h1 {
+      font-size: 42px;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 28px;
+      margin: 10px;
+      max-width: 900px;
+    }
+
     .hidden-clue {
       color: #444;
-      font-size: 30px;
+      font-size: 26px;
+      margin-top: 30px;
+      font-style: italic;
     }
+
     input, button {
-      padding: 10px;
-      margin-top: 10px;
+      padding: 12px;
+      margin-top: 15px;
       background-color: #111;
       color: #f1f1f1;
       border: 1px solid #555;
+      font-size: 20px;
+      width: 400px;
+      max-width: 90%;
+    }
+
+    button {
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <h1>📖 Puzzle #7: Pages of Deeper Meaning</h1>
+  <h1>∞Pages of Deeper Meaning∞</h1>
 
   <p>If you seek truth, you must first understand the pattern buried within the words.</p>
 
-  <p><strong>Cipher Clue:</strong> 1:2:4 1:5:6 2:3:2 3:1:3 3:5:8</p>
+  <p><strong></strong>MToxOjEgICAxOjU6NCAgICAzOjMwOjQgICAgNzoxOjE0ICAgICA2OjQwOjk=</p>
 
   <p class="hidden-clue">
-    “The clue is buried deep in pages of truth. Seek what is...”
-    <br>
-    Maybe it’s hidden with the one who asked!!!
-    <br>
-    The book lies in the past.
+    Lzw udmw ak tmjpwv vwwh af hsjwm gx ljmbl. Kwwc ozet ak… Estnwalqal’k zavvwf oalb lzw gfw ogw smcwv!!!<br>
+    Lzw tjgw dqam af lzw hskl.
+    <br><br>
+    If I had to look, I’d start with the chapter… then a line… then the word. You know?
   </p>
-
-  <form onsubmit="checkAnswer(event)">
+  <form method="POST">
     <label for="answer">Enter the phrase you find:</label><br>
-    <input type="text" id="answer" name="answer" placeholder="Type your answer here" required autocomplete="off">
+    <input type="text" id="answer" name="inputText" placeholder="Type your answer here" required autocomplete="off">
     <br>
     <button type="submit">Submit</button>
   </form>
 
-  <script>
-    function normalize(str) {
-      return str.trim().toLowerCase().replace(/[^\w\s]/gi, '').replace(/\s+/g, ' ');
-    }
-
-    function checkAnswer(e) {
-      e.preventDefault();
-      const input = document.getElementById("answer").value;
-      const normalized = normalize(input);
-      const expected = normalize("That which has theology may limit");
-
-      if (normalized === expected) {
-        window.location.href = "next.html";
-      } else {
-        alert("Incorrect. Perhaps you need to study the book more closely.");
-      }
-    }
-  </script>
+  <!-- when in rome>-->
 </body>
 </html>
