@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chyp3r.io - Modern Encryption Tools</title>
+    <style>
+        /* Modern Dark Theme CSS for Chyp3r.io */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-bg: #0a0a0a;
+            --secondary-bg: #1a1a1a;
+            --accent-bg: #2a2a2a;
+            --hover-bg: #3a3a3a;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --text-muted: #808080;
+            --accent-color: #00d4ff;
+            --accent-glow: rgba(0, 212, 255, 0.3);
+            --border-color: #333333;
+            --success-color: #00ff88;
+            --warning-color: #ff9500;
+            --error-color: #ff3333;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-blur {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(0, 255, 136, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 60%, rgba(255, 149, 0, 0.1) 0%, transparent 50%);
+            z-index: -1;
+            animation: backgroundShift 20s ease-in-out infinite;
+        }
+
+        @keyframes backgroundShift {
+            0%, 100% { 
+                background: 
+                    radial-gradient(circle at 20% 20%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 80%, rgba(0, 255, 136, 0.1) 0%, transparent 50%),
+                    radial-gradient(circle at 40% 60%, rgba(255, 149, 0, 0.1) 0%, transparent 50%);
+            }
+            50% { 
+                background: 
+                    radial-gradient(circle at 80% 30%, rgba(0, 212, 255, 0.15) 0%, transparent 50%),
+                    radial-gradient(circle at 20% 70%, rgba(0, 255, 136, 0.15) 0%, transparent 50%),
+                    radial-gradient(circle at 60% 40%, rgba(255, 149, 0, 0.15) 0%, transparent 50%);
+            }
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(26, 26, 26, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .navbar:hover {
+            background: rgba(26, 26, 26, 0.9);
+        }
+
+        .nav-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            text-decoration: none;
+            background: linear-gradient(45deg, var(--accent-color), var(--success-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            transition: all 0.3s ease;
+        }
+
+        .nav-brand:hover {
+            transform: scale(1.05);
+            filter: drop-shadow(0 0 10px var(--accent-glow));
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, var(--accent-glow), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .nav-link:hover::before {
+            left: 100%;
+        }
+
+        .nav-link:hover {
+            color: var(--text-primary);
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            transform: translateY(-2px);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 80px;
+            padding: 2rem;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Landing Page Styles */
+        .landing-hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .brand-glow {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--accent-color), var(--success-color), var(--warning-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: textGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes textGlow {
+            0%, 100% { filter: drop-shadow(0 0 20px var(--accent-glow)); }
+            50% { filter: drop-shadow(0 0 30px var(--accent-glow)) drop-shadow(0 0 40px var(--success-color)); }
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            font-weight: 300;
+        }
+
+        .cipher-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .cipher-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cipher-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-color), var(--success-color));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .cipher-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .cipher-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--accent-color);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
+        }
+
+        .cipher-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        .cipher-description {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .cipher-button {
+            background: linear-gradient(45deg, var(--accent-color), var(--success-color));
+            border: none;
+            color: var(--primary-bg);
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .cipher-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .cipher-button:hover::before {
+            left: 100%;
+        }
+
+        .cipher-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px var(--accent-glow);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+
+            .main-content {
+                margin-top: 120px;
+                padding: 1rem;
+            }
+
+            .brand-glow {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+
+            .cipher-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--secondary-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--success-color);
+        }
+
+        /* Selection Styling */
+        ::selection {
+            background: var(--accent-glow);
+            color: var(--text-primary);
+        }
+        
+    </style>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Chpy3r.io - Modern Cryptographic Tools</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="bg-blur"></div>
+    
+    <nav class="navbar">
+        <a href="/" class="nav-brand">Chyp3r.io</a>
+        <div class="nav-links">
+            <a class="nav-link" href="/ceaser">Caesar</a>
+            <a class="nav-link" href="/vignere">Vigenère</a>
+            <a class="nav-link" href="/atbash">Atbash</a>
+            <a class="nav-link" href="/bacons">Bacon</a>
+            <a class="nav-link" href="/calx">Calx</a>
+            <a class="nav-link" href="/rot">ROT13</a>
+
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="landing-hero">
+            <h1 class="brand-glow">Chyp3r.io</h1>
+            <p class="hero-subtitle">Modern Encryption Tools, Sleekly Delivered</p>
+        </div>
+
+        <div class="cipher-grid">
+            <div class="cipher-card">
+                <div class="cipher-title">Caesar Cipher</div>
+                <div class="cipher-description">
+                    The classic shift cipher that moves each letter a fixed number of positions in the alphabet. Simple yet effective for basic encryption needs.
+                </div>
+                <a href="/ceaser" class="cipher-button">Try Caesar Cipher</a>
+            </div>
+            <div class="cipher-card">
+                <div class="cipher-title">ROT13 Cipher</div>
+                <div class="cipher-description">
+                    ROT13 is a simple letter substitution cipher that replaces a letter with the 13th letter after it in the alphabet.
+                    It works with alphabetic characters.
+                     
+                </div>
+                <a href="/rot" class="cipher-button">Try ROT13 Cipher</a>
+            </div>
+            
+
+            <div class="cipher-card">
+                <div class="cipher-title">Vigenère Cipher</div>
+                <div class="cipher-description">
+                    A polyalphabetic substitution cipher using a keyword. More secure than Caesar cipher as it uses multiple shift values.
+                </div>
+                <a href="/vignere" class="cipher-button">Try Vigenère Cipher</a>
+            </div>
+
+            <div class="cipher-card">
+                <div class="cipher-title">Atbash Cipher</div>
+                <div class="cipher-description">
+                    An ancient monoalphabetic substitution cipher that maps A→Z, B→Y, and so on. Symmetric encryption and decryption.
+                </div>
+                <a href="/atbash" class="cipher-button">Try Atbash Cipher</a>
+            </div>
+
+            <div class="cipher-card">
+                <div class="cipher-title">Bacon Cipher</div>
+                <div class="cipher-description">
+                    A steganographic cipher that encodes letters as sequences of A's and B's. Perfect for hiding messages in plain sight.
+                </div>
+                <a href="/bacons" class="cipher-button">Try Bacon Cipher</a>
+            </div>
+
+            <div class="cipher-card">
+                <div class="cipher-title">Calx Cipher</div>
+                <div class="cipher-description">
+                    A multi-layered cipher combining Caesar, Vigenère, and Base64 encoding for enhanced security and obfuscation.
+                </div>
+                <a href="/calx" class="cipher-button">Try Calx Cipher</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add smooth scrolling and subtle animations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add loading animation to cards
+            const cards = document.querySelectorAll('.cipher-card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+                card.style.animation = 'fadeInUp 0.6s ease forwards';
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+            });
+
+            // Smooth reveal animation
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+
+            cards.forEach(card => observer.observe(card));
+        });
+
+        // Add CSS animation keyframes
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
