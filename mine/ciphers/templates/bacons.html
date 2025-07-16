@@ -359,11 +359,6 @@
             background: var(--accent-glow);
             color: var(--text-primary);
         }
-        .nav-link.active {
-            color: var(--accent-color);
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-        }
     </style>
 </head>
 <body>
@@ -375,9 +370,8 @@
             <a class="nav-link" href="/ceaser">Caesar</a>
             <a class="nav-link" href="/vignere">Vigenère</a>
             <a class="nav-link" href="/atbash">Atbash</a>
-            <a class="nav-link active" href="/bacons" style="color: var(--accent-color);">Bacon</a>
+            <a class="nav-link" href="/bacons" style="color: var(--accent-color);">Bacon</a>
             <a class="nav-link" href="/calx">Calx</a>
-            <a class="nav-link" href="/rot">ROT13</a>
         </div>
     </nav>
 
@@ -387,7 +381,7 @@
             <p class="hero-subtitle">Steganographic encoding using binary A/B sequences</p>
         </div>
 
-        <form method="POST" action="/bacons" autocomplete="off">
+        <form method="POST" action="/bacon" autocomplete="off">
             <div style="margin-bottom: 1.5rem;">
                 <label for="text" style="display: block; margin-bottom: 0.5rem; color: var(--text-secondary); font-weight: 500;">Enter your message:</label>
                 <input type="text" id="text" name="text" placeholder="Type your message here..." autocomplete="off">

@@ -12,12 +12,10 @@ def index():
             return render_template("vignere.html")
         elif action == 'atbash':
             return render_template("atbash.html")
-        elif action == 'bacons':
-            return render_template("bacons.html")
+        elif action == 'bacon':
+            return render_template("bacon.html")
         elif action == 'calx':
             return render_template("calx.html")
-        elif action == 'rot':
-            return render_template("rot.html")
     return render_template("index.html")
 
 def caesar_shift_char(ch, shift):
@@ -117,6 +115,7 @@ def calx():
             output = "Invalid action."
 
     return render_template("calx.html", output=output)
+
 @app.route("/bacons", methods=["GET", "POST"])
 def bacons():
     output = ""
@@ -131,68 +130,38 @@ def bacons():
     rev_bacon = {v: k for k, v in bacon_dict.items()}
 
     if request.method == "POST":
-        text = request.form.get("text", "")
+        text = request.form.get("text", "").lower()
         action = request.form.get("action")
 
         if action == "encode":
+            # Encode each letter to Bacon code, ignore non-alpha
             encoded = []
             for ch in text:
-                lower_ch = ch.lower()
-                if lower_ch in bacon_dict:
-                    encoded.append(bacon_dict[lower_ch])
+                if ch in bacon_dict:
+                    encoded.append(bacon_dict[ch])
                 elif ch == ' ':
-                    encoded.append(' ')  # optional, you can remove this to ignore input spaces
+                    encoded.append(' ')  # preserve spaces
                 else:
-                    encoded.append(ch)  # preserve non-alpha
+                    # skip non-letters or you can add something else
+                    pass
             output = ' '.join(encoded)
 
         elif action == "decode":
-            # Clean only A/B characters
-            clean = ''.join([ch.upper() for ch in text if ch.upper() in ['A', 'B']])
-            chunks = [clean[i:i+5] for i in range(0, len(clean), 5)]
-
+            # Decode assumes groups of 5 letters A/B separated by spaces
+            # Clean input (keep only A, B, and spaces)
+            clean_text = ''.join(ch for ch in text.upper() if ch in ['A','B',' '])
+            parts = clean_text.split()
             decoded = ''
-            for chunk in chunks:
-                if len(chunk) == 5:
-                    decoded += rev_bacon.get(chunk, '?')
+            for part in parts:
+                if len(part) == 5 and part in rev_bacon:
+                    decoded += rev_bacon[part]
                 else:
-                    decoded += ''  # skip incomplete chunks
-
+                    decoded += '?'  # unknown pattern
             output = decoded
 
-    return render_template("bacons.html", output=output)
+    return render_template("bacon.html", output=output)
 
-@app.route("/rot", methods=["GET", "POST"])
-def rot():
-    output = ""
-    if request.method == "POST":
-        text = request.form.get("text", "")
-        shift = 13
-        action = request.form.get("action")
-
-        try:
-            shift = int(shift)
-        except ValueError:
-            output = "Shift must be a number."
-            return render_template("rot.html", output=output)
-
-        result = ""
-        for char in text:
-            if char.isalpha():
-                base = ord('A') if char.isupper() else ord('a')
-                offset = ord(char) - base
-                if action == "encode":
-                    shifted = (offset + shift) % 26
-                else:  # decode
-                    shifted = (offset - shift) % 26
-                result += chr(base + shifted)
-            else:
-                result += char  # keep punctuation/digits unchanged
-
-        output = result
-
-    return render_template("rot.html", output=output)
-@app.route("/ceaser", methods=["GET", "POST"])
+@app.route("/ceaser.html", methods=["GET", "POST"])
 def ceaser():
     output = ""
     if request.method == "POST":
