@@ -6,9 +6,11 @@ import base64
 import numpy as np
 import yt_dlp
 from PIL import Image, ImageFilter, ImageEnhance, ImageOps
+from yt import ytt_dlp
 
 app = Flask(__name__)  # Use
-app.secret_key = 'your_secret_key_here'  # Needed for session
+app.register_blueprint(ytt_dlp)
+
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
@@ -18,7 +20,7 @@ def index():
         elif action == 'yt':
             return render_template("yt.html")
     return render_template("index.html")
-
+'''
 @app.route("/yt", methods=["GET", "POST"])
 def yt():
     output = ""
@@ -68,7 +70,7 @@ def yt():
         download_filename = session['yt_download_file']
 
     return render_template("yt.html", output=output, info=info_data, url=url, download_filename=download_filename)
-
+'''
 @app.route('/yt/download')
 def yt_download():
     filename = request.args.get('file') or session.get('yt_download_file')
