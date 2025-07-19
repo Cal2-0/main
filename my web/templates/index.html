@@ -59,8 +59,34 @@
 
         .nav-container {
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+                .nav-left {
+          display: flex;
+          align-items: center;
+          flex: 1;
+          justify-content: flex-start;
+          min-width: 80px;
+          margin-left: 20px;
+        }
+
+        .nav-center {
+            display: flex;
+            justify-content: center;
+            flex: 2;
+        }
+
+        .nav-right {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            flex: 1;
         }
 
         .nav-links {
@@ -133,6 +159,173 @@
         .scroll-cue i {
             font-size: 2rem;
             opacity: 0.7;
+        }
+
+        /* Social Media Icons */
+        .wrapper {
+            display: inline-flex;
+            list-style: none;
+            height: 50px;
+            width: auto;
+            padding-top: 0;
+            font-family: "Poppins", sans-serif;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .wrapper .icon {
+            position: relative;
+            background: #fff;
+            border-radius: 50%;
+            margin: 0;
+            width: 35px;
+            height: 35px;
+            font-size: 14px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .wrapper .tooltip {
+            position: absolute;
+            top: 0;
+            font-size: 12px;
+            background: #fff;
+            color: #fff;
+            padding: 4px 6px;
+            border-radius: 4px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .wrapper .tooltip::before {
+            position: absolute;
+            content: "";
+            height: 8px;
+            width: 8px;
+            background: #fff;
+            bottom: -3px;
+            left: 50%;
+            transform: translate(-50%) rotate(45deg);
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .wrapper .icon:hover .tooltip {
+            top: -45px;
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+            transform: none;
+        }
+
+        .wrapper .icon:hover span,
+        .wrapper .icon:hover .tooltip {
+            text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.1);
+            transform: none;
+        }
+
+        .wrapper .github:hover,
+        .wrapper .github:hover .tooltip,
+        .wrapper .github:hover .tooltip::before {
+            background: #333;
+            color: #fff;
+        }
+
+        .wrapper .twitter:hover,
+        .wrapper .twitter:hover .tooltip,
+        .wrapper .twitter:hover .tooltip::before {
+            background: #1da1f2;
+            color: #fff;
+        }
+
+        .wrapper .instagram:hover,
+        .wrapper .instagram:hover .tooltip,
+        .wrapper .instagram:hover .tooltip::before {
+            background: #e4405f;
+            color: #fff;
+        }
+
+        /* Pyramid Loader - Made Bigger */
+                .pyramid-loader {
+          position: relative;
+          width: 50px;
+          height: 50px;
+          display: block;
+          transform-style: preserve-3d;
+          transform: rotateX(-20deg);
+          cursor: pointer;
+          transition: all 0.3s ease;
+          transform-origin: center center;
+        }
+
+                .pyramid-loader:hover {
+          transform: rotateX(-20deg) scale(1.05);
+        }
+
+        .pyramid-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            animation: spin 4s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
+
+        .pyramid-loader .pyramid-wrapper .side {
+            width: 30px;
+            height: 30px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            transform-origin: center top;
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+        }
+
+        .pyramid-loader .pyramid-wrapper .side1 {
+            transform: rotateZ(-30deg) rotateY(90deg);
+            background: conic-gradient( #2BDEAC, #F028FD, #D8CCE6, #2F2585);
+        }
+
+        .pyramid-loader .pyramid-wrapper .side2 {
+            transform: rotateZ(30deg) rotateY(90deg);
+            background: conic-gradient( #2F2585, #D8CCE6, #F028FD, #2BDEAC);
+        }
+
+        .pyramid-loader .pyramid-wrapper .side3 {
+            transform: rotateX(30deg);
+            background: conic-gradient( #2F2585, #D8CCE6, #F028FD, #2BDEAC);
+        }
+
+        .pyramid-loader .pyramid-wrapper .side4 {
+            transform: rotateX(-30deg);
+            background: conic-gradient( #2BDEAC, #F028FD, #D8CCE6, #2F2585);
+        }
+
+        .pyramid-loader .pyramid-wrapper .shadow {
+            width: 25px;
+            height: 25px;
+            background: #8B5AD5;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            transform: rotateX(90deg) translateZ(-18px);
+            filter: blur(4px);
         }
 
         @keyframes bounce {
@@ -312,6 +505,7 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
+            text-decoration: none;
         }
 
         .project-btn:hover {
@@ -343,6 +537,15 @@
                 padding: 0.3rem 0.8rem;
                 font-size: 0.9rem;
             }
+
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-left, .nav-center, .nav-right {
+                flex: none;
+            }
         }
 
         /* Custom scrollbar */
@@ -370,229 +573,296 @@
     <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
-            <div class="nav-links">
-                <a href="#home" class="nav-link active">Home</a>
-                <a href="#about" class="nav-link">About</a>
-                <a href="#projects" class="nav-link">Projects</a>
+            <!-- Pyramid on the left -->
+                        <div class="nav-left">
+                <div class="pyramid-loader" onclick="window.location.href='sht.html';" style="cursor: pointer;">
+                  <div class="pyramid-wrapper">
+                    <span class="side side1"></span>
+                    <span class="side side2"></span>
+                    <span class="side side3"></span>
+                    <span class="side side4"></span>
+                    <span class="shadow"></span>
+                  </div>  
+                </div>
+            </div>
+            
+            <!-- Navigation links in center -->
+            <div class="nav-center">
+                <div class="nav-links">
+                    <a href="#home" class="nav-link active">Home</a>
+                    <a href="#about" class="nav-link">About</a>
+                    <a href="#skills" class="nav-link">Skills</a>
+                    <a href="#projects" class="nav-link">Projects</a>
+                </div>
+            </div>
+            
+            <!-- Social media buttons on the right -->
+            <div class="nav-right">
+                <ul class="wrapper">
+                    <li class="icon github">
+                        <span class="tooltip">GitHub</span>
+                        <a href="https://github.com/Cal2-0" target="_blank" style="color: inherit; text-decoration: none;">
+                            <svg viewBox="0 0 496 512" height="1.2em" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 0-2.4-.8-2.4-1.8 0-1 1.1-1.8 2.4-1.8 1.3 0 2.4.8 2.4 1.8 0 1-1.1 1.8-2.4 1.8zm10.8-1.8c0 1-1.1 1.8-2.4 1.8-1.3 0-2.4-.8-2.4-1.8 0-1 1.1-1.8 2.4-1.8 1.3 0 2.4.8 2.4 1.8z"></path>
+                            </svg>
+                        </a>
+                    </li>
+                    <li class="icon twitter">
+                        <span class="tooltip">Twitter</span>
+                        <a href="#" target="_blank" style="color: inherit; text-decoration: none;">
+                            <svg height="1.8em" fill="currentColor" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" class="twitter">
+                                <path d="M42,12.429c-1.323,0.586-2.746,0.977-4.247,1.162c1.526-0.906,2.7-2.351,3.251-4.058c-1.428,0.837-3.01,1.452-4.693,1.776C34.967,9.884,33.05,9,30.926,9c-4.08,0-7.387,3.278-7.387,7.32c0,0.572,0.067,1.129,0.193,1.67c-6.138-0.308-11.582-3.226-15.224-7.654c-0.64,1.082-1,2.349-1,3.686c0,2.541,1.301,4.778,3.285,6.096c-1.211-0.037-2.351-0.374-3.349-0.914c0,0.022,0,0.055,0,0.086c0,3.551,2.547,6.508,5.923,7.181c-0.617,0.169-1.269,0.263-1.941,0.263c-0.477,0-0.942-0.054-1.392-0.135c0.94,2.902,3.667,5.023,6.898,5.086c-2.528,1.96-5.712,3.134-9.174,3.134c-0.598,0-1.183-0.034-1.761-0.104C9.268,36.786,13.152,38,17.321,38c13.585,0,21.017-11.156,21.017-20.834c0-0.317-0.01-0.633-0.025-0.945C39.763,15.197,41.013,13.905,42,12.429"></path>
+                            </svg>
+                        </a>
+                    </li>
+                    <li class="icon instagram">
+                        <span class="tooltip">Instagram</span>
+                        <a href="https://www.instagram.com/_______.cal/" target="_blank" style="color: inherit; text-decoration: none;">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="1.2em" fill="currentColor" class="bi bi-instagram" viewBox="0 0 16 16">
+                                <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z"></path>
+                            </svg>
+                        </a>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
     <section id="home" class="hero">
-        <h1>Hi, I'm Calv Klein</h1>
-        <p>An aspiring developer crafting elegant solutions with code</p>
+        <h1>Hi, I'm Calvin Dsouza</h1>
+        <p>Cybersecurity Student & Backend Developer from Dubai, UAE</p>
         <div class="scroll-cue" onclick="document.getElementById('about').scrollIntoView()">
             <i class="fas fa-chevron-down"></i>
         </div>
     </section>
+
+
 
     <!-- About Section -->
     <section id="about" class="section">
         <h2>About Me</h2>
         <div class="about-grid">
             <div class="card" style="--delay: 1">
-                <h3><i class="fas fa-code"></i> Frameworks & Tools</h3>
-                <p>Building robust applications with modern technologies</p>
+                <h3><i class="fas fa-graduation-cap"></i> Education</h3>
+                <p>Year 2 Cybersecurity Student at Nitte NMAMIT College, India</p>
                 <div class="tech-list">
-                    <span class="tech-tag">Flask</span>
-                    <span class="tech-tag">Python</span>
-                    <span class="tech-tag">HTML</span>
-                    <span class="tech-tag">CSS</span>
-                    <span class="tech-tag">JavaScript</span>
+                    <span class="tech-tag">Cybersecurity</span>
+                    <span class="tech-tag">Computer Science</span>
+                    <span class="tech-tag">Network Security</span>
                 </div>
             </div>
             
             <div class="card" style="--delay: 2">
-                <h3><i class="fas fa-tools"></i> Apps & Tech I Use</h3>
-                <p>My daily toolkit for efficient development</p>
+                <h3><i class="fas fa-map-marker-alt"></i> Background</h3>
+                <p>Born and raised in Dubai, UAE. Schooling from IHS Dubai</p>
                 <div class="tech-list">
-                    <span class="tech-tag">VS Code</span>
-                    <span class="tech-tag">GitHub</span>
-                    <span class="tech-tag">Figma</span>
-                    <span class="tech-tag">Docker</span>
-                    <span class="tech-tag">Git</span>
+                    <span class="tech-tag">Dubai, UAE</span>
+                    <span class="tech-tag">3 Years Coding</span>
+                    <span class="tech-tag">Backend Focus</span>
                 </div>
             </div>
             
             <div class="card" style="--delay: 3">
-                <h3><i class="fas fa-gamepad"></i> Hobbies</h3>
-                <p>Exploring the intersection of technology and creativity</p>
+                <h3><i class="fas fa-heart"></i> Interests</h3>
+                <p>Football, Reading, Movies, Tech Gadgets, Cybersecurity</p>
                 <div class="tech-list">
-                    <span class="tech-tag">Cybersecurity Puzzles</span>
-                    <span class="tech-tag">Mini-games</span>
-                    <span class="tech-tag">Encryption Tools</span>
-                    <span class="tech-tag">AI Experiments</span>
+                    <span class="tech-tag">Football</span>
+                    <span class="tech-tag">Tech Documentaries</span>
+                    <span class="tech-tag">Gadgets</span>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Projects Section -->
-    <section id="projects" class="section">
-        <h2>Featured Projects</h2>
-        <div class="projects-grid">
-            <div class="project-card" style="--delay: 1">
-                <h3>Universal.st</h3>
-                <p>A comprehensive utility platform featuring YouTube downloader, image processing, and various tools all in one place.</p>
+    <!-- Skills Section -->
+    <section id="skills" class="section">
+        <h2>Technical Skills</h2>
+        <div class="about-grid">
+            <div class="card" style="--delay: 1">
+                <h3><i class="fas fa-code"></i> Programming Languages</h3>
+                <p>Core languages I work with daily</p>
                 <div class="tech-list">
                     <span class="tech-tag">Python</span>
+                    <span class="tech-tag">JavaScript</span>
+                    <span class="tech-tag">Go</span>
+                    <span class="tech-tag">Kotlin</span>
+                </div>
+            </div>
+            
+            <div class="card" style="--delay: 2">
+                <h3><i class="fas fa-layer-group"></i> Frameworks & Libraries</h3>
+                <p>Modern frameworks for web development</p>
+                <div class="tech-list">
                     <span class="tech-tag">Flask</span>
-                    <span class="tech-tag">YouTube API</span>
+                    <span class="tech-tag">Django</span>
+                    <span class="tech-tag">React</span>
+                    <span class="tech-tag">Next.js</span>
                 </div>
-                <a href="/uni" class="project-btn">
-                    <i class="fas fa-external-link-alt"></i>
-                    View Project
-                </a>
             </div>
             
-            <div class="project-card" style="--delay: 2">
-                <h3>AI Chat Collection</h3>
-                <p>Multiple AI-powered chat interfaces including general chat, holiday planner, and movie recommendations.</p>
+            <div class="card" style="--delay: 3">
+                <h3><i class="fas fa-database"></i> Databases & Tools</h3>
+                <p>Data management and development tools</p>
                 <div class="tech-list">
-                    <span class="tech-tag">Python</span>
-                    <span class="tech-tag">Flask</span>
-                    <span class="tech-tag">OpenAI API</span>
+                    <span class="tech-tag">MySQL</span>
+                    <span class="tech-tag">MongoDB</span>
+                    <span class="tech-tag">Git</span>
+                    <span class="tech-tag">Docker</span>
                 </div>
-                <a href="/aico" class="project-btn">
-                    <i class="fas fa-external-link-alt"></i>
-                    View Project
-                </a>
-            </div>
-            
-            <div class="project-card" style="--delay: 3">
-                <h3>Encryption Toolkit</h3>
-                <p>A comprehensive cybersecurity tool featuring multiple encryption algorithms including Caesar, Vigenère, and more.</p>
-                <div class="tech-list">
-                    <span class="tech-tag">Python</span>
-                    <span class="tech-tag">Flask</span>
-                    <span class="tech-tag">Cryptography</span>
-                </div>
-                <a href="/ciphers" class="project-btn">
-                    <i class="fas fa-external-link-alt"></i>
-                    View Project
-                </a>
-            </div>
-            
-            <div class="project-card" style="--delay: 4">
-                <h3>Movie Tracker</h3>
-                <p>A movie management system with user authentication, movie database integration, and personal watchlists.</p>
-                <div class="tech-list">
-                    <span class="tech-tag">Python</span>
-                    <span class="tech-tag">Flask</span>
-                    <span class="tech-tag">TMDB API</span>
-                </div>
-                <a href="/movie" class="project-btn">
-                    <i class="fas fa-external-link-alt"></i>
-                    View Project
-                </a>
-            </div>
-            
-            <div class="project-card" style="--delay: 5">
-                <h3>Encryption & Key Exchange</h3>
-                <p>Advanced encryption tools with Diffie-Hellman key exchange, public key cryptography, and secure communication.</p>
-                <div class="tech-list">
-                    <span class="tech-tag">Python</span>
-                    <span class="tech-tag">Flask</span>
-                    <span class="tech-tag">Cryptography</span>
-                </div>
-                <a href="/encrp" class="project-btn">
-                    <i class="fas fa-external-link-alt"></i>
-                    View Project
-                </a>
-            </div>
-            
-            <div class="project-card" style="--delay: 6">
-                <h3>Galactic Shooter</h3>
-                <p>An exciting space shooter game built with Pygame, featuring dynamic gameplay and stunning visuals.</p>
-                <div class="tech-list">
-                    <span class="tech-tag">Python</span>
-                    <span class="tech-tag">Pygame</span>
-                    <span class="tech-tag">Game Development</span>
-                </div>
-                <a href="/galactic" class="project-btn">
-                    <i class="fas fa-external-link-alt"></i>
-                    View Project
-                </a>
-            </div>
-            
-            <div class="project-card" style="--delay: 7">
-                <h3>Wild Goose Chase</h3>
-                <p>An interactive mystery game with multiple levels, puzzles, and an engaging storyline.</p>
-                <div class="tech-list">
-                    <span class="tech-tag">Python</span>
-                    <span class="tech-tag">Flask</span>
-                    <span class="tech-tag">Interactive Story</span>
-                </div>
-                <a href="/wildgoose" class="project-btn">
-                    <i class="fas fa-external-link-alt"></i>
-                    View Project
-                </a>
-            </div>
-            
-            <div class="project-card" style="--delay: 8">
-                <h3>Real-time Chat</h3>
-                <p>A real-time chat application with room-based messaging and user authentication.</p>
-                <div class="tech-list">
-                    <span class="tech-tag">Python</span>
-                    <span class="tech-tag">Flask</span>
-                    <span class="tech-tag">WebSocket</span>
-                </div>
-                <a href="/chat" class="project-btn">
-                    <i class="fas fa-external-link-alt"></i>
-                    View Project
-                </a>
-            </div>
-            
-            <div class="project-card" style="--delay: 9">
-                <h3>Computer ID System</h3>
-                <p>A system information and identification tool for computer hardware and software analysis.</p>
-                <div class="tech-list">
-                    <span class="tech-tag">Python</span>
-                    <span class="tech-tag">System Info</span>
-                    <span class="tech-tag">Hardware Detection</span>
-                </div>
-                <a href="/compid" class="project-btn">
-                    <i class="fas fa-external-link-alt"></i>
-                    View Project
-                </a>
-            </div>
-            
-            <div class="project-card" style="--delay: 10">
-                <h3>Steganography Tool</h3>
-                <p>A tool for hiding and revealing secret messages within images using steganography techniques.</p>
-                <div class="tech-list">
-                    <span class="tech-tag">Python</span>
-                    <span class="tech-tag">Image Processing</span>
-                    <span class="tech-tag">Steganography</span>
-                </div>
-                <a href="/stegno" class="project-btn">
-                    <i class="fas fa-external-link-alt"></i>
-                    View Project
-                </a>
-            </div>
-            
-            <div class="project-card" style="--delay: 11">
-                <h3>Image Editor</h3>
-                <p>A web-based image editing tool with various filters and processing capabilities.</p>
-                <div class="tech-list">
-                    <span class="tech-tag">Python</span>
-                    <span class="tech-tag">Flask</span>
-                    <span class="tech-tag">Image Processing</span>
-                </div>
-                <a href="/pic-editor" class="project-btn">
-                    <i class="fas fa-external-link-alt"></i>
-                    View Project
-                </a>
             </div>
         </div>
     </section>
+<!-- Projects Section -->
+<section id="projects" class="section">
+  <h2>Featured Projects</h2>
+
+  <!-- Cybersecurity Projects -->
+  <h3 style="text-align: center; margin: 2rem 0 1rem 0; color: #60a5fa; font-size: 1.5rem;">
+    <i class="fas fa-shield-alt"></i> Cybersecurity & Encryption
+  </h3>
+  <div class="projects-grid">
+    <div class="project-card" style="--delay: 1">
+      <h3>Encryption Toolkit</h3>
+      <p>A comprehensive cybersecurity tool featuring multiple encryption algorithms including Caesar, Vigenère, and more.</p>
+      <div class="tech-list">
+        <span class="tech-tag">Python</span>
+        <span class="tech-tag">Flask</span>
+        <span class="tech-tag">Cryptography</span>
+      </div>
+    </div>
+
+    <div class="project-card" style="--delay: 2">
+      <h3>Encryption & Key Exchange</h3>
+      <p>Advanced encryption tools with Diffie-Hellman key exchange, public key cryptography, and secure communication.</p>
+      <div class="tech-list">
+        <span class="tech-tag">Python</span>
+        <span class="tech-tag">Flask</span>
+        <span class="tech-tag">Cryptography</span>
+      </div>
+    </div>
+
+    <div class="project-card" style="--delay: 3">
+      <h3>Steganography Tool</h3>
+      <p>A tool for hiding and revealing secret messages within images using steganography techniques.</p>
+      <div class="tech-list">
+        <span class="tech-tag">Python</span>
+        <span class="tech-tag">Image Processing</span>
+        <span class="tech-tag">Steganography</span>
+      </div>
+    </div>
+
+    <div class="project-card" style="--delay: 4">
+      <h3>Computer ID System</h3>
+      <p>A system information and identification tool for computer hardware and software analysis.</p>
+      <div class="tech-list">
+        <span class="tech-tag">Python</span>
+        <span class="tech-tag">System Info</span>
+        <span class="tech-tag">Hardware Detection</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Web Development Projects -->
+  <h3 style="text-align: center; margin: 3rem 0 1rem 0; color: #60a5fa; font-size: 1.5rem;">
+    <i class="fas fa-globe"></i> Web Development
+  </h3>
+  <div class="projects-grid">
+    <div class="project-card" style="--delay: 5">
+      <h3>Universal.st</h3>
+      <p>A comprehensive utility platform featuring YouTube downloader, image processing, and various tools all in one place.</p>
+      <div class="tech-list">
+        <span class="tech-tag">Python</span>
+        <span class="tech-tag">Flask</span>
+        <span class="tech-tag">YouTube API</span>
+      </div>
+    </div>
+
+    <div class="project-card" style="--delay: 6">
+      <h3>Movie Tracker</h3>
+      <p>A movie management system with user authentication, movie database integration, and personal watchlists.</p>
+      <div class="tech-list">
+        <span class="tech-tag">Python</span>
+        <span class="tech-tag">Flask</span>
+        <span class="tech-tag">TMDB API</span>
+      </div>
+    </div>
+
+    <div class="project-card" style="--delay: 7">
+      <h3>Real-time Chat</h3>
+      <p>A real-time chat application with room-based messaging and user authentication.</p>
+      <div class="tech-list">
+        <span class="tech-tag">Python</span>
+        <span class="tech-tag">Flask</span>
+        <span class="tech-tag">WebSocket</span>
+      </div>
+    </div>
+
+    <div class="project-card" style="--delay: 8">
+      <h3>Image Editor</h3>
+      <p>A web-based image editing tool with various filters and processing capabilities.</p>
+      <div class="tech-list">
+        <span class="tech-tag">Python</span>
+        <span class="tech-tag">Flask</span>
+        <span class="tech-tag">Image Processing</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI & Games Projects -->
+  <h3 style="text-align: center; margin: 3rem 0 1rem 0; color: #60a5fa; font-size: 1.5rem;">
+    <i class="fas fa-robot"></i> AI & Games
+  </h3>
+  <div class="projects-grid">
+    <div class="project-card" style="--delay: 9">
+      <h3>AI Chat Collection</h3>
+      <p>Multiple AI-powered chat interfaces including general chat, holiday planner, and movie recommendations.</p>
+      <div class="tech-list">
+        <span class="tech-tag">Python</span>
+        <span class="tech-tag">Flask</span>
+        <span class="tech-tag">OpenAI API</span>
+      </div>
+    </div>
+
+    <div class="project-card" style="--delay: 10">
+      <h3>Galactic Shooter</h3>
+      <p>An exciting space shooter game built with Pygame, featuring dynamic gameplay and stunning visuals.</p>
+      <div class="tech-list">
+        <span class="tech-tag">Python</span>
+        <span class="tech-tag">Pygame</span>
+        <span class="tech-tag">Game Development</span>
+      </div>
+    </div>
+
+    <div class="project-card" style="--delay: 11">
+      <h3>Wild Goose Chase</h3>
+      <p>An interactive mystery game with multiple levels, puzzles, and an engaging storyline.</p>
+      <div class="tech-list">
+        <span class="tech-tag">Python</span>
+        <span class="tech-tag">Flask</span>
+        <span class="tech-tag">Interactive Story</span>
+      </div>
+    </div>
+  </div>
+</section>
+
 
     <script>
         // Smooth scrolling and navigation highlight
         document.addEventListener('DOMContentLoaded', function() {
             const navLinks = document.querySelectorAll('.nav-link');
             const sections = document.querySelectorAll('section');
+            
+            // Easter egg: Pyramid click handler
+            const pyramid = document.querySelector('.pyramid-loader');
+            if (pyramid) {
+                pyramid.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('Pyramid clicked! Redirecting to sht.html');
+                    window.location.href = 'sht.html';
+                });
+            }
             
             // Intersection Observer for section animations
             const observerOptions = {

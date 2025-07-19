@@ -10,5 +10,10 @@ app = Flask(__name__, template_folder='templates')
 def index():
     return render_template("index.html")
 
+
+@app.route("/sht.html", methods=["GET", "POST"])
+def sht():
+    return render_template("sht.html")
+
 if __name__ == "__main__":
     app.run(debug=True)
