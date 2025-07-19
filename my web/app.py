@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_from_directory
 import os
 import sys
 import importlib.util
@@ -14,6 +14,12 @@ def index():
 @app.route("/sht.html", methods=["GET", "POST"])
 def sht():
     return render_template("sht.html")
+
+
+@app.route("/Assets/<path:filename>")
+def assets(filename):
+    return send_from_directory('templates/Assets', filename)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
