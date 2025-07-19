@@ -16,7 +16,7 @@ app.register_blueprint(holi_bp)
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-    return render_template("index.html")
+    return render_template("aico.html")
 
 if __name__ == "__main__":
     app.run(debug=True)

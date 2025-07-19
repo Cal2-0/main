@@ -10,7 +10,7 @@ def get_public_key(priv):
 
 @app.route("/")
 def home():
-    return render_template("home.html")
+    return render_template("encrp.html")
 
 @app.route("/encrypt", methods=["GET", "POST"])
 def encrypt():

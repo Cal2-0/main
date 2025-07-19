@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_file, session, redirect, url_for
+from flask import Flask, render_template, request, send_file, session, redirect, url_for,Blueprint
 import base64
 import os
 import io
@@ -6,22 +6,23 @@ import base64
 import numpy as np
 import yt_dlp
 from PIL import Image, ImageFilter, ImageEnhance, ImageOps
-from yt import ytt_dlp
 
-app = Flask(__name__)  # Use
-app.register_blueprint(ytt_dlp)
 
-@app.route("/", methods=["GET", "POST"])
-def index():
+
+uni_bp=Flask(__name__)
+
+
+@uni_bp.route("/", methods=["GET", "POST"])
+def uni():
     if request.method == "POST":
         action = request.form.get("action")
         if action == 'pic':
             return render_template("pic.html")
         elif action == 'yt':
             return render_template("yt.html")
-    return render_template("index.html")
-'''
-@app.route("/yt", methods=["GET", "POST"])
+    return render_template("uni.html")
+
+@uni_bp.route("/yt", methods=["GET", "POST"])
 def yt():
     output = ""
     info_data = {}
@@ -70,8 +71,9 @@ def yt():
         download_filename = session['yt_download_file']
 
     return render_template("yt.html", output=output, info=info_data, url=url, download_filename=download_filename)
-'''
-@app.route('/yt/download')
+
+
+@uni_bp.route('/yt/download')
 def yt_download():
     filename = request.args.get('file') or session.get('yt_download_file')
     if filename and os.path.exists(filename):
@@ -116,7 +118,7 @@ def channel_only(img, channel):
 def add_border(img, border=20, color='black'):
     return ImageOps.expand(img, border=border, fill=color)
 
-@app.route('/pic', methods=['GET', 'POST'])
+@uni_bp.route('/pic', methods=['GET', 'POST'])
 def pic():
     image_data = None
     output = ''
@@ -303,7 +305,7 @@ def pic():
                 image_data = base64.b64encode(buf.read()).decode('utf-8')
                 return render_template('pic.html', image_data=image_data, output=output, filename=filename)
     return render_template('pic.html', image_data=None, output=output, filename=filename)
-@app.route('/pic/download/<filename>', methods=['POST'])
+@uni_bp.route('/pic/download/<filename>', methods=['POST'])
 def download(filename):
     base64_image = request.form.get('file')
     action = request.form.get('action')
@@ -319,4 +321,4 @@ def download(filename):
     return '', 400
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    uni_bp.run(debug=True)

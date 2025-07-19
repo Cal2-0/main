@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calv Klein - Developer Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #e8eaed;
+            overflow-x: hidden;
+            background: #0f1419;
+            min-height: 100vh;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 25%, #2d3748 50%, #1a202c 75%, #171923 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 20s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1rem 2rem;
+            background: rgba(15, 20, 25, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #e8eaed;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: rgba(255, 255, 255, 0.08);
+            color: #60a5fa;
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: fadeInUp 1s ease forwards 0.5s;
+        }
+
+        .hero p {
+            font-size: 1.4rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: fadeInUp 1s ease forwards 1s;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .scroll-cue {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            cursor: pointer;
+        }
+
+        .scroll-cue i {
+            font-size: 2rem;
+            opacity: 0.7;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-20px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+        }
+
+        /* Sections */
+        .section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section h2 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .section.visible h2 {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Glass Cards */
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(96, 165, 250, 0.2);
+        }
+
+        .section.visible .card {
+            opacity: 1;
+            transform: translateY(0);
+            transition-delay: calc(var(--delay) * 0.2s);
+        }
+
+        /* About Section */
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card i {
+            color: #60a5fa;
+            font-size: 1.8rem;
+        }
+
+        .tech-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .tech-tag {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .tech-tag:hover {
+            background: rgba(96, 165, 250, 0.15);
+            border-color: rgba(96, 165, 250, 0.3);
+            color: #60a5fa;
+            transform: scale(1.05);
+        }
+
+        /* Projects Section */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .project-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.4s ease;
+            opacity: 0;
+            transform: translateY(50px);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #60a5fa, #34d399, #a78bfa);
+            background-size: 200% 100%;
+            animation: gradientMove 4s linear infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .section.visible .project-card {
+            opacity: 1;
+            transform: translateY(0);
+            transition-delay: calc(var(--delay) * 0.15s);
+        }
+
+        .project-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(96, 165, 250, 0.2);
+        }
+
+        .project-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: #60a5fa;
+        }
+
+        .project-card p {
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+        }
+
+        .project-btn {
+            background: linear-gradient(45deg, #374151, #4b5563);
+            color: #e8eaed;
+            border: 1px solid rgba(96, 165, 250, 0.3);
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .project-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(96, 165, 250, 0.2);
+            background: linear-gradient(45deg, #4b5563, #60a5fa);
+            border-color: rgba(96, 165, 250, 0.5);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .section {
+                padding: 3rem 1rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .nav-links a {
+                padding: 0.3rem 0.8rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(96, 165, 250, 0.3);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(96, 165, 250, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-links">
+                <a href="#home" class="nav-link active">Home</a>
+                <a href="#about" class="nav-link">About</a>
+                <a href="#projects" class="nav-link">Projects</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <h1>Hi, I'm Calv Klein</h1>
+        <p>An aspiring developer crafting elegant solutions with code</p>
+        <div class="scroll-cue" onclick="document.getElementById('about').scrollIntoView()">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section">
+        <h2>About Me</h2>
+        <div class="about-grid">
+            <div class="card" style="--delay: 1">
+                <h3><i class="fas fa-code"></i> Frameworks & Tools</h3>
+                <p>Building robust applications with modern technologies</p>
+                <div class="tech-list">
+                    <span class="tech-tag">Flask</span>
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">HTML</span>
+                    <span class="tech-tag">CSS</span>
+                    <span class="tech-tag">JavaScript</span>
+                </div>
+            </div>
+            
+            <div class="card" style="--delay: 2">
+                <h3><i class="fas fa-tools"></i> Apps & Tech I Use</h3>
+                <p>My daily toolkit for efficient development</p>
+                <div class="tech-list">
+                    <span class="tech-tag">VS Code</span>
+                    <span class="tech-tag">GitHub</span>
+                    <span class="tech-tag">Figma</span>
+                    <span class="tech-tag">Docker</span>
+                    <span class="tech-tag">Git</span>
+                </div>
+            </div>
+            
+            <div class="card" style="--delay: 3">
+                <h3><i class="fas fa-gamepad"></i> Hobbies</h3>
+                <p>Exploring the intersection of technology and creativity</p>
+                <div class="tech-list">
+                    <span class="tech-tag">Cybersecurity Puzzles</span>
+                    <span class="tech-tag">Mini-games</span>
+                    <span class="tech-tag">Encryption Tools</span>
+                    <span class="tech-tag">AI Experiments</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="section">
+        <h2>Featured Projects</h2>
+        <div class="projects-grid">
+            <div class="project-card" style="--delay: 1">
+                <h3>Universal.st</h3>
+                <p>A comprehensive utility platform featuring YouTube downloader, image processing, and various tools all in one place.</p>
+                <div class="tech-list">
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">Flask</span>
+                    <span class="tech-tag">YouTube API</span>
+                </div>
+                <a href="/uni" class="project-btn">
+                    <i class="fas fa-external-link-alt"></i>
+                    View Project
+                </a>
+            </div>
+            
+            <div class="project-card" style="--delay: 2">
+                <h3>AI Chat Collection</h3>
+                <p>Multiple AI-powered chat interfaces including general chat, holiday planner, and movie recommendations.</p>
+                <div class="tech-list">
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">Flask</span>
+                    <span class="tech-tag">OpenAI API</span>
+                </div>
+                <a href="/aico" class="project-btn">
+                    <i class="fas fa-external-link-alt"></i>
+                    View Project
+                </a>
+            </div>
+            
+            <div class="project-card" style="--delay: 3">
+                <h3>Encryption Toolkit</h3>
+                <p>A comprehensive cybersecurity tool featuring multiple encryption algorithms including Caesar, Vigenère, and more.</p>
+                <div class="tech-list">
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">Flask</span>
+                    <span class="tech-tag">Cryptography</span>
+                </div>
+                <a href="/ciphers" class="project-btn">
+                    <i class="fas fa-external-link-alt"></i>
+                    View Project
+                </a>
+            </div>
+            
+            <div class="project-card" style="--delay: 4">
+                <h3>Movie Tracker</h3>
+                <p>A movie management system with user authentication, movie database integration, and personal watchlists.</p>
+                <div class="tech-list">
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">Flask</span>
+                    <span class="tech-tag">TMDB API</span>
+                </div>
+                <a href="/movie" class="project-btn">
+                    <i class="fas fa-external-link-alt"></i>
+                    View Project
+                </a>
+            </div>
+            
+            <div class="project-card" style="--delay: 5">
+                <h3>Encryption & Key Exchange</h3>
+                <p>Advanced encryption tools with Diffie-Hellman key exchange, public key cryptography, and secure communication.</p>
+                <div class="tech-list">
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">Flask</span>
+                    <span class="tech-tag">Cryptography</span>
+                </div>
+                <a href="/encrp" class="project-btn">
+                    <i class="fas fa-external-link-alt"></i>
+                    View Project
+                </a>
+            </div>
+            
+            <div class="project-card" style="--delay: 6">
+                <h3>Galactic Shooter</h3>
+                <p>An exciting space shooter game built with Pygame, featuring dynamic gameplay and stunning visuals.</p>
+                <div class="tech-list">
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">Pygame</span>
+                    <span class="tech-tag">Game Development</span>
+                </div>
+                <a href="/galactic" class="project-btn">
+                    <i class="fas fa-external-link-alt"></i>
+                    View Project
+                </a>
+            </div>
+            
+            <div class="project-card" style="--delay: 7">
+                <h3>Wild Goose Chase</h3>
+                <p>An interactive mystery game with multiple levels, puzzles, and an engaging storyline.</p>
+                <div class="tech-list">
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">Flask</span>
+                    <span class="tech-tag">Interactive Story</span>
+                </div>
+                <a href="/wildgoose" class="project-btn">
+                    <i class="fas fa-external-link-alt"></i>
+                    View Project
+                </a>
+            </div>
+            
+            <div class="project-card" style="--delay: 8">
+                <h3>Real-time Chat</h3>
+                <p>A real-time chat application with room-based messaging and user authentication.</p>
+                <div class="tech-list">
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">Flask</span>
+                    <span class="tech-tag">WebSocket</span>
+                </div>
+                <a href="/chat" class="project-btn">
+                    <i class="fas fa-external-link-alt"></i>
+                    View Project
+                </a>
+            </div>
+            
+            <div class="project-card" style="--delay: 9">
+                <h3>Computer ID System</h3>
+                <p>A system information and identification tool for computer hardware and software analysis.</p>
+                <div class="tech-list">
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">System Info</span>
+                    <span class="tech-tag">Hardware Detection</span>
+                </div>
+                <a href="/compid" class="project-btn">
+                    <i class="fas fa-external-link-alt"></i>
+                    View Project
+                </a>
+            </div>
+            
+            <div class="project-card" style="--delay: 10">
+                <h3>Steganography Tool</h3>
+                <p>A tool for hiding and revealing secret messages within images using steganography techniques.</p>
+                <div class="tech-list">
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">Image Processing</span>
+                    <span class="tech-tag">Steganography</span>
+                </div>
+                <a href="/stegno" class="project-btn">
+                    <i class="fas fa-external-link-alt"></i>
+                    View Project
+                </a>
+            </div>
+            
+            <div class="project-card" style="--delay: 11">
+                <h3>Image Editor</h3>
+                <p>A web-based image editing tool with various filters and processing capabilities.</p>
+                <div class="tech-list">
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">Flask</span>
+                    <span class="tech-tag">Image Processing</span>
+                </div>
+                <a href="/pic-editor" class="project-btn">
+                    <i class="fas fa-external-link-alt"></i>
+                    View Project
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Smooth scrolling and navigation highlight
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('section');
+            
+            // Intersection Observer for section animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        
+                        // Update active nav link
+                        const id = entry.target.getAttribute('id');
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === `#${id}`) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }, observerOptions);
+            
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+            
+            // Smooth scroll for navigation links
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetSection = document.getElementById(targetId);
+                    
+                    targetSection.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                });
+            });
+            
+            // Project button interactions
+            const projectButtons = document.querySelectorAll('.project-btn');
+            projectButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Add a small animation feedback
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 150);
+                });
+            });
+            
+            // Add floating animation to cards on hover
+            const cards = document.querySelectorAll('.card, .project-card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform += ' rotateY(5deg) rotateX(5deg)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = this.style.transform.replace(' rotateY(5deg) rotateX(5deg)', '');
+                });
+            });
+            
+            // Parallax effect for background
+            window.addEventListener('scroll', function() {
+                const scrolled = window.pageYOffset;
+                const parallax = document.querySelector('.bg-animation');
+                const speed = scrolled * 0.5;
+                parallax.style.transform = `translateY(${speed}px)`;
+            });
+        });
+        
+        // Add some interactive particle effect on mouse move
+        document.addEventListener('mousemove', function(e) {
+            if (Math.random() > 0.95) { // Only create particles occasionally
+                createParticle(e.clientX, e.clientY);
+            }
+        });
+        
+        function createParticle(x, y) {
+            const particle = document.createElement('div');
+            particle.style.position = 'fixed';
+            particle.style.left = x + 'px';
+            particle.style.top = y + 'px';
+            particle.style.width = '4px';
+            particle.style.height = '4px';
+            particle.style.background = 'rgba(255, 255, 255, 0.6)';
+            particle.style.borderRadius = '50%';
+            particle.style.pointerEvents = 'none';
+            particle.style.animation = 'particleFloat 2s ease-out forwards';
+            particle.style.zIndex = '9999';
+            
+            document.body.appendChild(particle);
+            
+            setTimeout(() => {
+                particle.remove();
+            }, 2000);
+        }
+        
+        // Add particle animation keyframes
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes particleFloat {
+                0% {
+                    transform: translateY(0) scale(1);
+                    opacity: 1;
+                }
+                100% {
+                    transform: translateY(-100px) scale(0);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
