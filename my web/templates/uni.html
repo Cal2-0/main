@@ -1,0 +1,342 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Universal.st - Premium Digital Tools</title>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+            @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&display=swap');
+            @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            :root {
+                --primary-bg: rgba(0, 0, 0, 0.85);
+                --secondary-bg: rgba(15, 15, 15, 0.9);
+                --accent-bg: rgba(25, 25, 25, 0.95);
+                --glass-bg: rgba(255, 255, 255, 0.03);
+                --glass-border: rgba(255, 255, 255, 0.08);
+                --text-primary: #ffffff;
+                --text-secondary: #e0e0e0;
+                --text-muted: #a0a0a0;
+                --accent-color: #6366f1;
+                --accent-light: #818cf8;
+                --accent-glow: rgba(99, 102, 241, 0.4);
+                --success-color: #10b981;
+                --warning-color: #f59e0b;
+                --premium-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                --premium-glow: rgba(102, 126, 234, 0.3);
+            }
+
+            html, body {
+                overflow-x: hidden;
+                height: auto;
+                width: 100vw;
+            }
+
+            body {
+                font-family: 'Inter', sans-serif;
+                background: var(--primary-bg);
+                color: var(--text-primary);
+                line-height: 1.6;
+            }
+
+            body::-webkit-scrollbar {
+                display: none !important;
+            }
+
+            body {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+
+            #bg-video {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                object-fit: cover;
+                z-index: -2;
+                opacity: 0.7;
+            }
+
+            body::before {
+                content: '';
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: radial-gradient(circle at center, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.7) 100%);
+                z-index: -1;
+                pointer-events: none;
+            }
+
+            .navbar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                background: rgba(0, 0, 0, 0.1);
+                backdrop-filter: blur(20px) saturate(180%);
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                padding: 1.5rem 3rem;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                z-index: 1000;
+            }
+
+            .nav-brand {
+                font-family: 'Space Grotesk', sans-serif;
+                font-size: 1.75rem;
+                font-weight: 700;
+                color: var(--text-primary);
+                text-decoration: none;
+                background: var(--premium-gradient);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+                transition: all 0.3s ease;
+                letter-spacing: -0.02em;
+            }
+
+            .nav-brand:hover {
+                transform: scale(1.05);
+                filter: drop-shadow(0 0 20px var(--premium-glow));
+            }
+
+            .nav-links {
+                display: flex;
+                gap: 2.5rem;
+                align-items: center;
+            }
+
+            .nav-link {
+                color: var(--text-secondary);
+                text-decoration: none;
+                font-weight: 500;
+                font-size: 0.95rem;
+                padding: 0.75rem 1.5rem;
+                border-radius: 12px;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .nav-link:hover {
+                color: var(--text-primary);
+                transform: translateY(-2px);
+            }
+
+            .main-content {
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: center;
+                text-align: center;
+                position: relative;
+            }
+
+            .landing-hero {
+                padding: 4rem;
+                max-width: 1200px;
+                width: 100%;
+                margin: 0 auto;
+                margin-top: 2rem;
+            }
+
+            .brand-glow {
+                font-family: 'Playfair Display', serif;
+                font-size: clamp(3.5rem, 8vw, 7rem);
+                font-weight: 800;
+                margin-bottom: 2rem;
+                background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 30%, #c7d2fe 60%, #a5b4fc 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                animation: textGlow 4s ease-in-out infinite;
+                line-height: 1.1;
+            }
+
+            @keyframes textGlow {
+                0%, 100% { 
+                    filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.2));
+                    transform: scale(1);
+                }
+                50% { 
+                    filter: drop-shadow(0 0 50px rgba(165, 180, 252, 0.4));
+                    transform: scale(1.02);
+                }
+            }
+
+            .hero-subtitle {
+                font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+                color: var(--text-secondary);
+                margin-bottom: 2rem;
+                font-weight: 400;
+                line-height: 1.5;
+                max-width: 600px;
+                margin-left: auto;
+                margin-right: auto;
+                opacity: 0.9;
+            }
+
+            .services-section {
+                padding: 0 2rem;
+                max-width: 1000px;
+                width: 100%;
+                margin: 0 auto;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .cipher-grid {
+                display: flex;
+                gap: 3rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .cipher-card {
+                background: rgba(255, 255, 255, 0.02);
+                border: 1px solid rgba(255, 255, 255, 0.06);
+                border-radius: 24px;
+                padding: 2rem 1.5rem;
+                backdrop-filter: blur(20px);
+                transition: all 0.4s ease;
+                flex: 1;
+                min-width: 400px;
+                max-width: 500px;
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            .cipher-card:hover {
+                transform: translateY(-8px);
+                background: rgba(255, 255, 255, 0.04);
+                border-color: rgba(255, 255, 255, 0.12);
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 80px var(--premium-glow);
+            }
+
+            .cipher-title {
+                font-family: 'Space Grotesk', sans-serif;
+                font-size: 1.75rem;
+                font-weight: 600;
+                margin-bottom: 1.5rem;
+            }
+
+            .cipher-description {
+                color: var(--text-muted);
+                margin-bottom: 2.5rem;
+                font-size: 0.95rem;
+            }
+
+            .cipher-button {
+                background: var(--premium-gradient);
+                border: none;
+                color: #fff;
+                padding: 1rem 2.5rem;
+                border-radius: 16px;
+                font-weight: 600;
+                font-size: 0.95rem;
+                width: 100%;
+                text-decoration: none;
+                display: inline-block;
+                text-align: center;
+            }
+
+            @keyframes float {
+                0%, 100% { transform: translateY(0px); }
+                50% { transform: translateY(-10px); }
+            }
+
+            .cipher-card:nth-child(odd) {
+                animation: float 6s ease-in-out infinite;
+            }
+
+            .cipher-card:nth-child(even) {
+                animation: float 6s ease-in-out infinite reverse;
+            }
+
+            @media (max-width: 768px) {
+                .cipher-grid {
+                    flex-direction: column;
+                    gap: 2rem;
+                    align-items: center;
+                }
+
+                .cipher-card {
+                    max-width: 100%;
+                    min-width: unset;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <video autoplay muted loop playsinline id="bg-video">
+            <source src="/static/landing.mp4" type="video/mp4" />
+        </video>
+
+        <nav class="navbar">
+            <a href="/uni" class="nav-brand">Universal.st</a>
+            <div class="nav-links">
+                <a class="nav-link" href="/pic">Pixitfy</a>
+                <a class="nav-link" href="/yt">TodownIt</a>
+            </div>
+        </nav>
+
+        <div class="main-content">
+            <div class="landing-hero">
+                <h1 class="brand-glow">Universal.st</h1>
+                <p class="hero-subtitle">
+                    Experience the future of digital tools with our premium suite of AI-powered applications designed for creators, professionals, and innovators.
+                </p>
+            </div>
+
+            <div class="services-section">
+                <div class="cipher-grid">
+                    <div class="cipher-card">
+                        <div class="cipher-title">Pixitfy</div>
+                        <div class="cipher-description">
+                            Transform your images with our advanced AI-powered photo editor. Apply professional filters, enhance quality, create stunning pixelated art, and unlock endless creative possibilities.
+                        </div>
+                        <a href="/pic" class="cipher-button">Launch Pixitfy</a>
+                    </div>
+                    <div class="cipher-card">
+                        <div class="cipher-title">TodownIt</div>
+                        <div class="cipher-description">
+                            Download videos effortlessly from YouTube, TikTok, and other platforms in top quality 
+                            . TodownIt delivers lightning-fast performance with support for MP4 — perfect for creators, students, and professionals alike.
+                        </div>
+                        <a href="/yt" class="cipher-button">Try TodownIt</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const cards = document.querySelectorAll('.cipher-card');
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach((entry, index) => {
+                        if (entry.isIntersecting) {
+                            setTimeout(() => {
+                                entry.target.style.opacity = '1';
+                                entry.target.style.transform = 'translateY(0)';
+                            }, index * 150);
+                        }
+                    });
+                }, { threshold: 0.1 });
+
+                cards.forEach(card => observer.observe(card));
+            });
+        </script>
+    </body>
+    </html>

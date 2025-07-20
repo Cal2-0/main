@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Signal Interference</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: #eee;
+      font-family: 'Courier New', monospace;
+      max-width: 800px;
+      margin: 60px auto;
+      padding: 20px;
+      text-align: center;
+      user-select: none;
+    }
+    .cipher-box {
+      background-color: #222;
+      padding: 20px;
+      border-radius: 10px;
+      display: inline-block;
+      margin-top: 30px;
+      font-size: 20px;
+      letter-spacing: 2px;
+    }
+    .hint {
+      margin-top: 30px;
+      font-size: 14px;
+      color: #888;
+    }
+
+    /* Hidden input box container */
+    #secretInputContainer {
+      position: fixed;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #222;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px #444;
+      display: none;
+      z-index: 9999;
+    }
+    #secretInput {
+      font-family: 'Courier New', monospace;
+      font-size: 16px;
+      padding: 10px;
+      width: 250px;
+      border-radius: 6px;
+      border: 1px solid #555;
+      background: #121212;
+      color: #eee;
+    }
+    #submitBtn {
+      margin-left: 10px;
+      padding: 10px 15px;
+      font-family: 'Courier New', monospace;
+      font-size: 16px;
+      border-radius: 6px;
+      border: none;
+      background: #444;
+      color: #eee;
+      cursor: pointer;
+    }
+    #submitBtn:hover {
+      background: #666;
+    }
+
+    .error {
+      color: red;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Interference Detected</h1>
+  <p>Something has scrambled the signal. Only those who know the pattern can restore it.</p>
+
+  <div class="cipher-box">
+    AVEHY UG WATED ZCTGWT YRD
+  </div>
+
+  <p class="hint">
+    The hunt never ends.<br />
+    Look closely, the pattern lies where the wild roams.
+  </p>
+
+  <!-- wildhunt -->
+  <div id="secretInputContainer">
+    <form method="POST" id="secretForm">
+      <input id="secretInput" type="text" name="inputText" placeholder="Enter secret phrase" autocomplete="off" required />
+      <button id="submitBtn" type="submit">Submit</button>
+    </form>
+  </div>
+
+  {% if error %}
+    <div class="error">{{ error }}</div>
+  {% endif %}
+
+  <script>
+    // Show input container on right mouse down
+    window.addEventListener('mousedown', (e) => {
+      if (e.button === 1) { // right click
+        e.preventDefault();
+        document.getElementById('secretInputContainer').style.display = 'block';
+        document.getElementById('secretInput').focus();
+      }
+    });
+
+    // Hide input container on right mouse up
+    window.addEventListener('mouseup', (e) => {
+      if (e.button === 1) {
+        document.getElementById('secretInputContainer').style.display = 'none';
+        document.getElementById('secretInput').value = '';
+      }
+    });
+
+  
+  </script>
+</body>
+</html>

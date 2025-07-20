@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8" />
+  <title>The Chosen One Awaits</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+    html, body {
+      margin: 0; padding: 40px;
+      height: 100%;
+      background: #0a0a0a;
+      color: #bbb;
+      font-family: 'Share Tech Mono', monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      user-select: none;
+      text-align: center;
+      line-height: 1.6;
+      font-size: 18px;
+      overflow: hidden;
+    }
+
+    .container {
+      max-width: 700px;
+      color: #777;
+      font-style: italic;
+      letter-spacing: 0.04em;
+      user-select: text;
+      user-select: all;
+    }
+
+    h1 {
+      color: #999;
+      font-weight: normal;
+      letter-spacing: 0.15em;
+      font-size: 28px;
+      margin-bottom: 30px;
+    }
+
+    p {
+      margin-bottom: 1.2em;
+      font-size: 1em;
+      line-height: 1.5em;
+      color: #666;
+    }
+
+    .hint {
+      margin-top: 40px;
+      font-size: 0.9em;
+      color: #444;
+      font-style: normal;
+      user-select: none;
+      opacity: 0.4;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container" tabindex="0" aria-label="Secret final challenge">
+    <h1>Only The Chosen May Proceed</h1>
+    <p>
+      This is no ordinary journey.<br />
+      The path has been scattered in whispers and shadows,<br />
+      encoded beneath layers of quiet noise.<br />
+      The key you seek is not written plainly,<br />
+      but hidden throughout your quest.<br /><br />
+      To proceed, you must become the one who sees beyond.<br />
+      The phrase to unlock your destiny<br />
+      lies somewhere within the puzzle you have followed.<br />
+      Seek it in silence.<br /><br />
+      When the time is right, type what you have uncovered —<br />
+      <em>the phrase</em> — anywhere on this page.<br />
+      The page is listening.<br />
+      No box, no invitation.<br />
+      Just your resolve.<br /><br />
+      Only then will the path reveal itself.<br />
+      Only then will you become the chosen one.
+    </p>
+    <div class="hint">(Hint: The key phrase was hidden in the puzzles you've solved.)</div>
+  </div>
+
+  <script>
+    const secretPhrase = 'victory at last';
+
+    let typed = '';
+
+    window.addEventListener('keydown', (e) => {
+
+      if (e.key.length === 1) {
+        typed += e.key.toLowerCase();
+
+        // Keep typed string length reasonable
+        if (typed.length > secretPhrase.length) {
+          typed = typed.slice(typed.length - secretPhrase.length);
+        }
+
+        if (typed === secretPhrase) {
+          document.body.style.transition = 'background 1s ease';
+          document.body.style.background = '#060606';
+
+          setTimeout(() => {
+       
+            window.location.href = '/finale.html';
+          }, 5000);
+        }
+      }
+    });
+  </script>
+</body>
+</html>
