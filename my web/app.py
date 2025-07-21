@@ -7,6 +7,9 @@ import importlib.util
 # Simple import since uni.py is now in the main directory
 from uni import uni_bp
 from server import chat_bp, init_socketio
+from test import comp_bp
+from encrp import encrp_bp
+
 
 app = Flask(__name__, template_folder='templates')
 app.config["SECRET_KEY"] = "hjhjsdahhds"
@@ -19,10 +22,13 @@ init_socketio(socketio)
 
 app.register_blueprint(uni_bp)
 app.register_blueprint(chat_bp)
+app.register_blueprint(comp_bp)
+app.register_blueprint(encrp_bp)
 
 @app.route("/", methods=["GET", "POST"])
 def index():
     return render_template("index.html")
+
 
 
 @app.route("/sht.html", methods=["GET", "POST"])
