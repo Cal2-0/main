@@ -1,8 +1,8 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request,Blueprint
 import base64
-app = Flask(__name__)  # Use default templates folder "templates"
+cip_bp = Blueprint('cipher',__name__)  # Use default templates folder "templates"
 
-@app.route("/", methods=["GET", "POST"])
+@cip_bp.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
         action = request.form.get("action")
@@ -16,7 +16,7 @@ def index():
             return render_template("bacon.html")
         elif action == 'calx':
             return render_template("calx.html")
-    return render_template("index.html")
+    return render_template("cipher.html")
 
 def caesar_shift_char(ch, shift):
     if ch.isalpha():
@@ -85,7 +85,7 @@ def calx_decode(text, shift, key):
     step3 = caesar_decode(step2, shift)
     return step3
 
-@app.route("/calx", methods=["GET", "POST"])
+@cip_bp.route("/calx", methods=["GET", "POST"])
 def calx():
     output = ""
     if request.method == "POST":
@@ -116,7 +116,28 @@ def calx():
 
     return render_template("calx.html", output=output)
 
-@app.route("/bacons", methods=["GET", "POST"])
+@cip_bp.route("/rot", methods=["GET", "POST"])
+def rot():
+    output = ""
+    if request.method == "POST":
+        text = request.form.get("text", "")
+        action = request.form.get("action")
+        def rot13(s):
+            result = ''
+            for char in s:
+                if char.isalpha():
+                    base = ord('A') if char.isupper() else ord('a')
+                    result += chr((ord(char) - base + 13) % 26 + base)
+                else:
+                    result += char
+            return result
+        if action in ["encode", "decode"]:
+            output = rot13(text)
+        else:
+            output = "Invalid action."
+    return render_template("rot.html", output=output)
+
+@cip_bp.route("/bacons", methods=["GET", "POST"])
 def bacons():
     output = ""
     bacon_dict = {
@@ -159,9 +180,9 @@ def bacons():
                     decoded += '?'  # unknown pattern
             output = decoded
 
-    return render_template("bacon.html", output=output)
+    return render_template("bacons.html", output=output)
 
-@app.route("/ceaser.html", methods=["GET", "POST"])
+@cip_bp.route("/ceaser", methods=["GET", "POST"])
 def ceaser():
     output = ""
     if request.method == "POST":
@@ -191,7 +212,7 @@ def ceaser():
         output = result
 
     return render_template("ceaser.html", output=output)
-@app.route("/vignere", methods=["GET", "POST"])
+@cip_bp.route("/vignere", methods=["GET", "POST"])
 def vignere():
     output = ""
     if request.method == "POST":
@@ -229,7 +250,7 @@ def vignere():
 
     return render_template("vignere.html", output=output)
 
-@app.route("/atbash", methods=["GET", "POST"])
+@cip_bp.route("/atbash", methods=["GET", "POST"])
 def atbash():
     output = ""
     if request.method == "POST":
@@ -251,7 +272,3 @@ def atbash():
 
     return render_template("atbash.html", output=output)
 
-
-
-if __name__ == "__main__":
-    app.run(debug=True)

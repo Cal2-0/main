@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash,Blueprint
 import os
 from datetime import datetime
 import urllib.request, urllib.parse, json
@@ -6,8 +6,8 @@ import mysql.connector as msc
 from werkzeug.security import generate_password_hash, check_password_hash
 import secrets
 
-app = Flask(__name__, template_folder=os.path.dirname(os.path.abspath(__file__)))
-app.secret_key = secrets.token_hex(16)  # Generate a random secret key
+movie_bp = Blueprint('movie',__name__)
+movie_bp.secret_key = secrets.token_hex(16)  # Generate a random secret key
 
 # Database connections
 def get_movie_db_connection():
@@ -91,8 +91,8 @@ def create_user_movies_table(username):
     cursor.close()
     conn.close()
 
-@app.route("/", methods=["GET", "POST"])
-def index():
+@movie_bp.route("/movie", methods=["GET", "POST"])
+def movie():
     output = ""
     ans = ""
     year = ""
@@ -110,11 +110,11 @@ def index():
             data = json.load(urllib.request.urlopen(url))
         except Exception as e:
             ans = f"Error fetching data from TMDB API: {e}"
-            return render_template("index.html", output=output, ans=ans, year=year, rat=rating, ov=overview, poster_url=poster_url, imdb_url=imdb_url)
+            return render_template("movie.html", output=output, ans=ans, year=year, rat=rating, ov=overview, poster_url=poster_url, imdb_url=imdb_url)
 
         if not data["results"]:
             ans = "Movie not found."
-            return render_template("index.html", output=output, ans=ans, year=year, rat=rating, ov=overview, poster_url=poster_url, imdb_url=imdb_url)
+            return render_template("movie.html", output=output, ans=ans, year=year, rat=rating, ov=overview, poster_url=poster_url, imdb_url=imdb_url)
 
         movie = data["results"][0]
         id = movie["id"]
@@ -184,9 +184,9 @@ def index():
                 cursor.close()
                 conn.close()
 
-    return render_template("index.html", output=output, ans=ans, year=year, rat=rating, ov=overview, poster_url=poster_url, imdb_url=imdb_url)
+    return render_template("movie.html", output=output, ans=ans, year=year, rat=rating, ov=overview, poster_url=poster_url, imdb_url=imdb_url)
 
-@app.route("/login", methods=["GET", "POST"])
+@movie_bp.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
         username = request.form.get("username")
@@ -214,14 +214,14 @@ def login():
             movie_cursor.close()
             movie_conn.close()
 
-            return redirect(url_for('index'))
+            return redirect(url_for('movie'))
         else:
             flash('Invalid username or password', 'error')
     
     return render_template("login.html")
 
 
-@app.route("/register", methods=["GET", "POST"])
+@movie_bp.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
         username = request.form.get("username")
@@ -258,7 +258,7 @@ def register():
             conn.close()
     
     return render_template("register.html")
-@app.route("/logout")
+@movie_bp.route("/logout")
 def logout():
     username = session.get('username')
 
@@ -273,9 +273,9 @@ def logout():
         movie_conn.close()
 
     session.clear()
-    return redirect(url_for('index'))
+    return redirect(url_for('movie'))
 
-@app.route("/view", methods=["GET"])
+@movie_bp.route("/view", methods=["GET"])
 def view_movies():
     if 'user_id' in session:
         # Logged in user - show their personal collection
@@ -304,7 +304,7 @@ def view_movies():
         
         return render_template("view.html", movies=all_movies, is_guest=True)
 
-@app.route("/remove/<int:tmdb_id>", methods=["POST"])
+@movie_bp.route("/remove/<int:tmdb_id>", methods=["POST"])
 def remove_movie(tmdb_id):
     if 'user_id' in session:
         # Logged in user - remove from their personal table
@@ -332,4 +332,4 @@ def remove_movie(tmdb_id):
     return redirect(url_for('view_movies'))
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    movie_bp.run(debug=True)

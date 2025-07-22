@@ -12,6 +12,10 @@ numb3=os.getenv("d")
 numb4=os.getenv("e")
 numb5=os.getenv("f")
 
+@wild_bp.route("/1", methods=["GET", "POST"])
+def home_alias():
+    return render_template("1.html")
+
 @wild_bp.route("/1.html", methods=["GET", "POST"])
 def home():
     return render_template("1.html")

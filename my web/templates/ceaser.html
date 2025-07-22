@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caesar Cipher - Chyp3r.io</title>
+    <style>
+        /* Modern Dark Theme CSS for Chyp3r.io */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-bg: #0a0a0a;
+            --secondary-bg: #1a1a1a;
+            --accent-bg: #2a2a2a;
+            --hover-bg: #3a3a3a;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --text-muted: #808080;
+            --accent-color: #00d4ff;
+            --accent-glow: rgba(0, 212, 255, 0.3);
+            --border-color: #333333;
+            --success-color: #00ff88;
+            --warning-color: #ff9500;
+            --error-color: #ff3333;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-blur {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(0, 255, 136, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 60%, rgba(255, 149, 0, 0.1) 0%, transparent 50%);
+            z-index: -1;
+            animation: backgroundShift 20s ease-in-out infinite;
+        }
+
+        @keyframes backgroundShift {
+            0%, 100% { 
+                background: 
+                    radial-gradient(circle at 20% 20%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 80%, rgba(0, 255, 136, 0.1) 0%, transparent 50%),
+                    radial-gradient(circle at 40% 60%, rgba(255, 149, 0, 0.1) 0%, transparent 50%);
+            }
+            50% { 
+                background: 
+                    radial-gradient(circle at 80% 30%, rgba(0, 212, 255, 0.15) 0%, transparent 50%),
+                    radial-gradient(circle at 20% 70%, rgba(0, 255, 136, 0.15) 0%, transparent 50%),
+                    radial-gradient(circle at 60% 40%, rgba(255, 149, 0, 0.15) 0%, transparent 50%);
+            }
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(26, 26, 26, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .navbar:hover {
+            background: rgba(26, 26, 26, 0.9);
+        }
+
+        .nav-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            text-decoration: none;
+            background: linear-gradient(45deg, var(--accent-color), var(--success-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            transition: all 0.3s ease;
+        }
+
+        .nav-brand:hover {
+            transform: scale(1.05);
+            filter: drop-shadow(0 0 10px var(--accent-glow));
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-link.active {
+            color: var(--accent-color);
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, var(--accent-glow), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .nav-link:hover::before {
+            left: 100%;
+        }
+
+        .nav-link:hover {
+            color: var(--text-primary);
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            transform: translateY(-2px);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 80px;
+            padding: 2rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .content-section {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 3rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+        }
+
+        .content-section:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--accent-color);
+        }
+
+        .page-title {
+            font-size: 3rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--accent-color), var(--success-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: textGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes textGlow {
+            0%, 100% { filter: drop-shadow(0 0 20px var(--accent-glow)); }
+            50% { filter: drop-shadow(0 0 30px var(--accent-glow)) drop-shadow(0 0 40px var(--success-color)); }
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            text-align: center;
+            margin-bottom: 3rem;
+            font-weight: 300;
+        }
+
+        /* Form Styles */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 1rem;
+            background: var(--secondary-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus, input[type="number"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px var(--accent-glow);
+            background: var(--accent-bg);
+        }
+
+        input[type="text"]::placeholder, input[type="number"]::placeholder {
+            color: var(--text-muted);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+        }
+
+        button {
+            flex: 1;
+            background: linear-gradient(45deg, var(--accent-color), var(--success-color));
+            border: none;
+            color: var(--primary-bg);
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        button:hover::before {
+            left: 100%;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px var(--accent-glow);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        /* Output Panel */
+        .output-panel {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .output-panel:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--success-color);
+        }
+
+        .output-panel h2 {
+            color: var(--success-color);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .output-panel p {
+            font-family: 'Courier New', monospace;
+            background: var(--secondary-bg);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            min-height: 3rem;
+            word-break: break-all;
+            line-height: 1.5;
+        }
+
+        /* Mobile Menu Toggle */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background: var(--text-primary);
+            margin: 2px 0;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-wrap: wrap;
+                padding: 1rem;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .nav-links {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                gap: 1rem;
+                margin-top: 1rem;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .main-content {
+                margin-top: 120px;
+                padding: 1rem;
+            }
+
+            .page-title {
+                font-size: 2.5rem;
+            }
+
+            .page-subtitle {
+                font-size: 1rem;
+            }
+
+            .content-section {
+                padding: 2rem;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--secondary-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--success-color);
+        }
+
+        /* Selection Styling */
+        ::selection {
+            background: var(--accent-glow);
+            color: var(--text-primary);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .fadeInUp {
+            animation: fadeInUp 0.7s ease forwards;
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-blur"></div>
+    
+    <nav class="navbar">
+        <a href="/cipher" class="nav-brand">Chyp3r.io</a>
+        <div class="nav-links">
+            <a class="nav-link {% if request.path == '/cipher/ceaser' %}active{% endif %}" href="/cipher/ceaser">Caesar</a>
+            <a class="nav-link {% if request.path == '/cipher/vignere' %}active{% endif %}" href="/cipher/vignere">Vigenère</a>
+            <a class="nav-link {% if request.path == '/cipher/atbash' %}active{% endif %}" href="/cipher/atbash">Atbash</a>
+            <a class="nav-link {% if request.path == '/cipher/bacons' %}active{% endif %}" href="/cipher/bacons">Bacon</a>
+            <a class="nav-link {% if request.path == '/cipher/calx' %}active{% endif %}" href="/cipher/calx">Calx</a>
+            <a class="nav-link {% if request.path == '/cipher/rot' %}active{% endif %}" href="/cipher/rot">ROT13</a>
+        </div>
+        <div class="menu-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <div class="main-content fadeInUp" style="animation-delay:0.15s;">
+        <div class="content-section">
+            <h1 class="page-title">Caesar Cipher</h1>
+            <p class="page-subtitle">A simple substitution cipher that shifts each letter by a fixed number of places in the alphabet. Great for learning the basics of encryption!</p>
+            
+            <form method="POST" action="/ceaser" autocomplete="off">
+                <input type="text" name="text" placeholder="Enter your message here..." autocomplete="off">
+                <input type="text" name="shift" placeholder="Enter shift value (number)..." autocomplete="off">
+                <div class="button-group">
+                    <button type="submit" name="action" value="encode">Encrypt</button>
+                    <button type="submit" name="action" value="decode">Decrypt</button>
+                </div>
+            </form>
+
+            <div class="output-panel">
+                <h2>Result:</h2>
+                <p>{{ output or "Your encrypted/decrypted message will appear here..." }}</p>
+            </div>
+        </div>
+        
+        <div style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 16px; padding: 2rem; margin-top: 2rem; backdrop-filter: blur(10px);">
+            <h3 style="color: var(--accent-color); margin-bottom: 1rem;">About Ceaser Cipher</h3>
+            <p style="color: var(--text-secondary); line-height: 1.6;">
+                The Caesar cipher is one of the simplest and oldest encryption techniques. It works by shifting each letter in the plaintext by a fixed number of positions down or up the alphabet. For example, with a shift of 3, 'A' becomes 'D', 'B' becomes 'E', and so on. This cipher is a type of substitution cipher and is easy to implement but also easy to break, making it more of a basic introduction to cryptography than a secure method.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+        
+        menuToggle.addEventListener('click', () => {
+            menuToggle.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                menuToggle.classList.remove('active');
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // Caesar Cipher Implementation
+        function caesarCipher(text, shift, encode = true) {
+            const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const adjustedShift = encode ? shift : -shift;
+            
+            return text.toUpperCase().split('').map(char => {
+                const index = alphabet.indexOf(char);
+                if (index === -1) return char; // Non-alphabetic characters remain unchanged
+                
+                const newIndex = (index + adjustedShift + 26) % 26;
+                return alphabet[newIndex];
+            }).join('');
+        }
+
+        function processText(action) {
+            const textInput = document.getElementById('textInput');
+            const shiftInput = document.getElementById('shiftInput');
+            const output = document.getElementById('output');
+            
+            const text = textInput.value.trim();
+            const shift = parseInt(shiftInput.value);
+            
+            if (!text) {
+                output.textContent = 'Please enter text to process.';
+                return;
+            }
+            
+            if (!shift || shift < 1 || shift > 25) {
+                output.textContent = 'Please enter a valid shift value (1-25).';
+                return;
+            }
+            
+            const result = caesarCipher(text, shift, action === 'encode');
+            output.textContent = result;
+        }
+
+        // Allow Enter key to trigger encoding
+        document.getElementById('textInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                processText('encode');
+            }
+        });
+
+        document.getElementById('shiftInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                processText('encode');
+            }
+        });
+
+        // Trigger fadeInUp animation on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const mainContent = document.querySelector('.main-content');
+            if (mainContent) {
+                mainContent.style.opacity = '1';
+                mainContent.style.transform = 'translateY(0)';
+            }
+        });
+    </script>
+</body>
+</html>

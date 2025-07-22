@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Movie List</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            background: linear-gradient(120deg, #181f2a 0%, #232b3a 100%);
+            color: #e5e7eb;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        .navbar {
+            width: 100%;
+            background: #181f2a;
+            box-shadow: 0 2px 16px 0 #2563eb33;
+            padding: 0 0 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .navbar-logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #60a5fa;
+            letter-spacing: 1px;
+            padding-left: 32px;
+            text-shadow: 0 2px 16px #2563eb77;
+        }
+        .navbar-logo .logo-icon {
+            font-size: 2.1rem;
+            margin-right: 10px;
+            filter: drop-shadow(0 0 8px #60a5fa99);
+        }
+        .navbar-links {
+            padding-right: 32px;
+        }
+        .navbar-link {
+            color: #a5b4fc;
+            text-decoration: none;
+            font-size: 1.08rem;
+            font-weight: 500;
+            margin-left: 18px;
+            transition: color 0.2s;
+        }
+        .navbar-link:hover {
+            color: #fff;
+        }
+        .user-welcome {
+            color: #60a5fa;
+            font-size: 1rem;
+            font-weight: 500;
+            margin-right: 18px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            background: #232b3a;
+            border-radius: 18px;
+            box-shadow: 0 6px 32px 0 rgba(20,30,60,0.25);
+            padding: 36px 32px 32px 32px;
+        }
+        .search-bar {
+            width: 100%;
+            margin-bottom: 18px;
+            display: flex;
+            justify-content: flex-end;
+        }
+        .search-input {
+            width: 320px;
+            max-width: 100%;
+            padding: 12px 14px;
+            border: 1.5px solid #374151;
+            border-radius: 8px;
+            font-size: 1rem;
+            background: #181f2a;
+            color: #e5e7eb;
+            transition: border 0.2s, background 0.2s;
+        }
+        .search-input:focus {
+            border: 1.5px solid #60a5fa;
+            outline: none;
+            background: #232b3a;
+        }
+        h1 {
+            font-size: 2.1rem;
+            font-weight: 600;
+            margin-bottom: 28px;
+            color: #60a5fa;
+            letter-spacing: -1px;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            min-width: 900px;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: #181f2a;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px 0 rgba(60,72,100,0.13);
+        }
+        th, td {
+            padding: 16px 10px;
+            text-align: left;
+        }
+        th {
+            background: #2563eb;
+            color: #fff;
+            font-weight: 600;
+            border-bottom: 2px solid #232b3a;
+        }
+        tr:not(:last-child) td {
+            border-bottom: 1px solid #374151;
+        }
+        tr {
+            transition: background 0.15s;
+        }
+        tr:hover {
+            background: #232b3a;
+        }
+        td:last-child {
+            text-align: center;
+        }
+        .remove-btn {
+            background: linear-gradient(90deg, #ef4444 60%, #f87171 100%);
+            color: #fff;
+            border: none;
+            border-radius: 7px;
+            padding: 8px 16px;
+            font-size: 0.98rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 1px 8px 0 #ef444455;
+            transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+        }
+        .remove-btn:hover {
+            background: linear-gradient(90deg, #dc2626 60%, #f87171 100%);
+            box-shadow: 0 2px 12px 0 #ef444499;
+            transform: translateY(-1px) scale(1.04);
+        }
+        @media (max-width: 700px) {
+            .container { padding: 12px 2px; }
+            th, td { padding: 8px 4px; font-size: 0.97rem; }
+            h1 { font-size: 1.2rem; }
+            .navbar-logo { font-size: 1.1rem; padding-left: 10px; }
+            .navbar-links { padding-right: 10px; }
+            .search-input { width: 100%; }
+        }
+        tr.clickable-row { cursor: pointer; transition: background 0.15s; }
+        tr.clickable-row:hover { background: #2563eb44; }
+        
+        /* Toast styles */
+        .toast-container {
+            position: fixed;
+            top: 32px;
+            right: 32px;
+            z-index: 9999;
+        }
+        .toast {
+            background: #232b3a;
+            color: #60a5fa;
+            border-left: 5px solid #60a5fa;
+            border-radius: 10px;
+            box-shadow: 0 2px 16px #2563eb33;
+            padding: 18px 28px;
+            margin-bottom: 16px;
+            font-size: 1.08rem;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.3s, transform 0.3s;
+            pointer-events: none;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+    </style>
+    <script>
+        function filterTable() {
+            var input = document.getElementById('searchInput');
+            var filter = input.value.toLowerCase();
+            var table = document.getElementById('moviesTable');
+            var trs = table.getElementsByTagName('tr');
+            for (var i = 1; i < trs.length; i++) {
+                var tds = trs[i].getElementsByTagName('td');
+                var show = false;
+                for (var j = 0; j < tds.length - 1; j++) { // skip last column (Remove)
+                    if (tds[j].textContent.toLowerCase().indexOf(filter) > -1) {
+                        show = true;
+                        break;
+                    }
+                }
+                trs[i].style.display = show ? '' : 'none';
+            }
+        }
+
+        // Toast notification system
+        function showToast(message) {
+            const container = document.querySelector('.toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            container.appendChild(toast);
+            setTimeout(() => toast.classList.add('show'), 10);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Handle movie removal with confirmation and toast
+        function removeMovieFromRow(button) {
+            const row = button.closest('tr');
+            const movieId = row.getAttribute('data-movie-id');
+            const movieTitle = row.getAttribute('data-movie-title');
+            
+            if (confirm(`Remove "${movieTitle}" from your collection?`)) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = `/remove/${movieId}`;
+                document.body.appendChild(form);
+                form.submit();
+                
+                // Show toast notification
+                showToast('🗑️ Movie removed from collection');
+            }
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('tr[data-imdb]').forEach(function(row) {
+                row.addEventListener('click', function(e) {
+                    // Prevent clicking remove button from triggering row click
+                    if (e.target.tagName === 'BUTTON' || e.target.closest('form')) return;
+                    const imdb = row.getAttribute('data-imdb');
+                    if (imdb) window.open('https://www.imdb.com/title/' + imdb, '_blank');
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="toast-container"></div>
+    <nav class="navbar">
+        <div class="navbar-logo">
+            <span class="logo-icon">🎬</span> Movieszbt
+        </div>
+        <div class="navbar-links">
+            {% if session.username %}
+                <span class="user-welcome">Welcome, {{ session.username }}!</span>
+                <a href="/" class="navbar-link">Home</a>
+                <a href="/logout" class="navbar-link">Logout</a>
+            {% else %}
+                <a href="/" class="navbar-link">Home</a>
+                <a href="/login" class="navbar-link">Login</a>
+                <a href="/register" class="navbar-link">Register</a>
+            {% endif %}
+        </div>
+    </nav>
+    <div class="container">
+        <h1>🎞️ {% if is_guest %}Guest Movies Collection{% else %}My Movies Collection{% endif %}</h1>
+        <div class="search-bar">
+            <input type="text" id="searchInput" class="search-input" onkeyup="filterTable()" placeholder="Search movies... (title, genre, year, etc)" autocomplete="off">
+        </div>
+        <table id="moviesTable">
+            <tr>
+                <th>TMDB ID</th>
+                <th>Title</th>
+                <th>Year</th>
+                <th>Genre</th>
+                <th>Rating</th>
+                <th>Overview</th>
+                <th>Date Added</th>
+                <th>Remove</th>
+            </tr>
+            <tbody>
+            {% for movie in movies %}
+            <tr class="clickable-row" data-imdb="{{ movie.imdb_id }}" data-movie-id="{{ movie.tmdb_id }}" data-movie-title="{{ movie.title }}">
+                <td>{{ movie.tmdb_id }}</td>
+                <td>{{ movie.title }}</td>
+                <td>{{ movie.year }}</td>
+                <td>{{ movie.genre }}</td>
+                <td>{{ movie.rating }}</td>
+                <td>{{ movie.overview }}</td>
+                <td>{{ movie.date_added }}</td>
+                <td>
+                    <button type="button" class="remove-btn" onclick="removeMovieFromRow(this)">Remove</button>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

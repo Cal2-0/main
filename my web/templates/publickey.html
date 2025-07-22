@@ -1,0 +1,13 @@
+{% extends 'base1.html' %}
+{% block title %}Public Key | Crypto App{% endblock %}
+{% block content %}
+    <h2>Public Key</h2>
+    <form method="POST">
+        <label for="priv">Enter your Private Key:</label>
+        <input type="number" name="priv" id="priv" required>
+        <button type="submit">Get Public Key</button>
+    </form>
+    {% if pubkey %}
+        <div class="output-copy">{{ pubkey }}</div>
+    {% endif %}
+{% endblock %} 
