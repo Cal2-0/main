@@ -13,6 +13,8 @@ from wild import wild_bp
 from movie import movie_bp
 from cipher import cip_bp
 from aico import aico_bp
+from ai import ai_bp
+
 
 app = Flask(__name__, template_folder='templates')
 app.config["SECRET_KEY"] = "hjhjsdahhds"
@@ -31,6 +33,8 @@ app.register_blueprint(wild_bp)
 app.register_blueprint(movie_bp)
 app.register_blueprint(cip_bp, url_prefix='/cipher')
 app.register_blueprint(aico_bp)
+app.register_blueprint(ai_bp)
+
 
 @app.route("/", methods=["GET", "POST"])
 def index():
