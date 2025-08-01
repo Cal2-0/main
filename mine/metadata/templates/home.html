@@ -391,8 +391,24 @@
             <div class="tagline">Image Metadata Extractor</div>
         </div>
 
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div style="
+                        background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+                        color: white;
+                        padding: 15px;
+                        border-radius: 10px;
+                        margin-bottom: 20px;
+                        text-align: center;
+                        font-weight: 600;
+                    ">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
         <div class="upload-card">
-            <form method="post" enctype="multipart/form-data">
+            <form method="post" action="{{ url_for('upload_file') }}" enctype="multipart/form-data">
                 <div class="upload-area">
                     <div class="upload-icon">📸</div>
                     <h3 style="color: white; margin-bottom: 20px; font-size: 1.5rem;">Drop your image here or click to browse</h3>
@@ -402,74 +418,6 @@
                 <button type="submit" class="upload-btn">🚀 Extract Metadata</button>
             </form>
         </div>
-
-        <!-- Results would be inserted here by Flask template -->
-        {% if exif_data %}
-        <div class="results-card">
-            {% if 'Error' in exif_data %}
-                <div class="error-message">
-                    <h3>⚠️ Error Occurred</h3>
-                    <p>{{ exif_data['Error'] }}</p>
-                </div>
-            {% else %}
-                <h2 class="results-title">📊 Extracted Metadata</h2>
-                <div class="exif-grid">
-                    {% for key, value in exif_data.items() %}
-                        {% if key == 'GPSInfo' or key == 'GPSLatitudeDecimal' or key == 'GPSLongitudeDecimal' or key == 'GPSAddress' or key == 'GPSDecimalError' %}
-                            <!-- GPS data handled separately -->
-                        {% else %}
-                            <div class="exif-item">
-                                <div class="exif-key">{{ key }}</div>
-                                <div class="exif-value">{{ value }}</div>
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                    
-                    {% if 'GPSInfo' in exif_data or 'GPSLatitudeDecimal' in exif_data %}
-                    <div class="exif-item gps-section">
-                        <div class="exif-key">🌍 GPS Location Data</div>
-                        
-                        {% if 'GPSLatitudeDecimal' in exif_data and 'GPSLongitudeDecimal' in exif_data %}
-                        <div class="gps-coords">
-                            <div class="coord-item">
-                                <div class="exif-key">Latitude</div>
-                                <div class="exif-value">{{ "%.6f"|format(exif_data['GPSLatitudeDecimal']) }}°</div>
-                            </div>
-                            <div class="coord-item">
-                                <div class="exif-key">Longitude</div>
-                                <div class="exif-value">{{ "%.6f"|format(exif_data['GPSLongitudeDecimal']) }}°</div>
-                            </div>
-                        </div>
-                        {% endif %}
-                        
-                        {% if 'GPSAddress' in exif_data %}
-                        <div class="address-display">
-                            <span class="address-icon">📍</span>
-                            {{ exif_data['GPSAddress'] }}
-                        </div>
-                        {% endif %}
-                        
-                        {% if 'GPSInfo' in exif_data %}
-                        <div class="gps-raw">
-                            <div class="exif-key" style="margin-bottom: 10px;">Raw GPS Data</div>
-                            {% for gps_key, gps_value in exif_data['GPSInfo'].items() %}
-                                <div class="gps-raw-item">{{ gps_key }}: {{ gps_value }}</div>
-                            {% endfor %}
-                        </div>
-                        {% endif %}
-                        
-                        {% if 'GPSDecimalError' in exif_data %}
-                        <div style="color: #feca57; margin-top: 15px; font-weight: 600;">
-                            ⚠️ {{ exif_data['GPSDecimalError'] }}
-                        </div>
-                        {% endif %}
-                    </div>
-                    {% endif %}
-                </div>
-            {% endif %}
-        </div>
-        {% endif %}
-    </div>
 
     <script>
         // File upload preview
@@ -509,4 +457,4 @@
         });
     </script>
 </body>
-</html>
+</html> 
