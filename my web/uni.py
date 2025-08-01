@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_file, session, redirect, url_for,Blueprint
+from flask import Flask, render_template, request, send_file, session, redirect, url_for,Blueprint, flash, send_from_directory
 import base64
 import os
 import io
@@ -6,11 +6,25 @@ import base64
 import numpy as np
 import yt_dlp
 from PIL import Image, ImageFilter, ImageEnhance, ImageOps
+from PIL.ExifTags import TAGS, GPSTAGS
+from geopy.geocoders import Nominatim
+import uuid
+import json
 
 
 
 uni_bp=Blueprint('uni', __name__)
 
+
+@uni_bp.route("/", methods=["GET", "POST"])
+def uni_root():
+    if request.method == "POST":
+        action = request.form.get("action")
+        if action == 'pic':
+            return render_template("pic.html")
+        elif action == 'yt':
+            return render_template("yt.html")
+    return render_template("uni.html")
 
 @uni_bp.route("/uni.html", methods=["GET", "POST"])
 def uni():
@@ -117,6 +131,66 @@ def channel_only(img, channel):
 
 def add_border(img, border=20, color='black'):
     return ImageOps.expand(img, border=border, fill=color)
+
+# Configure upload folder for MelkIt
+UPLOAD_FOLDER = 'uploads'
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
+
+def to_decimal(dms, ref):
+    """Convert GPS coordinates from DMS or float to decimal degrees."""
+    # If already a float or int, just return it
+    if isinstance(dms, float) or isinstance(dms, int):
+        decimal = dms
+    # If tuple of floats (like (25.251167, 0.0, 0.0)), use the first value
+    elif isinstance(dms, tuple) and all(isinstance(x, float) for x in dms):
+        decimal = dms[0]
+    # Standard DMS rational tuple
+    else:
+        degrees = dms[0][0] / dms[0][1]
+        minutes = dms[1][0] / dms[1][1]
+        seconds = dms[2][0] / dms[2][1]
+        decimal = degrees + minutes / 60 + seconds / 3600
+    return -decimal if ref in ['S', 'W'] else decimal
+
+def extract_exif(file_path):
+    try:
+        image = Image.open(file_path)
+        exif_raw = image._getexif()
+    except Exception as e:
+        return {'Error': f'Could not open or process image: {e}'}
+    if not exif_raw:
+        return {'Error': 'No EXIF data found.'}
+
+    exif = {}
+    gps_data = {}
+
+    def convert_to_serializable(obj):
+        """Convert non-serializable objects to strings"""
+        if hasattr(obj, 'numerator') and hasattr(obj, 'denominator'):
+            # Handle IFDRational objects
+            return f"{obj.numerator}/{obj.denominator}"
+        elif isinstance(obj, (tuple, list)):
+            return [convert_to_serializable(item) for item in obj]
+        elif isinstance(obj, dict):
+            return {key: convert_to_serializable(value) for key, value in obj.items()}
+        elif hasattr(obj, '__str__'):
+            return str(obj)
+        else:
+            return obj
+
+    for tag_id, value in exif_raw.items():
+        tag = TAGS.get(tag_id, tag_id)
+        if tag == 'GPSInfo':
+            for key in value:
+                decoded_key = GPSTAGS.get(key, key)
+                gps_data[decoded_key] = convert_to_serializable(value[key])
+            exif['GPSInfo'] = gps_data
+        else:
+            exif[tag] = convert_to_serializable(value)
+
+    # Extract and convert GPS decimal coordinates
+    return exif
 
 @uni_bp.route('/pic', methods=['GET', 'POST'])
 def pic():
@@ -319,6 +393,58 @@ def download(filename):
         buf.seek(0)
         return send_file(buf, mimetype='image/png', as_attachment=True, download_name='edited_' + filename)
     return '', 400
+
+# MelkIt routes
+@uni_bp.route('/home23')
+def home23():
+    """Home page with upload form"""
+    return render_template('home23.html')
+
+@uni_bp.route('/upload', methods=['POST'])
+def upload_file():
+    """Handle file upload and redirect to results"""
+    if 'file' not in request.files:
+        flash('No file selected')
+        return redirect(url_for('home23'))
+    
+    file = request.files['file']
+    if file.filename == '':
+        flash('No file selected')
+        return redirect(url_for('home23'))
+    
+    if file:
+        # Generate unique filename
+        filename = str(uuid.uuid4()) + '.' + file.filename.rsplit('.', 1)[1].lower()
+        file_path = os.path.join(UPLOAD_FOLDER, filename)
+        
+        # Save the file
+        file.save(file_path)
+        
+        # Extract EXIF data
+        exif_data = extract_exif(file_path)
+        
+        # Store data in session
+        session['filename'] = filename
+        session['exif_data'] = exif_data
+        
+        return redirect(url_for('index23'))
+
+@uni_bp.route('/uploads/<filename>')
+def uploaded_file(filename):
+    """Serve uploaded files"""
+    return send_from_directory(UPLOAD_FOLDER, filename)
+
+@uni_bp.route('/index23')
+def index23():
+    """Display results page"""
+    filename = session.get('filename')
+    exif_data = session.get('exif_data')
+    
+    if not filename:
+        flash('No image data available')
+        return redirect(url_for('home23'))
+    
+    return render_template('index23.html', filename=filename, exif_data=exif_data)
 
 if __name__ == "__main__":
     uni_bp.run(debug=True)

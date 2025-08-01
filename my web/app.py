@@ -25,7 +25,7 @@ socketio = SocketIO(app)
 # Initialize SocketIO handlers
 init_socketio(socketio)
 
-app.register_blueprint(uni_bp)
+app.register_blueprint(uni_bp, url_prefix='/uni')
 app.register_blueprint(chat_bp)
 app.register_blueprint(comp_bp)
 app.register_blueprint(encrp_bp)
